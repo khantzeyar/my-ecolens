@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "iteration-1": true,
+      "iteration-2": true,
+      "iteration-3": true,
+      "dev": false,
+      "epic-3-camping-sites": false,
+      "epic-4-static-guide": false,
+      "epic-6-chatbot": false
+    }
+  }
+}
