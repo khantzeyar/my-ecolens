@@ -11,7 +11,7 @@ import Image from 'next/image'
 const Navbar = () => {
   return (
     <nav className='fixed top-0 w-full flex items-center 
-    justify-between py-4 px-24 border-b border-gray-300 bg-white z-10'>
+    justify-between py-4 px-24 border-b border-gray-300 bg-white z-50'>
         {/* Logo */}
         <Link href='/'>
             <Image src='/logo.svg' alt='Logo'
