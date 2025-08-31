@@ -1,3 +1,7 @@
+/* Add drop shadow to custom Leaflet marker icon */
+.leaflet-marker-icon[src$="site-icon.svg"] {
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+}
 @import "tailwindcss";
 
 :root {
@@ -24,4 +28,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Roboto', sans-serif;
+}
+
+.leaflet-container {
+  z-index: 0 !important;
+}
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-pane,
+.leaflet-control {
+  z-index: 0 !important;
 }
