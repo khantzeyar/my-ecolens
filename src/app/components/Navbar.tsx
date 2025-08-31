@@ -11,14 +11,14 @@ import Image from 'next/image'
 const Navbar = () => {
   return (
     <nav className='fixed top-0 w-full flex items-center 
-    justify-between py-5 px-24 border-b border-gray-300 bg-white'>
+    justify-between py-4 px-24 border-b border-gray-300 bg-white'>
         {/* Logo */}
         <Link href='/'>
             <Image src='/logo.svg' alt='Logo'
             width={430} height={147} style={{ height: '50px', width: 'auto'}}/>
         </Link>
         {/* Navigation Links */}
-        <ul className='flex gap-10 text-lg font-medium'>
+        <ul className='flex gap-12 text-lg font-medium'>
             <Link href='/camp'>
                 Camping Sites
             </Link>
