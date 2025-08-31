@@ -68,7 +68,7 @@ export default function Chatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center"
+          className="fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center cursor-pointer"
         >
           <i className="ri-chat-3-line text-2xl"></i>
         </button>
@@ -83,12 +83,12 @@ export default function Chatbot() {
             <div className="flex gap-2">
               <button
                 onClick={handleReset}
-                className="text-white hover:text-gray-200 px-2 py-1 rounded text-xs flex items-center justify-center"
+                className="text-white hover:text-gray-200 px-2 py-1 rounded text-xs flex items-center justify-center cursor-pointer"
                 title="Reset conversation"
               >
                 <i className="ri-refresh-line text-lg"></i>
               </button>
-              <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-200 ml-1">
+              <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-200 ml-1 cursor-pointer">
                 ✕
               </button>
             </div>
@@ -139,7 +139,7 @@ export default function Chatbot() {
             <button
               onClick={sendMessage}
               disabled={loading}
-              className="ml-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+              className="ml-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 cursor-pointer"
             >
               ➤
             </button>
