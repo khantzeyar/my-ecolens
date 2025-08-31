@@ -1,3 +1,7 @@
+/* Add drop shadow to custom Leaflet marker icon */
+.leaflet-marker-icon[src$="site-icon.svg"] {
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+}
 @import "tailwindcss";
 
 :root {
@@ -8,19 +12,30 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-roboto);
+  --font-mono: var(--font-roboto);
 }
 
+/* Dark mode design is currently unimplemented
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+}*/
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+.leaflet-container {
+  z-index: 0 !important;
+}
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-pane,
+.leaflet-control {
+  z-index: 0 !important;
 }
