@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import "remixicon/fonts/remixicon.css"; 
 import Footer from "./components/Footer";
+import Chatbot from "./components/Chatbot";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <Navbar></Navbar>
         {children}
+        <Chatbot></Chatbot>
         <Footer></Footer>
       </body>
     </html>

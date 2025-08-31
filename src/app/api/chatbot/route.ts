@@ -1,3 +1,9 @@
+/** 
+ * This is the API endpoint for our chatbot
+ * - The user prompt is wrapped within a template to satsfiy the acceptance criteria for iteration 1.
+ * - The pages of the site are provided as a resource for the chatbot to use when answering questions.
+*/
+
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
