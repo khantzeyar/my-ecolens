@@ -40,13 +40,10 @@ const Footer = () => {
               <h3 className="font-semibold mb-4">Sources</h3>
               <ul className="space-y-2 text-gray-400">
                 <li className="flex items-center">
-                  Link 1
-                </li>
-                <li className="flex items-center">
-                  Link 2
-                </li>
-                <li className="flex items-center">
-                  Link 3
+                  <Link className="hover:text-white cursor-pointer" 
+                    href="https://www.forestry.gov.my/my/perkhidmatan/info-perhutanan/hutan-lipur-hutan-taman-negeri">
+                    Malaysian Forest Sites
+                  </Link>
                 </li>
               </ul>
             </div>
