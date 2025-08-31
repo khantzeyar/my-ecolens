@@ -14,7 +14,7 @@ export default function Home() {
       {/* Introduction Section */}
       <section 
         className="relative h-screen flex items-center justify-center pt-20"
-        style={{ backgroundImage: "url('/forest-fallback.png')" }}
+        style={{ backgroundImage: "url('/images/forest-fallback.png')" }}
       >
         {/* Background Video */}
         <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover z-0">
@@ -41,7 +41,7 @@ export default function Home() {
               font-semibold text-base transition-all transform shadow-2xl 
               whitespace-nowrap flex items-center justify-center"
             >
-              <Image src="/icons/rocket-icon.svg" alt="Rocket Icon" className="mr-2" width={20} height={20}/>
+              <i className="ri-rocket-line mr-2"></i>
               Start Exploring
             </Link>
             <Link
@@ -50,8 +50,72 @@ export default function Home() {
               font-semibold text-base transition-all border-2 border-white/30 hover:border-white/50 
               whitespace-nowrap flex items-center justify-center"
             >
-              <Image src="/icons/time-icon.svg" alt="Time Icon" className="mr-2" width={20} height={20}/>
+              <i className="ri-dashboard-3-line mr-2"></i>
               View Our Guide
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Core Features</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Promoting environmental awareness through technology and contributing to Malaysia&apos;s forest conservation
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Camping Sites */}
+            <Link href="/camp" className="group cursor-pointer">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group-hover:-translate-y-2">
+                <div className="h-48 bg-gradient-to-br from-green-400 to-emerald-500 relative overflow-hidden">
+                  <Image 
+                    src="/images/camp.jpg"
+                    alt="Eco Camping"
+                    className="w-full h-full object-cover object-top"
+                    width={200} height={20}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4">
+                    <i className="ri-tent-line text-3xl text-white mb-2"></i>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Eco Camping Sites</h3>
+                  <p className="text-gray-600 mb-4">Discover Malaysia&apos;s best sustainable camping locations while protecting the environment.</p>
+                  <div className="flex items-center text-green-600 font-semibold">
+                    <span>Explore Sites</span>
+                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            {/* Guide */}
+            <Link href="/guide" className="group cursor-pointer">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group-hover:-translate-y-2">
+                <div className="h-48 bg-gradient-to-br from-blue-400 to-cyan-500 relative overflow-hidden">
+                  <Image 
+                    src="/images/guide.jpg"
+                    alt="Action Guide"
+                    className="w-full h-full object-cover object-top"
+                    width={200} height={20}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4">
+                    <i className="ri-book-open-line text-3xl text-white mb-2"></i>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Environmental Action Guide</h3>
+                  <p className="text-gray-600 mb-4">Learn sustainable practices and participate in forest conservation through concrete actions</p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    <span>Learn Guide</span>
+                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
+                </div>
+              </div>
             </Link>
           </div>
         </div>
