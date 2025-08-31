@@ -2,8 +2,8 @@ import React from 'react'
 
 const CampPage = () => {
   return (
-    <div>camping</div>
-  )
-}
+    <div>camp</div>
+  );
+};
 
-export default CampPage
+export default CampPage;
