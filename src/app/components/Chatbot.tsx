@@ -59,6 +59,7 @@ export default function Chatbot() {
   const handleReset = () => {
     setMessages([{ ...initialMessage, time: getTimeString() }]);
     setInput("");
+    setLoading(false);
   };
 
   return (
@@ -116,8 +117,11 @@ export default function Chatbot() {
               </div>
             ))}
             {loading && (
-              <div className="bg-white text-gray-800 p-2 border border-gray-300 shadow-xs rounded-lg max-w-[75%]">
-                Typing...
+              <div className="flex items-end gap-2 justify-start">
+                <i className="ri-robot-2-line text-2xl text-green-600"></i>
+                <div className="bg-white text-gray-800 p-2 border border-gray-300 shadow-xs rounded-lg max-w-fit">
+                  Typing...
+                </div>
               </div>
             )}
           </div>
