@@ -3,6 +3,7 @@ import {Roboto} from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import "remixicon/fonts/remixicon.css"; 
+import Footer from "./components/Footer";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <Navbar></Navbar>
         {children}
+        <Footer></Footer>
       </body>
     </html>
   );
