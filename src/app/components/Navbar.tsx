@@ -19,10 +19,10 @@ const Navbar = () => {
         </Link>
         {/* Navigation Links */}
         <ul className='flex gap-12 text-lg font-medium'>
-            <Link href='/camp'>
+            <Link href='/camp' className='hover:text-green-600' >
                 Camping Sites
             </Link>
-            <Link href='/guide'>
+            <Link href='/guide' className='hover:text-green-600'>
                 Guide
             </Link>
         </ul>
