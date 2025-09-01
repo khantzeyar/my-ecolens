@@ -27,9 +27,11 @@ function convertMarkdownLinks(text: string): string {
 	);
 }
 
-// Function to render bot messages with HTML links
+// Function to render bot messages with HTML links (no emojis)
 function BotMessage({ text }: { text: string }) {
-	const htmlContent = convertMarkdownLinks(text);
+	// Remove emojis from bot text before rendering
+	const textWithoutEmojis = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "");
+	const htmlContent = convertMarkdownLinks(textWithoutEmojis);
 	return (
 		<p 
 			className="text-sm leading-relaxed whitespace-pre-line"
@@ -46,7 +48,7 @@ export default function Chatbot() {
 	const [messages, setMessages] = useState<Message[]>([
 		{
 			id: "1",
-			text: "Hello! I am MYEcoLens Assistant 🌿 How can I assist you today?",
+			text: "Hello! I am MYEcoLens Assistant. How can I assist you today?",
 			sender: "bot",
 			timestamp: new Date(),
 		},
@@ -73,7 +75,7 @@ export default function Chatbot() {
 		setMessages([
 			{
 				id: "1",
-				text: "Hello! I am MYEcoLens Assistant 🌿 How can I assist you today?",
+				text: "Hello! I am MYEcoLens Assistant. How can I assist you today?",
 				sender: "bot",
 				timestamp: new Date(),
 			},
@@ -107,7 +109,7 @@ export default function Chatbot() {
 			});
 			// Response from API
 			const data = await res.json();
-			const botText = data.answer || "I am sorry, I didn't quite understand that 😕 Could you please clarify?";
+			const botText = data.answer || "I am sorry, I didn't quite understand that. Could you please clarify?";
 			// Add bot response to chat
 			const botReply: Message = {
 				id: (Date.now() + 1).toString(),
@@ -123,7 +125,7 @@ export default function Chatbot() {
 				...prev,
 				{
 					id: (Date.now() + 2).toString(),
-					text: "⚠️ Oops! Something went wrong. Please try again.",
+					text: "Oops! Something went wrong. Please try again.",
 					sender: "bot",
 					timestamp: new Date(),
 				},
@@ -150,29 +152,25 @@ export default function Chatbot() {
 	
 			{/* Chat Interface */}
 			{isOpen && (
-				<div className="fixed right-3 top-30 bottom-3 w-100 z-50 flex">
-					<div className="bg-white shadow-2xl w-full flex flex-col animate-in slide-in-from-right duration-300 rounded-3xl overflow-hidden">
+				<div className="fixed bottom-6 right-6 w-100 h-[480px] z-50 flex">
+					<div className="bg-white shadow-2xl w-full flex flex-col animate-in slide-in-from-right duration-300 rounded-xl overflow-hidden">
 						{/* Header */}
-						<div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-tl-3xl">
+						<div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-tl-xl">
 							<div className="flex items-center space-x-4">
-								{/* Bot Icon */}
-								<div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-									<i className="ri-robot-2-line text-lg"></i>
-								</div>
 								<h3 className="font-bold text-lg">MYEcoLens Assistant</h3>
 							</div>
 							{/* Reset & Close Buttons */}
 							<div className="flex items-center gap-2">
 								<button
 								onClick={handleReset}
-								className="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-colors cursor-pointer"
+								className="w-8 h-8 flex items-center justify-center hover:text-gray-200 transition-colors cursor-pointer"
 								title="Reset conversation"
 								>
 									<i className="ri-refresh-line text-lg"></i>
 								</button>
 								<button
 								onClick={() => setIsOpen(false)}
-								className="w-10 h-10 flex items-center justify-center hover:bg-white/20 rounded-full transition-colors cursor-pointer"
+								className="w-10 h-10 flex items-center justify-center hover:text-gray-200 transition-colors cursor-pointer"
 								title="Close conversation"
 								>
 									<i className="ri-close-line text-xl"></i>
@@ -181,7 +179,7 @@ export default function Chatbot() {
 						</div>
 
 						{/* Messages */}
-						<div className="flex-1 overflow-y-auto pt-4 px-6 pb-6 space-y-4 bg-gray-50">
+						<div className="flex-1 overflow-y-auto pt-4 px-6 pb-6 space-y-4 bg-gray-50 border border-gray-300">
 							{messages.map((message) => (
 								<div
 								key={message.id}
@@ -214,9 +212,10 @@ export default function Chatbot() {
 											)}
 											<p className={`text-xs mt-2 ${
 												message.sender === "user"
-												? "text-white/90"
-												: "text-gray-500"
+													? "text-white/90 w-full flex justify-end text-right"
+													: "text-gray-500"
 											}`}
+											style={message.sender === "user" ? { marginLeft: "auto" } : {}}
 											>
 												{message.timestamp.toLocaleTimeString("en-US", {
 													hour: "2-digit",
@@ -269,7 +268,7 @@ export default function Chatbot() {
 										}
 									}}
 									placeholder="Ask me anything..."
-									className="flex-1 px-4 py-3 rounded-xl focus:ring-2 focus:ring-green-600 resize-none text-sm border border-gray-300 h-12"
+									className="flex-1 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 resize-none text-sm border border-gray-300 h-12"
 									rows={1}
 								/>
 								{/* Send button */}
@@ -282,7 +281,7 @@ export default function Chatbot() {
 									: "bg-green-600 hover:bg-green-700"
 								} text-white rounded-xl flex items-center justify-center cursor-pointer`}
 								>
-									<i className="ri-send-plane-line text-lg"></i>
+									<i className="ri-send-plane-fill text-lg"></i>
 								</button>
 							</div>
 						</div>
