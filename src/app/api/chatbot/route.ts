@@ -47,8 +47,12 @@ async function generateWithRetry(prompt: string, retries = 2, baseDelay = 1000):
       });
       const text = response.text ?? '';
       return text.trim();
-    } catch (err: any) {
-      console.error(`Gemini attempt ${attempt + 1} failed:`, err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(`Gemini attempt ${attempt + 1} failed:`, err.message);
+      } else {
+        console.error(`Gemini attempt ${attempt + 1} failed:`, err);
+      }
       // Retry with exponential backoff and jitter
       if (attempt < retries) {
         const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 500;
@@ -91,14 +95,16 @@ export async function POST(req: Request) {
       if (!reply.trim()) {
         reply = getFallbackResponse(message);
       }
-    } catch (err: any) {
-      console.error("Gemini API Error:", err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error("Gemini API Error:", err.message);
+      else console.error("Gemini API Error:", err);
       reply = getFallbackResponse(message);
     }
     // Return final chatbot answer
     return NextResponse.json({ answer: reply });
-  } catch (error: any) {
-    console.error("Unexpected Error Occurred:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) console.error("Unexpected Error Occurred:", error.message);
+    else console.error("Unexpected Error Occurred:", error);
     return NextResponse.json(
       { answer: "⚠️ Something went wrong. Please try again later." },
       { status: 500 }
