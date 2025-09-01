@@ -68,7 +68,7 @@ export default function Chatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center cursor-pointer"
+          className="z-10 fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center cursor-pointer"
         >
           <i className="ri-chat-3-line text-2xl"></i>
         </button>
