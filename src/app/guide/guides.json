@@ -1,0 +1,154 @@
+{
+  "camping": [
+    {
+      "icon": "ri-map-line",
+      "title": "Research Your Destination",
+      "description": "Study the ecosystem, weather patterns, and local regulations before your journey.",
+      "importance": "Prevents environmental damage and ensures visitor safety",
+      "difficulty": "Easy",
+      "stats": "Helps reduce your overall impact on the environment",
+      "color": "from-blue-500 to-blue-600"
+    },
+    {
+      "icon": "ri-shopping-bag-3-line",
+      "title": "Pack Eco-Friendly Gear",
+      "description": "Choose biodegradable soaps, reusable containers, and solar-powered equipment.",
+      "importance": "Minimises chemical pollution in natural water sources",
+      "difficulty": "Easy",
+      "stats": "Reduces your waste per trip",
+      "color": "from-green-500 to-green-600"
+    },
+    {
+      "icon": "ri-flashlight-line",
+      "title": "Use Sustainable Energy",
+      "description": "Rely on solar chargers, rechargeable batteries, and manual tools whenever possible.",
+      "importance": "Reduces carbon footprint and battery waste in nature",
+      "difficulty": "Medium",
+      "stats": "Lowers your CO₂ emissions per camping trip",
+      "color": "from-yellow-500 to-orange-500"
+    },
+    {
+      "icon": "ri-drinks-2-line",
+      "title": "Bring Water Purification",
+      "description": "Use portable filters instead of purchasing bottled water to reduce plastic waste.",
+      "importance": "Eliminates single-use plastic bottles in wilderness areas",
+      "difficulty": "Easy",
+      "stats": "Reduces plastic bottles per trip",
+      "color": "from-cyan-500 to-blue-500"
+    }
+  ],
+  "lnt": [
+    {
+      "icon": "ri-footprint-line",
+      "title": "Stay on Designated Trails",
+      "description": "Stick to marked paths to prevent soil erosion and damage to vegetation.",
+      "importance": "Protects fragile ecosystems from trampling damage",
+      "difficulty": "Easy",
+      "stats": "Preserves trail-side vegetation from being damaged",
+      "color": "from-green-500 to-emerald-600"
+    },
+    {
+      "icon": "ri-fire-line",
+      "title": "Use Established Fire Rings",
+      "description": "Only make fires in designated areas and ensure they are completely extinguished.",
+      "importance": "Prevents wildfires and soil sterilisation",
+      "difficulty": "Medium",
+      "stats": "Lowers risk of forest fires",
+      "color": "from-red-500 to-orange-600"
+    },
+    {
+      "icon": "ri-delete-bin-line",
+      "title": "Pack Out All Trash",
+      "description": "Leave no trace - take everything you brought, including organic waste.",
+      "importance": "Prevents wildlife dependency and ecosystem contamination",
+      "difficulty": "Easy",
+      "stats": "Keeps habitats clean",
+      "color": "from-purple-500 to-indigo-600"
+    },
+    {
+      "icon": "ri-volume-mute-line",
+      "title": "Minimise Noise Pollution",
+      "description": "Keep voices low and avoid loud music to respect wildlife and other visitors.",
+      "importance": "Prevents stress to wildlife and maintains natural soundscapes",
+      "difficulty": "Easy",
+      "stats": "Reduces stress to animals",
+      "color": "from-blue-500 to-cyan-600"
+    }
+  ],
+  "wildlife": [
+    {
+      "icon": "ri-camera-line",
+      "title": "Observe from Distance",
+      "description": "Use binoculars or zoom lenses instead of approaching wildlife closely.",
+      "importance": "Prevents animal stress and aggressive behaviour",
+      "difficulty": "Easy",
+      "stats": "Maintains natural behaviour in encounters with wildlife",
+      "color": "from-green-500 to-teal-600"
+    },
+    {
+      "icon": "ri-restaurant-line",
+      "title": "Never Feed Wildlife",
+      "description": "Feeding animals creates dependency and can lead to aggressive behaviour.",
+      "importance": "Maintains natural foraging patterns and prevents human conflict",
+      "difficulty": "Easy",
+      "stats": "Prevents human-wildlife conflict",
+      "color": "from-red-500 to-pink-600"
+    },
+    {
+      "icon": "ri-shield-line",
+      "title": "Secure Food Storage",
+      "description": "Use bear-proof containers or hang food properly to prevent animal access.",
+      "importance": "Protects both wildlife and campers from dangerous encounters",
+      "difficulty": "Medium",
+      "stats": "Reduces food-related incidents",
+      "color": "from-amber-500 to-orange-600"
+    },
+    {
+      "icon": "ri-time-line",
+      "title": "Respect Animal Schedules",
+      "description": "Avoid areas during feeding, nesting, or migration periods.",
+      "importance": "Allows animals to maintain crucial life activities",
+      "difficulty": "Medium",
+      "stats": "Increases breeding success among animals",
+      "color": "from-purple-500 to-violet-600"
+    }
+  ],
+  "waste": [
+    {
+      "icon": "ri-recycle-line",
+      "title": "Separate Recyclables",
+      "description": "Sort waste into recyclables, compostables, and landfill items.",
+      "importance": "Maximises resource recovery and minimises environmental impact",
+      "difficulty": "Easy",
+      "stats": "Diverts waste from landfill",
+      "color": "from-green-500 to-emerald-600"
+    },
+    {
+      "icon": "ri-leaf-line",
+      "title": "Compost Organic Matter",
+      "description": "Properly dispose of food scraps in designated compost areas only.",
+      "importance": "Prevents attraction of scavenging animals to campsites",
+      "difficulty": "Medium",
+      "stats": "Reduces encounters with animals",
+      "color": "from-brown-500 to-amber-600"
+    },
+    {
+      "icon": "ri-drop-line",
+      "title": "Use Biodegradable Products",
+      "description": "Choose soaps, detergents, and toiletries that break down naturally.",
+      "importance": "Prevents water pollution and aquatic ecosystem damage",
+      "difficulty": "Easy",
+      "stats": "Protects water quality",
+      "color": "from-blue-500 to-cyan-600"
+    },
+    {
+      "icon": "ri-compasses-2-line",
+      "title": "Plan Waste Disposal",
+      "description": "Know waste disposal locations and regulations before entering natural areas.",
+      "importance": "Ensures proper waste handling in remote locations",
+      "difficulty": "Easy",
+      "stats": "Prevents improper waste disposal",
+      "color": "from-indigo-500 to-purple-600"
+    }
+  ]
+}
