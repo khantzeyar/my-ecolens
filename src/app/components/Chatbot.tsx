@@ -27,11 +27,9 @@ function convertMarkdownLinks(text: string): string {
 	);
 }
 
-// Function to render bot messages with HTML links (no emojis)
+// Function to render bot messages with HTML links 
 function BotMessage({ text }: { text: string }) {
-	// Remove emojis from bot text before rendering
-	const textWithoutEmojis = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "");
-	const htmlContent = convertMarkdownLinks(textWithoutEmojis);
+	const htmlContent = convertMarkdownLinks(text);
 	return (
 		<p 
 			className="text-sm leading-relaxed whitespace-pre-line"
@@ -155,7 +153,7 @@ export default function Chatbot() {
 				<div className="fixed bottom-6 right-6 w-100 h-[480px] z-50 flex">
 					<div className="bg-white shadow-2xl w-full flex flex-col animate-in slide-in-from-right duration-300 rounded-xl overflow-hidden">
 						{/* Header */}
-						<div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-tl-xl">
+						<div className="flex items-center justify-between py-3 px-4 bg-green-600 text-white rounded-tl-xl">
 							<div className="flex items-center space-x-4">
 								<h3 className="font-bold text-lg">MYEcoLens Assistant</h3>
 							</div>
@@ -179,7 +177,7 @@ export default function Chatbot() {
 						</div>
 
 						{/* Messages */}
-						<div className="flex-1 overflow-y-auto pt-4 px-6 pb-6 space-y-4 bg-gray-50 border border-gray-300">
+						<div className="flex-1 overflow-y-auto pt-4 px-6 pb-6 space-y-4 bg-gray-50 border-b border-b-gray-300">
 							{messages.map((message) => (
 								<div
 								key={message.id}
@@ -196,11 +194,11 @@ export default function Chatbot() {
 										)}
 										
 										{/* Message Bubble */}
-										<div className={`rounded-2xl px-4 py-3 shadow-sm ${
+										<div className={`rounded-2xl px-4 py-2 shadow-sm ${
 											message.sender === "user"
 											? "bg-green-600 text-white"
 											: "bg-white text-gray-800"
-										}`}
+										} max-w-[600px]`}
 										>
 											{/* Render message content - different for bot vs user */}
 											{message.sender === "bot" ? (
