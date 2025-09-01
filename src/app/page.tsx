@@ -1,103 +1,125 @@
+/** 
+ * This is landing page for our website.
+ * - There will be 2 main section for iteration 1 :
+ * - The main section that introduces the website and provides 2 buttons (camp/guide)
+ * - The core features section that highlights the main functionalities of the site
+*/
+
+import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main>
+      {/* Introduction Section */}
+      <section 
+        className="relative h-screen flex items-center justify-center pt-20"
+        style={{ backgroundImage: "url('/images/forest-fallback.png')" }}
+      >
+        {/* Background Video */}
+        <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover z-0">
+          <source src="/forest-video.mp4" type="video/mp4" />
+        </video>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        {/* Information */}
+        <div className="relative z-10 text-center text-white max-w-6xl mx-auto px-6">
+          <h1 className="text-5xl font-bold mb-6 leading-tight">
+            MYEcoLens
+            <span className="block text-3xl text-green-300 mt-3">
+              Malaysian Forest Protection for Campers
+            </span>
+          </h1>
+          <p className="text-lg mb-10 opacity-95 max-w-3xl mx-auto leading-relaxed">
+            Providing campsite locations, eco-friendly tips, and forest insights so that you can explore responsibly and enjoy the forests with confidence.
+          </p>
+          {/* Navigation Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/camp"
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full 
+              font-semibold text-base transition-all transform shadow-2xl 
+              whitespace-nowrap flex items-center justify-center"
+            >
+              <i className="ri-rocket-line mr-2"></i>
+              Start Exploring
+            </Link>
+            <Link
+              href="/guide"
+              className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3 rounded-full 
+              font-semibold text-base transition-all border-2 border-white/30 hover:border-white/50 
+              whitespace-nowrap flex items-center justify-center"
+            >
+              <i className="ri-dashboard-3-line mr-2"></i>
+              View Our Guide
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Core Features</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Promoting environmental awareness through technology and contributing to Malaysia&apos;s forest conservation
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Camping Sites */}
+            <Link href="/camp" className="group cursor-pointer">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group-hover:-translate-y-2">
+                <div className="h-48 bg-gradient-to-br from-green-400 to-emerald-500 relative overflow-hidden">
+                  <Image 
+                    src="/images/camp.jpg"
+                    alt="Eco Camping"
+                    className="w-full h-full object-cover object-top"
+                    width={200} height={20}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4">
+                    <i className="ri-tent-line text-3xl text-white mb-2"></i>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Eco Camping Sites</h3>
+                  <p className="text-gray-600 mb-4">Discover Malaysia&apos;s best sustainable camping locations while protecting the environment.</p>
+                  <div className="flex items-center text-green-600 font-semibold">
+                    <span>Explore Sites</span>
+                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            {/* Guide */}
+            <Link href="/guide" className="group cursor-pointer">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group-hover:-translate-y-2">
+                <div className="h-48 bg-gradient-to-br from-blue-400 to-cyan-500 relative overflow-hidden">
+                  <Image 
+                    src="/images/guide.jpg"
+                    alt="Action Guide"
+                    className="w-full h-full object-cover object-top"
+                    width={200} height={20}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4">
+                    <i className="ri-book-open-line text-3xl text-white mb-2"></i>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Environmental Action Guide</h3>
+                  <p className="text-gray-600 mb-4">Learn sustainable practices and participate in forest conservation through concrete actions</p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    <span>Learn Guide</span>
+                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
