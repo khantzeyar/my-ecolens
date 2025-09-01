@@ -68,7 +68,7 @@ export default function Chatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="z-10 fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center cursor-pointer"
+          className="fixed bottom-6 right-6 bg-green-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-green-700 flex items-center justify-center cursor-pointer"
         >
           <i className="ri-chat-3-line text-2xl"></i>
         </button>
@@ -76,7 +76,7 @@ export default function Chatbot() {
 
       {/* Chat Overlay */}
     {isOpen && (
-  <div className="z-10 fixed bottom-6 right-6 w-80 md:w-96 h-[480px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '90vh' }}>
+  <div className="fixed bottom-6 right-6 w-80 md:w-96 h-[480px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '90vh' }}>
           {/* Header */}
           <div className="bg-green-600 text-white px-4 py-3 flex justify-between items-center">
             <h2 className="font-semibold">MYEcoLens Assistant</h2>
