@@ -15,9 +15,9 @@ const chatbot = new GoogleGenAI({
 
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
-  { keyword: "home", page: "/", description: "Landing page." },
-  { keyword: "camping", page: "/camp", description: "Camping sites." },
-  { keyword: "guide", page: "/guide", description: "Eco-friendly camping tips." },
+  { keyword: "home", page: "/", description: "The landing page for the website." },
+  { keyword: "camping", page: "/camp", description: "Details on available camping sites and locations."},
+  { keyword: "guide", page: "/guide", description: "Information on eco-friendly tips the camper can follow to be environmentally friendly." },
 ];
 
 // Hardcoded fallback responses (Used if Gemini fails)
@@ -25,15 +25,15 @@ function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   // Simple keyword matches
   if (input.includes("camp")) {
-    return "🏕️ : [Camping Sites](/camp)";
+    return "[Camping Sites](/camp)";
   }
   if (input.includes("guide")) {
-    return "🌱 : [Eco-friendly Tips](/guide)";
+    return " [Eco-friendly Tips](/guide)";
   }
   // General suggestion if no keywords matched
-  return `⚠️ Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
-  - 🏕️ : [Camping Sites](/camp)
-  - 🌱 : [Eco-friendly Tips](/guide)
+  return `Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
+  - [Camping Sites](/camp)
+  - [Eco-friendly Tips](/guide)
   `;
 }
 
@@ -47,8 +47,12 @@ async function generateWithRetry(prompt: string, retries = 2, baseDelay = 1000):
       });
       const text = response.text ?? '';
       return text.trim();
-    } catch (err: any) {
-      console.error(`Gemini attempt ${attempt + 1} failed:`, err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(`Gemini attempt ${attempt + 1} failed:`, err.message);
+      } else {
+        console.error(`Gemini attempt ${attempt + 1} failed:`, err);
+      }
       // Retry with exponential backoff and jitter
       if (attempt < retries) {
         const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 500;
@@ -67,21 +71,21 @@ export async function POST(req: Request) {
     // Extract user message
     const { message } = await req.json();
 
-    // Prompt for Gemini
-    const prompt = `
-    Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia. 
+  // Prompt for Gemini
+  const prompt = `
+  Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia. 
     
-    Guidelines:
-    - Answer in simple, clear English, avoid jargons.
-    - Keep responses concise (under 300 characters).
-    - If the question is about the platform, suggest the most relevant page from this list:
-    ${PAGE_MAPPINGS.map(p => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
-    - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
-    - When suggesting links, list each one on a new line, include an emoji before the link.
-    - Use emojis sparingly to make responses friendly and engaging.
+  Guidelines:
+  - Answer in simple, clear English, avoid jargons.
+  - Keep responses concise (under 300 characters).
+  - If the question is about the platform, suggest the most relevant page from this list:
+  ${PAGE_MAPPINGS.map(p => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
+  - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
+  - When suggesting links, list each one on a new line.
+  - Do not use emojis in your responses.
 
-    User question: ${message}
-    `;
+  User question: ${message}
+  `;
 
     let reply = "";
     try {
@@ -91,16 +95,18 @@ export async function POST(req: Request) {
       if (!reply.trim()) {
         reply = getFallbackResponse(message);
       }
-    } catch (err: any) {
-      console.error("Gemini API Error:", err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error("Gemini API Error:", err.message);
+      else console.error("Gemini API Error:", err);
       reply = getFallbackResponse(message);
     }
     // Return final chatbot answer
     return NextResponse.json({ answer: reply });
-  } catch (error: any) {
-    console.error("Unexpected Error Occurred:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) console.error("Unexpected Error Occurred:", error.message);
+    else console.error("Unexpected Error Occurred:", error);
     return NextResponse.json(
-      { answer: "⚠️ Something went wrong. Please try again later." },
+      { answer: "Something went wrong. Please try again later." },
       { status: 500 }
     );
   }
