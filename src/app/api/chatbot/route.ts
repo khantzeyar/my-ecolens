@@ -12,7 +12,7 @@ import { GoogleGenAI } from "@google/genai";
 const chatbot = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
-
+ 
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
   { keyword: "home", page: "/", description: "The landing page for the website." },
