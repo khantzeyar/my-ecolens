@@ -17,7 +17,7 @@ interface Message {
 	sender: "user" | "bot";
 	timestamp: Date;
 }
-
+ 
 // Function to convert Markdown links to HTML
 function convertMarkdownLinks(text: string): string {
 	// Convert [text](url) to HTML anchor tags
