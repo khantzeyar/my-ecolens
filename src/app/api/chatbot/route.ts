@@ -19,9 +19,9 @@ const prisma = new PrismaClient();
 
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
-  { keyword: "home", page: "/", description: "Landing page." },
-  { keyword: "camping", page: "/camp", description: "Camping sites." },
-  { keyword: "guide", page: "/guide", description: "Eco-friendly camping tips." },
+  { keyword: "home", page: "/", description: "The landing page for the website." },
+  { keyword: "camping", page: "/camp", description: "Details on available camping sites and locations."},
+  { keyword: "guide", page: "/guide", description: "Information on eco-friendly tips the camper can follow to be environmentally friendly." },
 ];
 
 // Hardcoded fallback responses (Used if Gemini fails)
@@ -29,15 +29,15 @@ function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   // Simple keyword matches
   if (input.includes("camp")) {
-    return "🏕️ : [Camping Sites](/camp)";
+    return "[Camping Sites](/camp)";
   }
   if (input.includes("guide")) {
-    return "🌱 : [Eco-friendly Tips](/guide)";
+    return " [Eco-friendly Tips](/guide)";
   }
   // General suggestion if no keywords matched
-  return `⚠️ Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
-  - 🏕️ : [Camping Sites](/camp)
-  - 🌱 : [Eco-friendly Tips](/guide)
+  return `Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
+  - [Camping Sites](/camp)
+  - [Eco-friendly Tips](/guide)
   `;
 }
 
@@ -112,8 +112,8 @@ export async function POST(req: Request) {
     - If the question is about camping locations, suggest up to 5 campsites from this list:
     ${campsiteList}
 
-    User question: ${message}
-    `;
+  User question: ${message}
+  `;
 
     let reply = "";
     try {
@@ -134,7 +134,7 @@ export async function POST(req: Request) {
     if (error instanceof Error) console.error("Unexpected Error Occurred:", error.message);
     else console.error("Unexpected Error Occurred:", error);
     return NextResponse.json(
-      { answer: "⚠️ Something went wrong. Please try again later." },
+      { answer: "Something went wrong. Please try again later." },
       { status: 500 }
     );
   }
