@@ -14,13 +14,23 @@ model CampSite {
   latitude    Float
   longitude   Float
   state       String
+
+  // CSV: address
   address     String   @default("")
+  // CSV: tel
   phone       String   @default("")
+  // CSV: url
   website     String   @default("")
+  // CSV: information
   description String   @default("")
+  // CSV: opening_hours
   openingTime String   @default("")
+  // CSV: fee
   fees        String[] @db.Text
+  // CSV: attractions
   tags        String[] @db.Text
+  // CSV: enquiries
   contact     String   @default("")
+  // CSV
   image       String   @default("")
 }
