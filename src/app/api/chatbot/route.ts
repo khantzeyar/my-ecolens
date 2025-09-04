@@ -7,12 +7,16 @@
 
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { PrismaClient } from "@prisma/client";
 
 // Initialise Gemini client
 const chatbot = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
- 
+
+// Initialise Prisma client
+const prisma = new PrismaClient();
+
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
   { keyword: "home", page: "/", description: "Landing page." },
@@ -71,6 +75,28 @@ export async function POST(req: Request) {
     // Extract user message
     const { message } = await req.json();
 
+    // Detect state from user question
+    const stateRegex =
+      /(Johor|Kedah|Kelantan|Melaka|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Selangor|Terengganu)/i;
+    const stateMatch = message.match(stateRegex);
+    const state = stateMatch ? stateMatch[1] : null;
+
+    // Query campsites from database
+    const campsites = await prisma.campSite.findMany({
+      where: state
+        ? { state: { equals: state, mode: "insensitive" } }
+        : {},
+      take: 5,
+    });
+
+    // Format query results
+    const campsiteList =
+      campsites.length > 0
+        ? campsites
+            .map((c) => `- ${c.name} (${c.state}) — ${c.type}`)
+            .join("\n")
+        : `No campsites found in the state.`;
+
     // Prompt for Gemini
     const prompt = `
     Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia. 
@@ -83,6 +109,8 @@ export async function POST(req: Request) {
     - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
     - When suggesting links, list each one on a new line, include an emoji before the link.
     - Use emojis sparingly to make responses friendly and engaging.
+    - If the question is about camping locations, suggest up to 5 campsites from this list:
+    ${campsiteList}
 
     User question: ${message}
     `;
