@@ -12,35 +12,56 @@ const prisma = new PrismaClient();
 async function main() {
   const results: any[] = [];
 
-  fs.createReadStream(path.join(__dirname, "CAMPING_WEST_MINIMAL.csv"))
-    .pipe(csvParser())
-    .on("data", (row) => {
-      const match = row.location.match(/N([\d\.]+).*E\s*([\d\.]+)/);
-      const latitude = match ? parseFloat(match[1]) : null;
-      const longitude = match ? parseFloat(match[2]) : null;
+  await new Promise<void>((resolve, reject) => {
+    fs.createReadStream(path.join(__dirname, "CAMPING_WEST.csv"))
+      .pipe(csvParser())
+      .on("data", (row) => {
+        // Parse latitude & longitude
+        const latitude = row.latitude ? parseFloat(row.latitude) : 0;
+        const longitude = row.longitude ? parseFloat(row.longitude) : 0;
 
-      results.push({
-        type: row.type.trim(),
-        name: row.name.trim(),
-        latitude,
-        longitude,
-        state: row.state.trim(),
-      });
-    })
-    .on("end", async () => {
-      console.log(`Importing ${results.length} campsites...`);
+        results.push({
+          type: row.type?.trim() || "",
+          name: row.name?.trim() || "",
+          latitude,
+          longitude,
+          state: row.state?.trim() || "",
+          address: row.address?.trim() || "",
+          phone: row.tel?.trim() || "",
+          website: row.url?.trim() || "",
+          description: row.information?.trim() || "",
+          openingTime: row.opening_hours?.trim() || "",
+          fees: row.fee ? [row.fee.trim()] : [],
+          tags: row.attractions
+            ? row.attractions.split(",").map((t: string) => t.trim())
+            : [],
+          contact: row.enquiries?.trim() || "",
+          image:
+            row.image && row.image.trim().length > 0
+              ? row.image.trim()
+              : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", // ✅ 默认森林图
+        });
+      })
+      .on("end", resolve)
+      .on("error", reject);
+  });
 
-      for (const site of results) {
-        await prisma.campSite.create({ data: site });
-      }
+  console.log(`Importing ${results.length} campsites...`);
 
-      console.log("Seeding completed!");
-      await prisma.$disconnect();
-    });
+  // Clear old data and insert new records
+  await prisma.campSite.deleteMany();
+  await prisma.campSite.createMany({
+    data: results,
+  });
+
+  console.log("Seeding completed successfully!");
 }
 
-main().catch((e) => {
-  console.error(e);
-  prisma.$disconnect();
-  process.exit(1);
-});
+main()
+  .catch((e) => {
+    console.error("Error while seeding:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

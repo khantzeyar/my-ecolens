@@ -1,13 +1,14 @@
-/** 
+/**
  * This is the map for our website.
  * - It will display the location of forest based camp sites in Malaysia.
  * - The user can use the state filters to choose which sites are shown on the map.
- * - By clicking a site marker, the user can view that site's information.
-*/
+ * - By clicking a site marker, the user can view that site's information and open a detail page.
+ */
 
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import "remixicon/fonts/remixicon.css";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
@@ -155,6 +156,13 @@ const Map = () => {
               <div className="font-bold text-green-700">{site.name}</div>
               <div className="text-xs text-gray-600">State: {site.state}</div>
               <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
+              {/* Detail Page Link */}
+              <Link 
+                href={`/camp/${site.id}`} 
+                className="text-blue-600 underline text-sm mt-2 block"
+              >
+                View details →
+              </Link>
             </Popup>
           </Marker>
         ))}
