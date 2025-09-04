@@ -6,10 +6,12 @@ const prisma = new PrismaClient();
 export default async function CampDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params; 
+
   const camp = await prisma.campSite.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: parseInt(id, 10) },
   });
 
   if (!camp) {
@@ -82,7 +84,7 @@ export default async function CampDetail({
             <p className="text-gray-500">Free / Not specified</p>
           )}
         </div>
-
+        
         {/* Opening Time */}
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Opening Hours</h2>
