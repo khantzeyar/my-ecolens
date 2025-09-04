@@ -29,9 +29,9 @@ export default async function CampDetail({
 
       {/* Image */}
       <div className="mb-6">
-        {camp.image ? (
+        {camp.imageUrl ? (
           <img
-            src={camp.image}
+            src={camp.imageUrl}
             alt={camp.name}
             className="rounded-lg shadow-md w-full max-h-[400px] object-cover"
           />
@@ -55,7 +55,6 @@ export default async function CampDetail({
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Contact</h2>
           <p className="text-gray-700">Tel: {camp.phone || "N/A"}</p>
-          <p className="text-gray-700">Email: {camp.contact || "N/A"}</p>
           {camp.website && (
             <a
               href={camp.website}
@@ -71,11 +70,13 @@ export default async function CampDetail({
         {/* Fees */}
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Entry Fee</h2>
-          {camp.fees.length > 0 ? (
+          {camp.fees ? (
             <ul className="list-disc list-inside text-gray-700">
-              {camp.fees.map((fee, idx) => (
-                <li key={idx}>{fee}</li>
-              ))}
+              {camp.fees
+                .split(",")
+                .map((fee, idx) => (
+                  <li key={idx}>{fee.trim()}</li>
+                ))}
             </ul>
           ) : (
             <p className="text-gray-500">Free / Not specified</p>
@@ -91,25 +92,20 @@ export default async function CampDetail({
         </div>
       </div>
 
-      {/* Description */}
-      <div className="mt-6 p-4 border rounded-lg shadow-sm bg-white">
-        <h2 className="text-xl font-semibold mb-2">Description</h2>
-        <p className="text-gray-700 whitespace-pre-line">
-          {camp.description || "No description available"}
-        </p>
-      </div>
 
       {/* Tags */}
-      {camp.tags.length > 0 && (
+      {camp.tags && (
         <div className="mt-6 flex flex-wrap gap-2">
-          {camp.tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
+          {camp.tags
+            .split(",")
+            .map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+              >
+                {tag.trim()}
+              </span>
+            ))}
         </div>
       )}
     </main>

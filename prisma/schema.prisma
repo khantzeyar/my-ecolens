@@ -16,21 +16,31 @@ model CampSite {
   state       String
 
   // CSV: address
-  address     String   @default("")
+  address     String
+
   // CSV: tel
-  phone       String   @default("")
+  phone       String?
+
   // CSV: url
-  website     String   @default("")
-  // CSV: information
-  description String   @default("")
+  website     String?
+
   // CSV: opening_hours
-  openingTime String   @default("")
+  openingTime String?
+
   // CSV: fee
-  fees        String[] @db.Text
+  fees        String?   
+
+  // CSV: forest_type
+  forestType  String?
+
   // CSV: attractions
-  tags        String[] @db.Text
-  // CSV: enquiries
-  contact     String   @default("")
-  // CSV
-  image       String   @default("")
+  tags        String?   
+
+  // CSV: enquiries/contact
+  contact     String?
+
+  // CSV: imageUrl
+  imageUrl    String?
+
+  @@map("campsite") 
 }
