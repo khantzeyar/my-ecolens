@@ -9,6 +9,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import "remixicon/fonts/remixicon.css";
+import { useChat } from "../context/chatcontext";
+import Link from "next/link";
 
 // Message type definition
 interface Message {
@@ -17,40 +19,41 @@ interface Message {
 	sender: "user" | "bot";
 	timestamp: Date;
 }
- 
-// Function to convert Markdown links to HTML
-function convertMarkdownLinks(text: string): string {
-	// Convert [text](url) to HTML anchor tags
-	return text.replace(
-		/\[([^\]]+)\]\(([^)]+)\)/g, 
-		'<a href="$2" class="chatbot-link" style="color: #2563eb; text-decoration: underline; cursor: pointer;">$1</a>'
-	);
-}
 
-// Function to render bot messages with HTML links
+// Function to render bot messages with clickable links
 function BotMessage({ text }: { text: string }) {
-	const htmlContent = convertMarkdownLinks(text);
-	return (
-		<p 
-			className="text-sm leading-relaxed whitespace-pre-line"
-			dangerouslySetInnerHTML={{ __html: htmlContent }}
-		/>
-	);
+  // Convert markdown [label](url) into JSX <Link>
+  const parts = text.split(/(\[.*?\]\(.*?\))/g); // split by markdown links
+
+  return (
+    <p className="text-sm leading-relaxed whitespace-pre-line">
+      {parts.map((part, i) => {
+        const match = part.match(/\[(.*?)\]\((.*?)\)/); // [label](url)
+        if (match) {
+          const label = match[1];
+          const url = match[2];
+          return (
+            <Link
+              key={i}
+              href={url}
+              className="chatbot-link text-blue-600 underline cursor-pointer"
+            >
+              {label}
+            </Link>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </p>
+  );
 }
 
 export default function Chatbot() {
 	// State: is the chat window open?
 	const [isOpen, setIsOpen] = useState(false);
 
-	// State: array of all messages in the conversation
-	const [messages, setMessages] = useState<Message[]>([
-		{
-			id: "1",
-			text: "Hello! I am MYEcoLens Assistant 🌿 How can I assist you today?",
-			sender: "bot",
-			timestamp: new Date(),
-		},
-	]);
+	// Chat context
+	const { messages, setMessages } = useChat();
 
 	// State: current user input text
 	const [inputValue, setInputValue] = useState("");
@@ -99,12 +102,16 @@ export default function Chatbot() {
 		setIsTyping(true);
 		
 		try {
-			// Send message to backend API
+			// Keep only the last 10 messages for memory
+			const history = [...messages, newMessage].slice(-10);
+
+			// Send message and history to backend API
 			const res = await fetch("/api/chatbot", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: messageText }),
+				body: JSON.stringify({ message: messageText, history }),
 			});
+
 			// Response from API
 			const data = await res.json();
 			const botText = data.answer || "I am sorry, I didn't quite understand that 😕 Could you please clarify?";
