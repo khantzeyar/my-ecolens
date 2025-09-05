@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 export default async function CampDetail({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params; 
+  const { id } = params;
 
   const camp = await prisma.campSite.findUnique({
     where: { id: parseInt(id, 10) },
@@ -57,34 +57,39 @@ export default async function CampDetail({
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Contact</h2>
           <p className="text-gray-700">Tel: {camp.phone || "N/A"}</p>
-          {camp.website && (
-            <a
-              href={camp.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 underline mt-2 block"
-            >
-              Go to Website
-            </a>
-          )}
         </div>
 
         {/* Fees */}
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Entry Fee</h2>
           {camp.fees ? (
-            <ul className="list-disc list-inside text-gray-700">
+            <div className="space-y-2 text-gray-700">
               {camp.fees
-                .split(",")
-                .map((fee, idx) => (
-                  <li key={idx}>{fee.trim()}</li>
-                ))}
-            </ul>
+                .split(/[,|]/)
+                .map((fee) => fee.trim())
+                .filter(Boolean)
+                .map((fee, idx) => {
+                  // highlight section headers like "Citizen", "Non-citizen", "Admission"
+                  const isHeader = /(citizen|admission)/i.test(fee);
+                  return (
+                    <p
+                      key={idx}
+                      className={
+                        isHeader
+                          ? "text-lg font-semibold text-gray-900 mt-2"
+                          : "pl-4 text-gray-700"
+                      }
+                    >
+                      {fee}
+                    </p>
+                  );
+                })}
+            </div>
           ) : (
             <p className="text-gray-500">Free / Not specified</p>
           )}
         </div>
-        
+
         {/* Opening Time */}
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Opening Hours</h2>
@@ -93,7 +98,6 @@ export default async function CampDetail({
           </p>
         </div>
       </div>
-
 
       {/* Tags */}
       {camp.tags && (

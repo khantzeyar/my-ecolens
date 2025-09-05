@@ -12,13 +12,20 @@ const prisma = new PrismaClient();
 async function main() {
   const results: any[] = [];
 
+  const csvPath = path.join(__dirname, "CAMPING_WEST.csv");
+
   await new Promise<void>((resolve, reject) => {
-    fs.createReadStream(path.join(__dirname, "CAMPING_WEST.csv"))
+    fs.createReadStream(csvPath)
       .pipe(csvParser())
       .on("data", (row) => {
-        // Parse latitude & longitude
-        const latitude = row.latitude ? parseFloat(row.latitude) : 0;
-        const longitude = row.longitude ? parseFloat(row.longitude) : 0;
+        let latitude = row.latitude ? parseFloat(row.latitude) : 0;
+        let longitude = row.longitude ? parseFloat(row.longitude) : 0;
+
+        // ✅ 修正 Kledang Saiong Forest Eco Park 的经纬度
+        if (row.name?.trim() === "Kledang Saiong Forest Eco Park") {
+          latitude = 4.6843;
+          longitude = 101.0678;
+        }
 
         results.push({
           type: row.type?.trim() || "",
@@ -30,21 +37,21 @@ async function main() {
           phone: row.tel?.trim() || "",
           website: row.url?.trim() || "",
           openingTime: row.opening_hours?.trim() || "",
-          fees: row.fee?.trim() || "", // 存成 String
+          fees: row.fee?.trim() || "",             // keep as String
           forestType: row.forest_type?.trim() || "",
-          tags: row.attractions?.trim() || "", // 存成 String（后端/前端再 split）
+          tags: row.attractions?.trim() || "",     // keep as String (frontend split later)
           contact: row.enquiries?.trim() || "",
           imageUrl:
             row.imageUrl && row.imageUrl.trim().length > 0
               ? row.imageUrl.trim()
-              : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", // 默认森林图
+              : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", // fallback image
         });
       })
       .on("end", resolve)
       .on("error", reject);
   });
 
-  console.log(`Importing ${results.length} campsites...`);
+  console.log(`📥 Importing ${results.length} campsites...`);
 
   // Clear old data and insert new records
   await prisma.campSite.deleteMany();
@@ -52,12 +59,12 @@ async function main() {
     data: results,
   });
 
-  console.log("Seeding completed successfully!");
+  console.log("✅ Seeding completed successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("Error while seeding:", e);
+    console.error("❌ Error while seeding:", e);
     process.exit(1);
   })
   .finally(async () => {
