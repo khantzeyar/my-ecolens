@@ -7,14 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "ts-node --esm prisma/seed.ts"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node --esm prisma/seed.ts"
   },
   "dependencies": {
     "@google/genai": "^1.16.0",
     "@prisma/client": "^6.15.0",
+    "csv-parse": "^6.1.0",
     "csv-parser": "^3.2.0",
     "leaflet": "^1.9.4",
     "next": "15.5.2",
@@ -36,5 +38,6 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
-  }
+  },
+  "type": "module"
 }

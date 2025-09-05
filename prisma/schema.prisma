@@ -3,15 +3,44 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"  
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model CampSite {
-  id        Int     @id @default(autoincrement())
-  type      String
-  name      String
-  latitude  Float
-  longitude Float
-  state     String
+  id          Int      @id @default(autoincrement())
+  type        String
+  name        String
+  latitude    Float
+  longitude   Float
+  state       String
+
+  // CSV: address
+  address     String
+
+  // CSV: tel
+  phone       String?
+
+  // CSV: url
+  website     String?
+
+  // CSV: opening_hours
+  openingTime String?
+
+  // CSV: fee
+  fees        String?   // e.g. "FREE admission", "RM 5.00"
+
+  // CSV: forest_type
+  forestType  String?
+
+  // CSV: attractions (comma-separated values, e.g. "River, Waterfall, Wildlife")
+  tags        String?   
+
+  // CSV: enquiries/contact
+  contact     String?
+
+  // CSV: imageUrl
+  imageUrl    String?
+
+  @@map("campsite") 
 }
