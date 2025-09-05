@@ -103,24 +103,22 @@ export async function POST(req: Request) {
     });
 
     // Format detailed campsite info
-const campsiteList =
-  campsites.length > 0
-    ? campsites
-        .map(
+    const campsiteList = campsites.length > 0
+        ? campsites.map(
           (c) => `
-          Name: ${c.name}
-          State: ${c.state}
-          Type: ${c.type}
-          Attractions: ${c.tags}
-          Address: ${c.address}
-          Phone: ${c.phone}
-          Opening Hours: ${c.openingTime}
-          Fees: ${c.fees}
-          Forest Type: ${c.forestType}
-          Contact: ${c.contact}
-          Link: /camp/${c.id}
+            Name: ${c.name}
+            State: ${c.state}
+            Type: ${c.type}
+            Attractions: ${c.tags}
+            Address: ${c.address}
+            Phone: ${c.phone}
+            Opening Hours: ${c.openingTime}
+            Fees: ${c.fees}
+            Forest Type: ${c.forestType}
+            Contact: ${c.contact}
+            Link: /camp/${c.id}
         `)
-        .join("\n\n")
+      .join("\n\n")
     : "No campsites found.";
 
     // Prompt for Gemini
