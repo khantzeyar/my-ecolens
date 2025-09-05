@@ -95,8 +95,7 @@ const categories = [
       },
       {
         title: "Fire Safety",
-        description:
-          "Use designated fire pits and never leave a fire unattended.",
+        description: "Use designated fire pits and never leave a fire unattended.",
       },
       {
         title: "Flood Precaution",
@@ -196,8 +195,11 @@ const categories = [
   },
 ];
 
+type ChecklistCategory = typeof categories[0];
+type TipsCategory = typeof categories[number] & { checklist?: undefined };
+
 export default function GuidePage() {
-  const [activeCategory, setActiveCategory] = useState("essentials");
+  const [activeCategory, setActiveCategory] = useState<string>("essentials");
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   const category = categories.find((c) => c.id === activeCategory);
@@ -243,7 +245,7 @@ export default function GuidePage() {
         {/* Content */}
         <section>
           {/* Essentials checklist */}
-          {category?.id === "essentials" && (
+          {category && "checklist" in category && category.checklist && (
             <div className="p-6 bg-white/80 rounded-xl shadow-md border border-green-200">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Packing Checklist
@@ -251,9 +253,7 @@ export default function GuidePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {category.checklist.map((group, idx) => (
                   <div key={idx}>
-                    <h3 className="font-semibold text-gray-800 mb-2">
-                      {group.group}
-                    </h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">{group.group}</h3>
                     <ul className="space-y-2">
                       {group.items.map((item) => (
                         <li key={item} className="flex items-center space-x-3">
@@ -282,16 +282,14 @@ export default function GuidePage() {
           )}
 
           {/* Other categories */}
-          {category?.id !== "essentials" && (
+          {category && "tips" in category && category.tips && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {category?.tips.map((tip, idx) => (
+              {category.tips.map((tip, idx) => (
                 <div
                   key={idx}
                   className="p-6 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-200"
                 >
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
-                    {tip.title}
-                  </h2>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">{tip.title}</h2>
                   <p className="text-gray-600 text-sm">{tip.description}</p>
                 </div>
               ))}

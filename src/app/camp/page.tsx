@@ -1,9 +1,3 @@
-/**
-* This page has three sections:
-* 1. Banner with background image and title
-* 2. Filter panel (search, price filter, attraction filter, state filter)
-* 3. Map (smaller size, not full screen)
-*/
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -12,14 +6,38 @@ import dynamic from "next/dynamic";
 // Dynamically import Map so that Leaflet runs only on the client side
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
-const CampPage = () => {
+// Type for campsite fetched from API
+interface CampSite {
+  id: string;
+  name: string;
+  tags?: string;
+  state: string;
+  type?: string;
+  address?: string;
+  phone?: string;
+  openingTime?: string;
+  fees?: string;
+  forestType?: string;
+  contact?: string;
+}
+
+// Props for CampPage - Updated to match Next.js App Router expectations
+interface CampPageProps {
+  params?: Promise<Record<string, string>>;
+  searchParams?: Promise<Record<string, string>>;
+}
+
+// Price filter options
+type PriceFilter = "all" | "low" | "medium" | "high";
+
+const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
   const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
   const [attractions, setAttractions] = useState<string[]>([]);
 
-  const states = [
+  const states: string[] = [
     "Johor",
     "Kedah",
     "Kelantan",
@@ -33,30 +51,47 @@ const CampPage = () => {
     "Terengganu",
   ];
 
+  // Helper function to fetch campsites
+  const fetchCampsites = async (): Promise<CampSite[]> => {
+    const res = await fetch("/api/campsites");
+    if (!res.ok) throw new Error("Failed to fetch campsites");
+    const data = (await res.json()) as CampSite[];
+    return data;
+  };
+
+  // Handle async params and searchParams if needed
   useEffect(() => {
-    const fetchAttractions = async () => {
-      try {
-        const res = await fetch("/api/campsites");
-        if (!res.ok) throw new Error("Failed to fetch campsites");
-        const data = await res.json();
-
-        const allTags = Array.from(
-          new Set(
-            data.flatMap((site: any) =>
-              site.tags
-                ? site.tags.split(",").map((t: string) => t.trim())
-                : []
-            )
-          )
-        );
-
-        setAttractions(allTags);
-      } catch (err) {
-        console.error("Error fetching attractions:", err);
+    const handleAsyncParams = async () => {
+      if (params) {
+        const resolvedParams = await params;
+        // Handle resolved params if needed
+        console.log("Resolved params:", resolvedParams);
+      }
+      
+      if (searchParams) {
+        const resolvedSearchParams = await searchParams;
+        // Handle resolved search params if needed
+        console.log("Resolved search params:", resolvedSearchParams);
       }
     };
 
-    fetchAttractions();
+    handleAsyncParams();
+  }, [params, searchParams]);
+
+  // Fetch all attractions
+  useEffect(() => {
+    fetchCampsites()
+      .then((data) => {
+        const allTags: string[] = Array.from(
+          new Set(
+            data.flatMap((site) =>
+              site.tags ? site.tags.split(",").map((t) => t.trim()) : []
+            )
+          )
+        );
+        setAttractions(allTags);
+      })
+      .catch((err) => console.error("Error fetching attractions:", err));
   }, []);
 
   const toggleState = (state: string) => {
@@ -83,11 +118,8 @@ const CampPage = () => {
       {/* Banner */}
       <section
         className="h-[300px] bg-cover bg-center flex flex-col items-center justify-center text-white relative"
-        style={{
-          backgroundImage: "url('/images/forest-banner.jpg')", // ✅ correct path
-        }}
+        style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
       >
-        {/* ❌ removed the black overlay */}
         <div className="relative z-10 text-center">
           <h1 className="text-4xl font-bold">Discover Camping Sites</h1>
           <p className="text-lg mt-2">
@@ -97,10 +129,11 @@ const CampPage = () => {
         </div>
       </section>
 
-      {/* Filter */}
+      {/* Filter Panel */}
       <section className="max-w-6xl mx-auto p-6">
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            {/* Search */}
             <div>
               <h3 className="text-sm font-semibold mb-2 text-green-700">Search</h3>
               <input
@@ -112,11 +145,14 @@ const CampPage = () => {
               />
             </div>
 
+            {/* Price */}
             <div>
               <h3 className="text-sm font-semibold mb-2 text-green-700">Price</h3>
               <select
                 value={priceFilter}
-                onChange={(e) => setPriceFilter(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setPriceFilter(e.target.value as PriceFilter)
+                }
                 className="w-full p-2 border rounded-md"
               >
                 <option value="all">All Prices</option>
@@ -126,6 +162,7 @@ const CampPage = () => {
               </select>
             </div>
 
+            {/* Attractions */}
             <div>
               <h3 className="text-sm font-semibold mb-2 text-green-700">Attractions</h3>
               <div className="flex flex-wrap gap-2">
@@ -147,6 +184,7 @@ const CampPage = () => {
             </div>
           </div>
 
+          {/* States */}
           <div className="mt-6">
             <h3 className="text-sm font-semibold mb-2 text-green-700">States</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -164,10 +202,7 @@ const CampPage = () => {
             </div>
           </div>
 
-          <button
-            onClick={resetFilters}
-            className="mt-4 text-green-600 underline"
-          >
+          <button onClick={resetFilters} className="mt-4 text-green-600 underline">
             Reset
           </button>
         </div>
