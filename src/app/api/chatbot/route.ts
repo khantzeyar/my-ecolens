@@ -19,9 +19,9 @@ const prisma = new PrismaClient();
 
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
-  { keyword: "home", page: "/", description: "The landing page for the website." },
-  { keyword: "camping", page: "/camp", description: "Details on available camping sites and locations."},
-  { keyword: "guide", page: "/guide", description: "Information on eco-friendly tips the camper can follow to be environmentally friendly." },
+  { keyword: "home", page: "/", description: "Landing Page." },
+  { keyword: "camping", page: "/camp", description: "Camping Sites"},
+  { keyword: "guide", page: "/guide", description: "Eco-friendly Tips." },
 ];
 
 // Hardcoded fallback responses (Used if Gemini fails)
@@ -29,15 +29,15 @@ function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   // Simple keyword matches
   if (input.includes("camp")) {
-    return "[Camping Sites](/camp)";
+    return "🏕️ : [Camping Sites](/camp)";
   }
   if (input.includes("guide")) {
-    return " [Eco-friendly Tips](/guide)";
+    return "🌱 : [Eco-friendly Tips](/guide)";
   }
   // General suggestion if no keywords matched
-  return `Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
-  - [Camping Sites](/camp)
-  - [Eco-friendly Tips](/guide)
+  return `⚠️ Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
+  - 🏕️ : [Camping Sites](/camp)
+  - 🌱 : [Eco-friendly Tips](/guide)
   `;
 }
 
@@ -72,48 +72,80 @@ async function generateWithRetry(prompt: string, retries = 2, baseDelay = 1000):
 // Main POST handler for Gemini API
 export async function POST(req: Request) {
   try {
-    // Extract user message
-    const { message } = await req.json();
+    // Extract user message and conversation history
+    const { message, history } = await req.json();
+
+    // Format history into plain text
+    const historyText =
+      history
+        ?.map((m: any) => `${m.sender === "user" ? "User" : "Bot"}: ${m.text}`)
+        .join("\n") ?? "";
 
     // Detect state from user question
     const stateRegex =
-      /(Johor|Kedah|Kelantan|Melaka|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Selangor|Terengganu)/i;
+      /(Johor|Kedah|Kelantan|Melaka|Malacca|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Penang|Selangor|Terengganu)/i;
     const stateMatch = message.match(stateRegex);
-    const state = stateMatch ? stateMatch[1] : null;
+    let state = stateMatch ? stateMatch[1] : null;
+
+    // Normalise aliases
+    if (state) {
+      const lower = state.toLowerCase();
+      if (lower === "malacca") state = "Melaka";
+      if (lower === "penang") state = "Pulau Pinang";
+    }
 
     // Query campsites from database
     const campsites = await prisma.campSite.findMany({
       where: state
         ? { state: { equals: state, mode: "insensitive" } }
         : {},
-      take: 5,
+      take: 3,
     });
 
-    // Format query results
-    const campsiteList =
-      campsites.length > 0
-        ? campsites
-            .map((c) => `- ${c.name} (${c.state}) — ${c.type}`)
-            .join("\n")
-        : `No campsites found in the state.`;
+    // Format detailed campsite info
+const campsiteList =
+  campsites.length > 0
+    ? campsites
+        .map(
+          (c) => `
+          Name: ${c.name}
+          State: ${c.state}
+          Type: ${c.type}
+          Attractions: ${c.tags}
+          Address: ${c.address}
+          Phone: ${c.phone}
+          Opening Hours: ${c.openingTime}
+          Fees: ${c.fees}
+          Forest Type: ${c.forestType}
+          Contact: ${c.contact}
+          Link: /camp/${c.id}
+        `)
+        .join("\n\n")
+    : "No campsites found.";
 
     // Prompt for Gemini
     const prompt = `
+    ${historyText}
+
     Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia. 
-    
+        
     Guidelines:
     - Answer in simple, clear English, avoid jargons.
     - Keep responses concise (under 300 characters).
-    - If the question is about the platform, suggest the most relevant page from this list:
-    ${PAGE_MAPPINGS.map(p => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
+    - Use emojis sparingly to make responses friendly and engaging.
     - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
     - When suggesting links, list each one on a new line, include an emoji before the link.
-    - Use emojis sparingly to make responses friendly and engaging.
-    - If the question is about camping locations, suggest up to 5 campsites from this list:
+    - If the question is about the platform, suggest the most relevant page from this list:
+    ${PAGE_MAPPINGS.map(p => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
+    - For camping queries: suggest up to 3 campsites from the list below:
     ${campsiteList}
+    - When camp site details are asked, use the exact details below. Do not say "not sure" if the field is provided.
+    ${campsiteList}
+    - Always include a link to the campsite's detail page when mentioning it.  
+    - If the user asks about weather, explain that you cannot provide real-time forecasts. Instead, suggest checking [MetMalaysia](https://www.met.gov.my/) for accurate weather updates.
 
-  User question: ${message}
-  `;
+    User question: ${message}
+    `;
 
     let reply = "";
     try {
@@ -134,7 +166,7 @@ export async function POST(req: Request) {
     if (error instanceof Error) console.error("Unexpected Error Occurred:", error.message);
     else console.error("Unexpected Error Occurred:", error);
     return NextResponse.json(
-      { answer: "Something went wrong. Please try again later." },
+      { answer: "⚠️ Something went wrong. Please try again later." },
       { status: 500 }
     );
   }
