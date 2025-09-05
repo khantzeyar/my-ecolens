@@ -29,17 +29,15 @@ async function main() {
           address: row.address?.trim() || "",
           phone: row.tel?.trim() || "",
           website: row.url?.trim() || "",
-          description: row.information?.trim() || "",
           openingTime: row.opening_hours?.trim() || "",
-          fees: row.fee ? [row.fee.trim()] : [],
-          tags: row.attractions
-            ? row.attractions.split(",").map((t: string) => t.trim())
-            : [],
+          fees: row.fee?.trim() || "", // 存成 String
+          forestType: row.forest_type?.trim() || "",
+          tags: row.attractions?.trim() || "", // 存成 String（后端/前端再 split）
           contact: row.enquiries?.trim() || "",
-          image:
-            row.image && row.image.trim().length > 0
-              ? row.image.trim()
-              : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", // ✅ 默认森林图
+          imageUrl:
+            row.imageUrl && row.imageUrl.trim().length > 0
+              ? row.imageUrl.trim()
+              : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", // 默认森林图
         });
       })
       .on("end", resolve)

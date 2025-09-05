@@ -14,13 +14,33 @@ model CampSite {
   latitude    Float
   longitude   Float
   state       String
-  address     String   @default("")
-  phone       String   @default("")
-  website     String   @default("")
-  description String   @default("")
-  openingTime String   @default("")
-  fees        String[]
-  tags        String[]
-  contact     String   @default("")
-  image       String   @default("")
+
+  // CSV: address
+  address     String
+
+  // CSV: tel
+  phone       String?
+
+  // CSV: url
+  website     String?
+
+  // CSV: opening_hours
+  openingTime String?
+
+  // CSV: fee
+  fees        String?   
+
+  // CSV: forest_type
+  forestType  String?
+
+  // CSV: attractions
+  tags        String?   
+
+  // CSV: enquiries/contact
+  contact     String?
+
+  // CSV: imageUrl
+  imageUrl    String?
+
+  @@map("campsite") 
 }
