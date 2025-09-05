@@ -19,15 +19,6 @@ interface Message {
 	sender: "user" | "bot";
 	timestamp: Date;
 }
- 
-// Function to convert Markdown links to HTML
-function convertMarkdownLinks(text: string): string {
-	// Convert [text](url) to HTML anchor tags
-	return text.replace(
-		/\[([^\]]+)\]\(([^)]+)\)/g, 
-		'<a href="$2" class="chatbot-link" style="color: #2563eb; text-decoration: underline; cursor: pointer;">$1</a>'
-	);
-}
 
 // Function to render bot messages with clickable links
 function BotMessage({ text }: { text: string }) {
@@ -62,7 +53,7 @@ export default function Chatbot() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	// Chat context
-	const { messages, setMessages, clearMessages } = useChat();
+	const { messages, setMessages } = useChat();
 
 	// State: current user input text
 	const [inputValue, setInputValue] = useState("");
