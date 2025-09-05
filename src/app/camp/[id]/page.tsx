@@ -57,16 +57,6 @@ export default async function CampDetail({
         <div className="p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="text-xl font-semibold mb-2">Contact</h2>
           <p className="text-gray-700">Tel: {camp.phone || "N/A"}</p>
-          {camp.website && (
-            <a
-              href={camp.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 underline mt-2 block"
-            >
-              Go to Website
-            </a>
-          )}
         </div>
 
         {/* Fees */}
