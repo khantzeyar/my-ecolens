@@ -6,7 +6,7 @@
 */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import Map so that Leaflet runs only on the client side
@@ -17,6 +17,7 @@ const CampPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState<string>("all");
   const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
+  const [attractions, setAttractions] = useState<string[]>([]);
 
   const states = [
     "Johor",
@@ -32,7 +33,31 @@ const CampPage = () => {
     "Terengganu",
   ];
 
-  const attractions = ["River", "Waterfall", "Wildlife", "Bird Watching"];
+  useEffect(() => {
+    const fetchAttractions = async () => {
+      try {
+        const res = await fetch("/api/campsites");
+        if (!res.ok) throw new Error("Failed to fetch campsites");
+        const data = await res.json();
+
+        const allTags = Array.from(
+          new Set(
+            data.flatMap((site: any) =>
+              site.tags
+                ? site.tags.split(",").map((t: string) => t.trim())
+                : []
+            )
+          )
+        );
+
+        setAttractions(allTags);
+      } catch (err) {
+        console.error("Error fetching attractions:", err);
+      }
+    };
+
+    fetchAttractions();
+  }, []);
 
   const toggleState = (state: string) => {
     setSelectedStates((prev) =>
@@ -59,12 +84,12 @@ const CampPage = () => {
       <section
         className="h-[300px] bg-cover bg-center flex flex-col items-center justify-center text-white relative"
         style={{
-          backgroundImage: "url('/forest-banner.jpg')", // ensure this image is inside /public
+          backgroundImage: "url('/images/forest-banner.jpg')", // ✅ correct path
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        {/* ❌ removed the black overlay */}
         <div className="relative z-10 text-center">
-          <h1 className="text-4xl font-bold">Discover Eco Camping Sites</h1>
+          <h1 className="text-4xl font-bold">Discover Camping Sites</h1>
           <p className="text-lg mt-2">
             Find, explore, and enjoy sustainable camping locations across
             Malaysia&apos;s pristine forests
@@ -75,12 +100,9 @@ const CampPage = () => {
       {/* Filter */}
       <section className="max-w-6xl mx-auto p-6">
         <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-6">Filter</h2>
-
-          {/* Three column layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            {/* Left: Search by camp name */}
             <div>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">Search</h3>
               <input
                 type="text"
                 placeholder="Search by camp name..."
@@ -90,8 +112,8 @@ const CampPage = () => {
               />
             </div>
 
-            {/* Middle: Price filter */}
             <div>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">Price</h3>
               <select
                 value={priceFilter}
                 onChange={(e) => setPriceFilter(e.target.value)}
@@ -104,38 +126,42 @@ const CampPage = () => {
               </select>
             </div>
 
-            {/* Right: Attraction filter */}
-            <div className="flex flex-wrap gap-2">
-              {attractions.map((attr) => (
-                <button
-                  key={attr}
-                  type="button"
-                  onClick={() => toggleAttraction(attr)}
-                  className={`px-3 py-1 rounded-full text-green-700 ${
-                    selectedAttractions.includes(attr)
-                      ? "bg-green-300"
-                      : "bg-green-100"
-                  }`}
-                >
-                  {attr}
-                </button>
-              ))}
+            <div>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">Attractions</h3>
+              <div className="flex flex-wrap gap-2">
+                {attractions.map((attr) => (
+                  <button
+                    key={attr}
+                    type="button"
+                    onClick={() => toggleAttraction(attr)}
+                    className={`px-3 py-1 rounded-full text-green-700 ${
+                      selectedAttractions.includes(attr)
+                        ? "bg-green-300"
+                        : "bg-green-100"
+                    }`}
+                  >
+                    {attr}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* State checkboxes */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-6">
-            {states.map((state) => (
-              <label key={state} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={selectedStates.includes(state)}
-                  onChange={() => toggleState(state)}
-                  className="accent-green-600"
-                />
-                <span>{state}</span>
-              </label>
-            ))}
+          <div className="mt-6">
+            <h3 className="text-sm font-semibold mb-2 text-green-700">States</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {states.map((state) => (
+                <label key={state} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedStates.includes(state)}
+                    onChange={() => toggleState(state)}
+                    className="accent-green-600"
+                  />
+                  <span>{state}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <button
