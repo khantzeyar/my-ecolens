@@ -28,12 +28,12 @@ model CampSite {
   openingTime String?
 
   // CSV: fee
-  fees        String?   
+  fees        String?   // e.g. "FREE admission", "RM 5.00"
 
   // CSV: forest_type
   forestType  String?
 
-  // CSV: attractions
+  // CSV: attractions (comma-separated values, e.g. "River, Waterfall, Wildlife")
   tags        String?   
 
   // CSV: enquiries/contact

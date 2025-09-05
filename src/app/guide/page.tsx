@@ -4,235 +4,297 @@ import React, { useState } from "react";
 
 const categories = [
   {
-    id: "planning",
-    title: "Planning & Safety",
-    tips: [
+    id: "essentials",
+    title: "Essentials",
+    checklist: [
       {
-        title: "Choose the Right Location",
-        description:
-          "Camp only at designated sites away from disaster-prone zones such as steep slopes, floodplains, or riverbanks.",
-        impact: "Reduces risk of landslides, flooding, and accidents.",
-        reason: "Ensures visitor safety and protects fragile areas.",
-        level: "Easy",
+        group: "Sleeping Gear",
+        items: ["Tent", "Sleeping Bag", "Sleeping Mat", "Pillow", "Blanket"],
       },
       {
-        title: "Safe Access & Emergency Routes",
-        description:
-          "Ensure the site has road access during all seasons and emergency routes for ambulances or fire trucks.",
-        impact: "Improves response time during emergencies.",
-        reason: "Helps authorities reach campers quickly when needed.",
-        level: "Medium",
+        group: "Cooking Essentials",
+        items: [
+          "Cooking Stove",
+          "Gas Canisters",
+          "Cooking Pot / Pan",
+          "Utensils",
+          "Plates / Bowls",
+          "Cups / Mugs",
+          "Cutting Board & Knife",
+          "Dish Soap & Sponge",
+        ],
       },
       {
-        title: "Boundary & Security",
-        description:
-          "Campsites should be fenced or landscaped to prevent wildlife intrusion and reduce security risks.",
-        impact: "Protects campers and wildlife.",
-        reason: "Prevents accidents and reduces conflict with animals.",
-        level: "Medium",
-      },
-    ],
-  },
-  {
-    id: "layout",
-    title: "Campsite Layout & Facilities",
-    tips: [
-      {
-        title: "Tent Placement",
-        description:
-          "Maintain at least 3 meters between tent clusters and avoid placing them too close to rivers or cliffs.",
-        impact: "Prevents fire spread and accidents near hazards.",
-        reason: "Creates safer spacing and reduces risks of collapse or flooding.",
-        level: "Easy",
+        group: "Food & Water",
+        items: [
+          "Drinking Water",
+          "Water Filter / Purification Tablets",
+          "Packed Meals / Instant Food",
+          "Snacks",
+          "Cooler Box",
+        ],
       },
       {
-        title: "Basic Facilities",
-        description:
-          "Provide toilets, surau/prayer spaces, safe cooking, and dining areas away from tents.",
-        impact: "Improves hygiene and reduces fire hazards.",
-        reason: "Supports comfort and prevents accidents.",
-        level: "Medium",
+        group: "Safety & First Aid",
+        items: [
+          "First Aid Kit",
+          "Insect Repellent",
+          "Sunscreen",
+          "Personal Medication",
+          "Hand Sanitizer",
+        ],
       },
       {
-        title: "Utilities",
-        description:
-          "Ensure clean water (pipes or rain harvesting), electricity (solar preferred), and reliable communication.",
-        impact: "Provides essential services for campers.",
-        reason: "Improves resilience during longer stays and emergencies.",
-        level: "Medium",
-      },
-    ],
-  },
-  {
-    id: "environment",
-    title: "Environmental Management",
-    tips: [
-      {
-        title: "Solid Waste Management",
-        description:
-          "Apply 3R (Reduce, Reuse, Recycle). Campers should take back rubbish to support zero waste policy.",
-        impact: "Minimises pollution and protects ecosystems.",
-        reason: "Keeps campsites clean and prevents wildlife dependency.",
-        level: "Easy",
+        group: "Lighting & Power",
+        items: [
+          "Flashlight",
+          "Headlamp",
+          "Lantern",
+          "Extra Batteries",
+          "Power Bank",
+        ],
       },
       {
-        title: "Drainage & Flood Prevention",
-        description:
-          "Ensure proper drainage and no stagnant water to avoid breeding of mosquitoes and other vectors.",
-        impact: "Prevents disease outbreaks and waterlogging.",
-        reason: "Keeps environment safe and healthy.",
-        level: "Medium",
+        group: "Clothing & Footwear",
+        items: [
+          "Hiking Shoes / Boots",
+          "Extra Socks",
+          "Raincoat / Poncho",
+          "Warm Jacket",
+          "Hat / Cap",
+        ],
       },
       {
-        title: "Wildlife Protection",
-        description:
-          "Do not damage flora or disturb fauna. Place fire pits at least 5m away from tents.",
-        impact: "Preserves biodiversity and reduces fire risks.",
-        reason: "Protects habitats and ensures coexistence with nature.",
-        level: "Easy",
+        group: "Others",
+        items: [
+          "Backpack",
+          "Map / Compass / GPS",
+          "Camping Chair",
+          "Trash Bags",
+          "Multi-tool / Swiss Knife",
+          "Rope / Paracord",
+          "Towel",
+          "Toiletries",
+        ],
       },
     ],
   },
   {
-    id: "operations",
-    title: "Operations & Emergency Preparedness",
+    id: "safety",
+    title: "Weather & Safety",
     tips: [
       {
-        title: "Check-In System",
+        title: "Check Weather Forecast",
         description:
-          "All campers must register with personal and emergency contact details.",
-        impact: "Improves accountability and emergency response.",
-        reason: "Allows authorities to track campers during incidents.",
-        level: "Easy",
+          "Malaysia has a tropical climate with heavy rain during monsoon. Always check the forecast before camping.",
       },
       {
-        title: "Safety Briefing",
+        title: "Wildlife Awareness",
         description:
-          "Provide clear briefings or videos about campsite rules, cultural norms, and emergency plans.",
-        impact: "Increases awareness of risks.",
-        reason: "Educates campers and reduces unsafe practices.",
-        level: "Easy",
+          "Keep food sealed and avoid feeding animals to prevent attracting wildlife.",
       },
       {
-        title: "Emergency Equipment",
-        description:
-          "Ensure availability of first-aid kits, fire extinguishers, evacuation points, and rescue contacts.",
-        impact: "Strengthens preparedness for emergencies.",
-        reason: "Enables quick and effective responses.",
-        level: "Medium",
+        title: "Fire Safety",
+        description: "Use designated fire pits and never leave a fire unattended.",
       },
       {
-        title: "Adequate Staffing",
+        title: "Flood Precaution",
         description:
-          "Each site must have a manager and enough staff, with emergency contacts clearly displayed.",
-        impact: "Improves safety and operational control.",
-        reason: "Ensures someone is always accountable for site safety.",
-        level: "Medium",
+          "Avoid camping near rivers during heavy rain to prevent flash floods.",
+      },
+      {
+        title: "Heat Protection",
+        description:
+          "Wear a hat, apply sunscreen, and stay hydrated under the hot sun.",
+      },
+      {
+        title: "Trail Safety",
+        description: "Stay on marked trails to avoid getting lost.",
+      },
+      {
+        title: "First Aid Knowledge",
+        description:
+          "Learn basic first aid for insect bites, cuts, or dehydration.",
       },
     ],
   },
   {
-    id: "legal",
-    title: "Legal & Governance",
+    id: "sustainable",
+    title: "Sustainable Tips",
     tips: [
       {
-        title: "Permits & Licenses",
+        title: "Leave No Trace",
         description:
-          "Operators must obtain business licenses and permits such as planning permission and building approvals.",
-        impact: "Ensures legal compliance.",
-        reason: "Protects both campers and operators from liability.",
-        level: "Medium",
+          "Pack up all your trash and minimise impact on the environment.",
       },
       {
-        title: "Compliance with Acts",
-        description:
-          "Follow planning, building, local authority, and tourism-related laws (e.g., Akta 172, Akta 171).",
-        impact: "Aligns operations with national policies.",
-        reason: "Maintains professional standards in site management.",
-        level: "Medium",
+        title: "Eco-Friendly Products",
+        description: "Use biodegradable soap, reusable containers, and eco-bags.",
       },
       {
-        title: "Insurance",
+        title: "Respect Local Communities",
         description:
-          "Operators should provide public liability or takaful insurance for their campsite.",
-        impact: "Covers risks of accidents or damages.",
-        reason: "Protects campers financially in case of incidents.",
-        level: "Medium",
+          "Follow local rules and be considerate of nearby villagers.",
+      },
+      {
+        title: "Save Water",
+        description:
+          "Use water sparingly when washing or cooking at campsites.",
+      },
+      {
+        title: "Energy Efficiency",
+        description:
+          "Use solar-powered lamps or rechargeable batteries instead of disposable ones.",
+      },
+      {
+        title: "Protect Nature",
+        description:
+          "Do not pick plants, disturb animals, or damage trees in camping areas.",
+      },
+    ],
+  },
+  {
+    id: "emergency",
+    title: "Emergency Info",
+    tips: [
+      {
+        title: "Emergency Contacts",
+        description: "Police: 999, Fire & Rescue: 994, Ambulance: 999.",
+      },
+      {
+        title: "Nearest Ranger / Forest Dept",
+        description:
+          "Locate the ranger station or park office before setting up camp.",
+      },
+      {
+        title: "Hospital Locator",
+        description:
+          "Know the nearest hospital or clinic to your campsite in case of emergencies.",
+      },
+      {
+        title: "Mobile Signal",
+        description:
+          "Check network coverage; bring a satellite phone if camping in remote areas.",
+      },
+      {
+        title: "Emergency Shelter",
+        description:
+          "Identify the nearest shelter or evacuation center in case of storms.",
+      },
+      {
+        title: "Whistle & Signal",
+        description:
+          "Carry a whistle, flashlight, or flare for distress signaling.",
+      },
+      {
+        title: "Group Safety",
+        description:
+          "Always inform friends or family about your camping location and duration.",
       },
     ],
   },
 ];
 
+type ChecklistCategory = typeof categories[0];
+type TipsCategory = typeof categories[number] & { checklist?: undefined };
 
 export default function GuidePage() {
-  const [activeCategory, setActiveCategory] = useState("planning");
+  const [activeCategory, setActiveCategory] = useState<string>("essentials");
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
   const category = categories.find((c) => c.id === activeCategory);
 
-  return (
-    <main className="pt-28 px-8 max-w-7xl mx-auto pb-20">
-      {/* Title Section with background image */}
-      <div
-        className="bg-cover bg-center rounded-2xl shadow-lg h-80 flex items-start justify-center pt-12 mb-16"
-        style={{
-          backgroundImage: "url('/images/bg-camping.jpg')",
-        }}
-      >
-        <h1 className="text-4xl font-extrabold text-black drop-shadow-md">
-          Camping Environmental Guide
-        </h1>
-      </div>
+  const toggleCheck = (item: string) => {
+    setCheckedItems((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+    );
+  };
 
-      {/* Content area */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-        {/* Sidebar */}
-        <aside className="md:col-span-1 space-y-4">
+  return (
+    <main
+      className="pt-24 px-6 pb-20 min-h-screen"
+      style={{
+        backgroundImage: "url('/images/bg-camping.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Page title */}
+        <h1 className="text-4xl font-bold text-white text-center mb-12 drop-shadow-lg">
+          Camping Guide
+        </h1>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-4 justify-center mb-10">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setActiveCategory(c.id)}
-              className={`w-full text-left px-5 py-4 rounded-xl font-semibold transition-all duration-200 ${
+              className={`px-6 py-2 rounded-full text-sm font-medium transition ${
                 activeCategory === c.id
-                  ? "bg-green-600 text-white shadow-lg scale-[1.02]"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-green-600 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-green-100"
               }`}
             >
               {c.title}
-              <span className="ml-2 text-sm font-normal text-gray-400">
-                {c.tips.length} tips
-              </span>
             </button>
           ))}
-        </aside>
+        </div>
 
         {/* Content */}
-        <section className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {category?.tips.map((tip, idx) => (
-            <div
-              key={idx}
-              className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all border-t-4 border-green-500"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-800">{tip.title}</h2>
-                <span
-                  className={`text-xs px-3 py-1 rounded-full ${
-                    tip.level === "Easy"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {tip.level}
-                </span>
-              </div>
-              <p className="text-gray-600 mb-4">{tip.description}</p>
-              <div className="bg-blue-50 p-3 rounded mb-4 text-sm">
-                <strong className="text-blue-700">Why This Matters:</strong>{" "}
-                {tip.reason}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Impact:</strong> {tip.impact}
+        <section>
+          {/* Essentials checklist */}
+          {category && "checklist" in category && category.checklist && (
+            <div className="p-6 bg-white/80 rounded-xl shadow-md border border-green-200">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Packing Checklist
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {category.checklist.map((group, idx) => (
+                  <div key={idx}>
+                    <h3 className="font-semibold text-gray-800 mb-2">{group.group}</h3>
+                    <ul className="space-y-2">
+                      {group.items.map((item) => (
+                        <li key={item} className="flex items-center space-x-3">
+                          <input
+                            type="checkbox"
+                            checked={checkedItems.includes(item)}
+                            onChange={() => toggleCheck(item)}
+                            className="w-4 h-4 text-green-600 border-gray-300 rounded"
+                          />
+                          <span
+                            className={`text-sm ${
+                              checkedItems.includes(item)
+                                ? "line-through text-gray-400"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          )}
+
+          {/* Other categories */}
+          {category && "tips" in category && category.tips && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {category.tips.map((tip, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-200"
+                >
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">{tip.title}</h2>
+                  <p className="text-gray-600 text-sm">{tip.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </main>
