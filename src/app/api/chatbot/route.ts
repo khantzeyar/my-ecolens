@@ -1,10 +1,3 @@
-/** 
- * API endpoint for MYEcoLens chatbot
- * - Handles camping, weather, and platform queries
- * - Uses Google Gemini API with retry & fallback
- * - Specific campsite details are served directly from database
-*/
-
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { PrismaClient } from "@prisma/client";
@@ -27,14 +20,12 @@ const PAGE_MAPPINGS = [
 // Fallback responses if Gemini fails
 function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
-  // Simple keyword matches
   if (input.includes("camp")) {
     return "🏕️ : [Camping Sites](/camp)";
   }
   if (input.includes("guide")) {
     return "🌱 : [Eco-friendly Tips](/guide)";
   }
-  // General suggestion if no keywords matched
   return `⚠️ Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
   - 🏕️ : [Camping Sites](/camp)
   - 🌱 : [Eco-friendly Tips](/guide)
@@ -42,19 +33,23 @@ function getFallbackResponse(userInput: string): string {
 }
 
 // Retry logic for Gemini API
-async function generateWithRetry(prompt: string, retries = 2, baseDelay = 1000): Promise<string> {
+async function generateWithRetry(
+  prompt: string,
+  retries = 2,
+  baseDelay = 1000
+): Promise<string> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const response = await chatbot.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
       });
-      const text = response.text ?? '';
       return response.text?.trim() ?? "";
     } catch (err: unknown) {
       console.error(`Gemini attempt ${attempt + 1} failed:`, err);
       if (attempt < retries) {
-        const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 500;
+        const delay =
+          baseDelay * Math.pow(2, attempt) + Math.random() * 500;
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
         throw err;
@@ -75,17 +70,52 @@ interface ChatRequestBody {
   history?: ChatHistoryItem[];
 }
 
-// Main POST handler
+// Helper function to detect state from user message
+function detectState(message: string): string | null {
+  const stateRegex =
+    /(Johor|Kedah|Kelantan|Melaka|Malacca|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Penang|Selangor|Terengganu)/i;
+  const match = message.match(stateRegex);
+  if (!match) return null;
+
+  // State alias
+  let state = match[1];
+  const lower = state.toLowerCase();
+  if (lower === "malacca") state = "Melaka";
+  if (lower === "penang") state = "Pulau Pinang";
+  return state;
+}
+
+// Helper function to detect attractions from user message
+function detectAttractions(message: string): string[] {
+  const attractionKeywords = [
+    "wildlife",
+    "bird watching",
+    "beach",
+    "river",
+    "lake",
+    "waterfall",
+    "cave",
+  ];
+  return attractionKeywords.filter((a) =>
+    message.toLowerCase().includes(a.toLowerCase())
+  );
+}
+
+// Main handler
 export async function POST(req: Request) {
   try {
     const { message, history } = (await req.json()) as ChatRequestBody;
 
+    // Chat history for context
     const historyText =
       history
-        ?.map((m: ChatHistoryItem) => `${m.sender === "user" ? "User" : "Bot"}: ${m.text}`)
+        ?.map(
+          (m: ChatHistoryItem) =>
+            `${m.sender === "user" ? "User" : "Bot"}: ${m.text}`
+        )
         .join("\n") ?? "";
 
-    // Check if the user is asking about a specific campsite by name
+    // Check if user is asking about a specific campsite by name
     const campsite = await prisma.campSite.findFirst({
       where: { name: { equals: message, mode: "insensitive" } },
     });
@@ -101,35 +131,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ answer: details.trim() });
     }
 
-    // If not asking about a specific campsite, detect state to give suggestions
-    const stateRegex =
-      /(Johor|Kedah|Kelantan|Melaka|Malacca|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Penang|Selangor|Terengganu)/i;
-    const stateMatch = message.match(stateRegex);
-    let state = stateMatch ? stateMatch[1] : null;
+    // Detect filters
+    const state = detectState(message);
+    const attractions = detectAttractions(message);
 
-    // Normalise aliases
-    if (state) {
-      const lower = state.toLowerCase();
-      if (lower === "malacca") state = "Melaka";
-      if (lower === "penang") state = "Pulau Pinang";
-    }
-
-    // Query up to 3 campsites for suggestions
+    // Query campsites
     const campsites = await prisma.campSite.findMany({
-      where: state ? { state: { equals: state, mode: "insensitive" } } : {},
+      where: {
+        AND: [
+          state ? { state: { equals: state, mode: "insensitive" } } : {},
+          attractions.length > 0
+            ? {
+                OR: attractions.map((attr) => ({
+                  tags: { contains: attr, mode: "insensitive" },
+                })),
+              }
+            : {},
+        ],
+      },
       take: 3,
     });
 
     const campsiteList =
       campsites.length > 0
         ? campsites
-            .map(
-              (c) => `${c.name} → /camp/${c.id}`
-            )
+            .map((c) => `🏕️ [${c.name}](/camp/${c.id})`)
             .join("\n")
         : "No campsites found.";
 
-    // Prepare prompt for Gemini
+    // Prompt for Gemini
     const prompt = `
     ${historyText}
 
@@ -144,14 +174,16 @@ export async function POST(req: Request) {
     - Suggest up to 3 campsites from the list below:
     ${campsiteList}
     - For platform queries, suggest the most relevant page:
-    ${PAGE_MAPPINGS.map((p) => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
+    ${PAGE_MAPPINGS.map(
+      (p) => `${p.keyword} → ${p.page} (${p.description})`
+    ).join("\n")}
     - Always include a link to the campsite's detail page when mentioning it.
     - If the user asks about weather, suggest checking [MetMalaysia](https://www.met.gov.my/).
 
     User question: ${message}
     `;
 
-    // Generate Gemini response
+    // Generate response
     let reply: string = "";
     try {
       reply = await generateWithRetry(prompt);
