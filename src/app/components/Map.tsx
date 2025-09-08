@@ -39,7 +39,7 @@ type CampSite = {
   state: string
   fees?: string
   tags?: string
-  price?: string
+  price?: string   // ✅ free / paid
   attractions?: string[]
 }
 
@@ -55,7 +55,7 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
-  onWeatherUpdate: (forecast: WeatherDay[]) => void   // ⬅️ 新增：把天气数据传出去
+  onWeatherUpdate: (forecast: WeatherDay[]) => void
 }
 
 const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions, onWeatherUpdate }) => {
@@ -82,14 +82,13 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
         const data = await res.json()
 
         const processed = data.map((site: CampSite) => {
-          let price: string = "low"
+          let price: string = "paid"
+
           if (site.fees) {
-            if (/RM\s?(20|[3-9]\d+)/i.test(site.fees)) {
-              price = "high"
-            } else if (/RM\s?(5|10|15)/i.test(site.fees)) {
-              price = "medium"
-            } else if (/RM\s?(0|1|2|3|4)/i.test(site.fees) || /FREE/i.test(site.fees)) {
-              price = "low"
+            if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
+              price = "free"
+            } else {
+              price = "paid"
             }
           }
 
@@ -127,7 +126,7 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
         icon: `https://openweathermap.org/img/wn/${d.weather[0].icon}.png`
       }))
 
-      onWeatherUpdate(forecast)  // ⬅️ 把天气传给父组件
+      onWeatherUpdate(forecast)
     } catch (err) {
       console.error("Failed to fetch weather", err)
     }
@@ -184,7 +183,7 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
               click: () => {
                 setLastClickedId(site.id)
                 localStorage.setItem("lastClickedId", String(site.id))
-                fetchWeather(site.latitude, site.longitude)  // ⬅️ 点击时获取天气
+                fetchWeather(site.latitude, site.longitude)
               },
             }}
           >
@@ -192,7 +191,11 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
               <div className="font-bold text-green-700">{site.name}</div>
               <div className="text-xs text-gray-600">State: {site.state}</div>
               <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
-              {site.price && <div className="text-xs text-gray-500">Price: {site.price}</div>}
+              {site.price && (
+                <div className="text-xs text-gray-500">
+                  Price: {site.price === "free" ? "Free" : "Paid"}
+                </div>
+              )}
               {site.attractions && site.attractions.length > 0 && (
                 <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
               )}

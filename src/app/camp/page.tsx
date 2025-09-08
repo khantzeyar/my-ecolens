@@ -24,7 +24,8 @@ interface CampPageProps {
   searchParams?: Promise<Record<string, string>>;
 }
 
-type PriceFilter = "all" | "low" | "medium" | "high";
+// ✅ 改成 free / paid
+type PriceFilter = "all" | "free" | "paid";
 
 type WeatherDay = {
   date: string;
@@ -129,10 +130,9 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
                 }
                 className="w-full p-2 border rounded-md"
               >
-                <option value="all">All Prices</option>
-                <option value="low">Low Budget</option>
-                <option value="medium">Medium</option>
-                <option value="high">Premium</option>
+                <option value="all">All</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
               </select>
             </div>
 
