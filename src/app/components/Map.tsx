@@ -39,7 +39,7 @@ type CampSite = {
   state: string
   fees?: string
   tags?: string
-  price?: string   // ✅ free / paid
+  price?: string   
   attractions?: string[]
 }
 
@@ -48,6 +48,17 @@ type WeatherDay = {
   temp: number
   description: string
   icon: string
+}
+
+// OpenWeatherMap API response
+type OpenWeatherForecastItem = {
+  dt: number
+  main: { temp: number }
+  weather: { description: string; icon: string }[]
+}
+
+type OpenWeatherResponse = {
+  list: OpenWeatherForecastItem[]
 }
 
 interface MapProps {
@@ -115,11 +126,13 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
       )
-      const data = await res.json()
+      const data: OpenWeatherResponse = await res.json()
       if (!data.list) return
 
-      const daily = data.list.filter((_: any, idx: number) => idx % 8 === 0).slice(0, 5)
-      const forecast: WeatherDay[] = daily.map((d: any) => ({
+      // Take every 8th item (~once per day), limit to 5 days
+      const daily = data.list.filter((_, idx) => idx % 8 === 0).slice(0, 5)
+
+      const forecast: WeatherDay[] = daily.map((d) => ({
         date: new Date(d.dt * 1000).toLocaleDateString(),
         temp: d.main.temp,
         description: d.weather[0].description,
