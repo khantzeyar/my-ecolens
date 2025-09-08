@@ -3,15 +3,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"  
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model CampSite {
-  id        Int     @id @default(autoincrement())
-  type      String
-  name      String
-  latitude  Float
-  longitude Float
-  state     String
+  id          Int     @id @default(autoincrement())
+  type        String
+  name        String
+  latitude    Float
+  longitude   Float
+  state       String
+  address     String
+  phone       String?
+  website     String?
+  openingTime String?
+  fees        String?
+  forestType  String?
+  tags        String?
+  contact     String?
+  imageUrl    String?
+
+  @@map("campsite")
 }

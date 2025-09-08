@@ -1,112 +1,203 @@
-/** 
- * This is the API endpoint for our chatbot
- * - The user prompt is wrapped within a template to satsfiy the acceptance criteria for iteration 1.
- * - The pages of the site are provided as a resource for the chatbot to use when answering questions.
- * - Has retry and fallback logic for resilience
-*/
-
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { PrismaClient } from "@prisma/client";
 
 // Initialise Gemini client
 const chatbot = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
+// Initialise Prisma client
+const prisma = new PrismaClient();
+
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
-  { keyword: "home", page: "/", description: "The landing page for the website." },
-  { keyword: "camping", page: "/camp", description: "Details on available camping sites and locations."},
-  { keyword: "guide", page: "/guide", description: "Information on eco-friendly tips the camper can follow to be environmentally friendly." },
+  { keyword: "home", page: "/", description: "Landing Page." },
+  { keyword: "camping", page: "/camp", description: "Camping Sites" },
+  { keyword: "guide", page: "/guide", description: "Eco-friendly Tips." },
 ];
 
-// Hardcoded fallback responses (Used if Gemini fails)
+// Fallback responses if Gemini fails
 function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
-  // Simple keyword matches
   if (input.includes("camp")) {
-    return "[Camping Sites](/camp)";
+    return "🏕️ : [Camping Sites](/camp)";
   }
   if (input.includes("guide")) {
-    return " [Eco-friendly Tips](/guide)";
+    return "🌱 : [Eco-friendly Tips](/guide)";
   }
-  // General suggestion if no keywords matched
-  return `Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
-  - [Camping Sites](/camp)
-  - [Eco-friendly Tips](/guide)
+  return `⚠️ Sorry, I am temporarily unavailable to answer fully. Meanwhile, you can explore:
+  - 🏕️ : [Camping Sites](/camp)
+  - 🌱 : [Eco-friendly Tips](/guide)
   `;
 }
 
 // Retry logic for Gemini API
-async function generateWithRetry(prompt: string, retries = 2, baseDelay = 1000): Promise<string> {
+async function generateWithRetry(
+  prompt: string,
+  retries = 2,
+  baseDelay = 1000
+): Promise<string> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const response = await chatbot.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
       });
-      const text = response.text ?? '';
-      return text.trim();
+      return response.text?.trim() ?? "";
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error(`Gemini attempt ${attempt + 1} failed:`, err.message);
-      } else {
-        console.error(`Gemini attempt ${attempt + 1} failed:`, err);
-      }
-      // Retry with exponential backoff and jitter
+      console.error(`Gemini attempt ${attempt + 1} failed:`, err);
       if (attempt < retries) {
-        const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 500;
+        const delay =
+          baseDelay * Math.pow(2, attempt) + Math.random() * 500;
         await new Promise((resolve) => setTimeout(resolve, delay));
-        continue;
+      } else {
+        throw err;
       }
-      throw err;
     }
   }
   throw new Error("All retry attempts failed");
 }
 
-// Main POST handler for Gemini API
+// Type definitions for request body
+interface ChatHistoryItem {
+  sender: "user" | "bot";
+  text: string;
+}
+
+interface ChatRequestBody {
+  message: string;
+  history?: ChatHistoryItem[];
+}
+
+// Helper function to detect state from user message
+function detectState(message: string): string | null {
+  const stateRegex =
+    /(Johor|Kedah|Kelantan|Melaka|Malacca|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Penang|Selangor|Terengganu)/i;
+  const match = message.match(stateRegex);
+  if (!match) return null;
+
+  // State alias
+  let state = match[1];
+  const lower = state.toLowerCase();
+  if (lower === "malacca") state = "Melaka";
+  if (lower === "penang") state = "Pulau Pinang";
+  return state;
+}
+
+// Helper function to detect attractions from user message
+function detectAttractions(message: string): string[] {
+  const attractionKeywords = [
+    "wildlife",
+    "bird watching",
+    "beach",
+    "river",
+    "lake",
+    "waterfall",
+    "cave",
+  ];
+  return attractionKeywords.filter((a) =>
+    message.toLowerCase().includes(a.toLowerCase())
+  );
+}
+
+// Main handler
 export async function POST(req: Request) {
   try {
-    // Extract user message
-    const { message } = await req.json();
+    const { message, history } = (await req.json()) as ChatRequestBody;
 
-  // Prompt for Gemini
-  const prompt = `
-  Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia. 
-    
-  Guidelines:
-  - Answer in simple, clear English, avoid jargons.
-  - Keep responses concise (under 300 characters).
-  - If the question is about the platform, suggest the most relevant page from this list:
-  ${PAGE_MAPPINGS.map(p => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
-  - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
-  - When suggesting links, list each one on a new line.
-  - Do not use emojis in your responses.
+    // Chat history for context
+    const historyText =
+      history
+        ?.map(
+          (m: ChatHistoryItem) =>
+            `${m.sender === "user" ? "User" : "Bot"}: ${m.text}`
+        )
+        .join("\n") ?? "";
 
-  User question: ${message}
-  `;
+    // Check if user is asking about a specific campsite by name
+    const campsite = await prisma.campSite.findFirst({
+      where: { name: { equals: message, mode: "insensitive" } },
+    });
 
-    let reply = "";
+    if (campsite) {
+      const details = `
+        🏕️ [${campsite.name}](/camp/${campsite.id})
+        🌲 Forest Type: ${campsite.forestType}
+        📸 Attractions: ${campsite.tags}
+        🕗 Opening Hours: ${campsite.openingTime}
+        💲 Fees: ${campsite.fees}
+      `;
+      return NextResponse.json({ answer: details.trim() });
+    }
+
+    // Detect filters
+    const state = detectState(message);
+    const attractions = detectAttractions(message);
+
+    // Query campsites
+    const campsites = await prisma.campSite.findMany({
+      where: {
+        AND: [
+          state ? { state: { equals: state, mode: "insensitive" } } : {},
+          attractions.length > 0
+            ? {
+                OR: attractions.map((attr) => ({
+                  tags: { contains: attr, mode: "insensitive" },
+                })),
+              }
+            : {},
+        ],
+      },
+      take: 3,
+    });
+
+    const campsiteList =
+      campsites.length > 0
+        ? campsites
+            .map((c) => `🏕️ [${c.name}](/camp/${c.id})`)
+            .join("\n")
+        : "No campsites found.";
+
+    // Prompt for Gemini
+    const prompt = `
+    ${historyText}
+
+    Context: You are MYEcoLens Assistant, a friendly chatbot that helps users with eco-friendly camping in Malaysia.
+
+    Guidelines:
+    - Answer in simple, clear English, avoid jargons.
+    - Keep responses concise (under 300 characters).
+    - Use emojis sparingly to make responses friendly and engaging.
+    - Use Markdown-style clickable links for pages, e.g., [Camping Sites](/camp)
+    - When suggesting links, list each one on a new line, include an emoji before the link.
+    - Suggest up to 3 campsites from the list below:
+    ${campsiteList}
+    - For platform queries, suggest the most relevant page:
+    ${PAGE_MAPPINGS.map(
+      (p) => `${p.keyword} → ${p.page} (${p.description})`
+    ).join("\n")}
+    - Always include a link to the campsite's detail page when mentioning it.
+    - If the user asks about weather, suggest checking [MetMalaysia](https://www.met.gov.my/).
+
+    User question: ${message}
+    `;
+
+    // Generate response
+    let reply: string = "";
     try {
-      // Call Gemini with retry logic
       reply = await generateWithRetry(prompt);
-      // If Gemini gives nothing, fallback to hardcoded response
-      if (!reply.trim()) {
-        reply = getFallbackResponse(message);
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) console.error("Gemini API Error:", err.message);
-      else console.error("Gemini API Error:", err);
+      if (!reply.trim()) reply = getFallbackResponse(message);
+    } catch (err) {
+      console.error("Gemini API Error:", err);
       reply = getFallbackResponse(message);
     }
-    // Return final chatbot answer
+
     return NextResponse.json({ answer: reply });
-  } catch (error: unknown) {
-    if (error instanceof Error) console.error("Unexpected Error Occurred:", error.message);
-    else console.error("Unexpected Error Occurred:", error);
+  } catch (error) {
+    console.error("Unexpected Error Occurred:", error);
     return NextResponse.json(
-      { answer: "Something went wrong. Please try again later." },
+      { answer: "⚠️ Something went wrong. Please try again later." },
       { status: 500 }
     );
   }

@@ -7,8 +7,11 @@ export async function GET() {
   try {
     const sites = await prisma.campSite.findMany();
     return NextResponse.json(sites);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to fetch campsites" }, { status: 500 });
+  } catch (_error) {
+    console.error("Failed to fetch campsites:", _error);
+    return NextResponse.json(
+      { error: "Failed to fetch campsites" },
+      { status: 500 }
+    );
   }
 }
