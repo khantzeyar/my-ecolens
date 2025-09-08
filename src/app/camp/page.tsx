@@ -3,10 +3,8 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
-// Dynamically import Map so that Leaflet runs only on the client side
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
-// Type for campsite fetched from API
 interface CampSite {
   id: string;
   name: string;
@@ -21,14 +19,20 @@ interface CampSite {
   contact?: string;
 }
 
-// Props for CampPage - Updated to match Next.js App Router expectations
 interface CampPageProps {
   params?: Promise<Record<string, string>>;
   searchParams?: Promise<Record<string, string>>;
 }
 
-// Price filter options
-type PriceFilter = "all" | "low" | "medium" | "high";
+// ✅ 改成 free / paid
+type PriceFilter = "all" | "free" | "paid";
+
+type WeatherDay = {
+  date: string;
+  temp: number;
+  description: string;
+  icon: string;
+};
 
 const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
@@ -36,49 +40,19 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
   const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
   const [attractions, setAttractions] = useState<string[]>([]);
+  const [weather, setWeather] = useState<WeatherDay[]>([]);
 
   const states: string[] = [
-    "Johor",
-    "Kedah",
-    "Kelantan",
-    "Melaka",
-    "Negeri Sembilan",
-    "Pahang",
-    "Perak",
-    "Perlis",
-    "Pulau Pinang",
-    "Selangor",
-    "Terengganu",
+    "Johor","Kedah","Kelantan","Melaka","Negeri Sembilan",
+    "Pahang","Perak","Perlis","Pulau Pinang","Selangor","Terengganu",
   ];
 
-  // Helper function to fetch campsites
   const fetchCampsites = async (): Promise<CampSite[]> => {
     const res = await fetch("/api/campsites");
     if (!res.ok) throw new Error("Failed to fetch campsites");
-    const data = (await res.json()) as CampSite[];
-    return data;
+    return (await res.json()) as CampSite[];
   };
 
-  // Handle async params and searchParams if needed
-  useEffect(() => {
-    const handleAsyncParams = async () => {
-      if (params) {
-        const resolvedParams = await params;
-        // Handle resolved params if needed
-        console.log("Resolved params:", resolvedParams);
-      }
-      
-      if (searchParams) {
-        const resolvedSearchParams = await searchParams;
-        // Handle resolved search params if needed
-        console.log("Resolved search params:", resolvedSearchParams);
-      }
-    };
-
-    handleAsyncParams();
-  }, [params, searchParams]);
-
-  // Fetch all attractions
   useEffect(() => {
     fetchCampsites()
       .then((data) => {
@@ -114,25 +88,26 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   };
 
   return (
-    <main className="pt-20">
+    <main
+      className="pt-20 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
+    >
       {/* Banner */}
-      <section
-        className="h-[300px] bg-cover bg-center flex flex-col items-center justify-center text-white relative"
-        style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
-      >
-        <div className="relative z-10 text-center">
-          <h1 className="text-4xl font-bold">Discover Camping Sites</h1>
-          <p className="text-lg mt-2">
-            Find, explore, and enjoy sustainable camping locations across
-            Malaysia&apos;s pristine forests
-          </p>
-        </div>
+      <section className="h-[350px] flex flex-col items-center justify-center text-center">
+        <h1 className="text-4xl font-bold text-green-700 drop-shadow-md mb-2">
+          Discover Camping Sites
+        </h1>
+        <p className="text-lg text-green-800 drop-shadow-sm">
+          Find, explore, and enjoy sustainable camping locations across
+          Malaysia&apos;s pristine forests
+        </p>
       </section>
 
-      {/* Filter Panel */}
-      <section className="max-w-6xl mx-auto p-6">
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      {/* Filter + Weather Side by Side */}
+      <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 -mt-2">
+        {/* Filter Panel */}
+        <div className="bg-white/70 shadow-md rounded-lg p-6 backdrop-blur-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {/* Search */}
             <div>
               <h3 className="text-sm font-semibold mb-2 text-green-700">Search</h3>
@@ -155,15 +130,14 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
                 }
                 className="w-full p-2 border rounded-md"
               >
-                <option value="all">All Prices</option>
-                <option value="low">Low Budget</option>
-                <option value="medium">Medium</option>
-                <option value="high">Premium</option>
+                <option value="all">All</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
               </select>
             </div>
 
             {/* Attractions */}
-            <div>
+            <div className="md:col-span-2">
               <h3 className="text-sm font-semibold mb-2 text-green-700">Attractions</h3>
               <div className="flex flex-wrap gap-2">
                 {attractions.map((attr) => (
@@ -187,7 +161,7 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
           {/* States */}
           <div className="mt-6">
             <h3 className="text-sm font-semibold mb-2 text-green-700">States</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
               {states.map((state) => (
                 <label key={state} className="flex items-center space-x-2">
                   <input
@@ -206,16 +180,62 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
             Reset
           </button>
         </div>
+
+        {/* Weather Forecast */}
+        <div className="relative p-6 rounded-lg shadow-md bg-white/70 backdrop-blur-md">
+          <h3 className="text-xl font-bold mb-2 text-green-900">
+            Weather Forecast
+          </h3>
+
+          {weather.length === 0 ? (
+            <p className="text-green-800">
+              Click a campsite marker to view the weather forecast.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {/* 第一行：3 个 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {weather.slice(0, 3).map((day, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center p-2 bg-white/80 rounded-lg shadow"
+                  >
+                    <span className="text-sm font-medium text-gray-800">{day.date}</span>
+                    <img src={day.icon} alt={day.description} className="w-14 h-14 my-1" />
+                    <span className="text-sm text-gray-800">{day.temp}°C</span>
+                    <span className="text-xs text-gray-600">{day.description}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 第二行：2 个，居中 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 justify-center">
+                {weather.slice(3, 5).map((day, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center p-2 bg-white/80 rounded-lg shadow"
+                  >
+                    <span className="text-sm font-medium text-gray-800">{day.date}</span>
+                    <img src={day.icon} alt={day.description} className="w-14 h-14 my-1" />
+                    <span className="text-sm text-gray-800">{day.temp}°C</span>
+                    <span className="text-xs text-gray-600">{day.description}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Map */}
-      <section className="max-w-6xl mx-auto p-6">
-        <div className="h-[500px] w-full border rounded-lg overflow-hidden shadow-md">
+      <section className="max-w-7xl mx-auto px-6 mt-4">
+        <div className="h-[600px] w-full border rounded-lg overflow-hidden shadow-md bg-white/60 backdrop-blur-sm">
           <Map
             selectedStates={selectedStates}
             searchTerm={searchTerm}
             priceFilter={priceFilter}
             selectedAttractions={selectedAttractions}
+            onWeatherUpdate={setWeather}
           />
         </div>
       </section>
