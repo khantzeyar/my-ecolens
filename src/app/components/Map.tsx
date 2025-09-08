@@ -2,7 +2,7 @@
  * This is the map for our website.
  * - It displays the location of forest-based camp sites in Malaysia.
  * - Filters: state, search term, price, attractions (all from CampPage).
- * - Clicking a site marker opens a detail page.
+ * - Clicking a site marker opens a detail page and fetches weather.
  */
 
 'use client'
@@ -14,12 +14,20 @@ import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 
-// ✅ Custom site icon (smaller size)
-const siteIcon = L.icon({
+// Default icon
+const defaultIcon = L.icon({
   iconUrl: '/icons/site-icon.svg',
-  iconSize: [28, 28],   // smaller icon for less overlap
-  iconAnchor: [14, 28], // bottom-center
+  iconSize: [28, 28],
+  iconAnchor: [14, 28],
   popupAnchor: [0, -28],
+})
+
+// Highlighted icon
+const highlightedIcon = L.icon({
+  iconUrl: '/icons/site-icon-highlight.svg',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
 })
 
 type CampSite = {
@@ -29,10 +37,28 @@ type CampSite = {
   latitude: number
   longitude: number
   state: string
-  fees?: string        // raw string from DB
-  tags?: string        // raw string from DB
-  price?: string       // normalized "low" | "medium" | "high"
+  fees?: string
+  tags?: string
+  price?: string   
   attractions?: string[]
+}
+
+type WeatherDay = {
+  date: string
+  temp: number
+  description: string
+  icon: string
+}
+
+// OpenWeatherMap API response
+type OpenWeatherForecastItem = {
+  dt: number
+  main: { temp: number }
+  weather: { description: string; icon: string }[]
+}
+
+type OpenWeatherResponse = {
+  list: OpenWeatherForecastItem[]
 }
 
 interface MapProps {
@@ -40,12 +66,24 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
+  onWeatherUpdate: (forecast: WeatherDay[]) => void
 }
 
-const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions }) => {
+const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions, onWeatherUpdate }) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [lastClickedId, setLastClickedId] = useState<number | null>(null)
+
+  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY
+
+  // Restore last clicked marker
+  useEffect(() => {
+    const savedId = localStorage.getItem("lastClickedId")
+    if (savedId) {
+      setLastClickedId(Number(savedId))
+    }
+  }, [])
 
   useEffect(() => {
     const fetchSites = async () => {
@@ -54,16 +92,14 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
         if (!res.ok) throw new Error('Failed to fetch campsites')
         const data = await res.json()
 
-        // 🔄 Normalize fees -> price, tags -> attractions[]
         const processed = data.map((site: CampSite) => {
-          let price: string = "low"
+          let price: string = "paid"
+
           if (site.fees) {
-            if (/RM\s?(20|[3-9]\d+)/i.test(site.fees)) {
-              price = "high"
-            } else if (/RM\s?(5|10|15)/i.test(site.fees)) {
-              price = "medium"
-            } else if (/RM\s?(0|1|2|3|4)/i.test(site.fees) || /FREE/i.test(site.fees)) {
-              price = "low"
+            if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
+              price = "free"
+            } else {
+              price = "paid"
             }
           }
 
@@ -84,31 +120,45 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
     fetchSites()
   }, [])
 
-  // ✅ Apply filters: state + searchTerm + price + attractions
+  // Fetch 5-day weather when marker is clicked
+  const fetchWeather = async (lat: number, lon: number) => {
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+      )
+      const data: OpenWeatherResponse = await res.json()
+      if (!data.list) return
+
+      // Take every 8th item (~once per day), limit to 5 days
+      const daily = data.list.filter((_, idx) => idx % 8 === 0).slice(0, 5)
+
+      const forecast: WeatherDay[] = daily.map((d) => ({
+        date: new Date(d.dt * 1000).toLocaleDateString(),
+        temp: d.main.temp,
+        description: d.weather[0].description,
+        icon: `https://openweathermap.org/img/wn/${d.weather[0].icon}.png`
+      }))
+
+      onWeatherUpdate(forecast)
+    } catch (err) {
+      console.error("Failed to fetch weather", err)
+    }
+  }
+
+  // Apply filters
   const displayedSites = sites.filter((site) => {
-    const matchState =
-      selectedStates.length === 0 || selectedStates.includes(site.state)
-
-    const matchSearch =
-      searchTerm.trim() === "" ||
-      site.name.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchPrice =
-      priceFilter === "all" || site.price === priceFilter
-
+    const matchState = selectedStates.length === 0 || selectedStates.includes(site.state)
+    const matchSearch = searchTerm.trim() === "" || site.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchPrice = priceFilter === "all" || site.price === priceFilter
     const matchAttractions =
       selectedAttractions.length === 0 ||
-      (site.attractions &&
-        selectedAttractions.every((attr) =>
-          site.attractions?.includes(attr)
-        ))
+      (site.attractions && selectedAttractions.every((attr) => site.attractions?.includes(attr)))
 
     return matchState && matchSearch && matchPrice && matchAttractions
   })
 
   return (
     <div className="h-[600px] w-full relative">
-      {/* Loading and error overlays */}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-20">
           <span className="text-gray-600 text-lg">Loading campsites...</span>
@@ -120,41 +170,54 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
         </div>
       )}
 
-      {/* Map */}
       <MapContainer
         center={[3.139, 101.6869]} // Kuala Lumpur
         zoom={7}
-        scrollWheelZoom={true}
         style={{ height: "100%", width: "100%" }}
         className="rounded-lg shadow-md"
         zoomControl={false}
+        dragging={false}
+        doubleClickZoom={false}
+        scrollWheelZoom={false}
+        boxZoom={false}
+        keyboard={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Markers */}
         {displayedSites.map((site) => (
           <Marker
             key={site.id}
             position={[site.latitude, site.longitude]}
-            icon={siteIcon}
+            icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
+            eventHandlers={{
+              click: () => {
+                setLastClickedId(site.id)
+                localStorage.setItem("lastClickedId", String(site.id))
+                fetchWeather(site.latitude, site.longitude)
+              },
+            }}
           >
             <Popup>
               <div className="font-bold text-green-700">{site.name}</div>
               <div className="text-xs text-gray-600">State: {site.state}</div>
               <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
               {site.price && (
-                <div className="text-xs text-gray-500">Price: {site.price}</div>
+                <div className="text-xs text-gray-500">
+                  Price: {site.price === "free" ? "Free" : "Paid"}
+                </div>
               )}
               {site.attractions && site.attractions.length > 0 && (
-                <div className="text-xs text-gray-500">
-                  Attractions: {site.attractions.join(", ")}
-                </div>
+                <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
               )}
               <Link
                 href={`/camp/${site.id}`}
+                onClick={() => {
+                  setLastClickedId(site.id)
+                  localStorage.setItem("lastClickedId", String(site.id))
+                }}
                 className="text-blue-600 underline text-sm mt-2 block"
               >
                 View details →
