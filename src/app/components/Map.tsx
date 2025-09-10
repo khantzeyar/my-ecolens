@@ -2,7 +2,7 @@
  * This is the map for our website.
  * - It displays the location of forest-based camp sites in Malaysia.
  * - Filters: state, search term, price, attractions (all from CampPage).
- * - Clicking a site marker opens a detail page and fetches weather.
+ * - Clicking a site marker opens a detail page.
  */
 
 'use client'
@@ -43,39 +43,18 @@ type CampSite = {
   attractions?: string[]
 }
 
-type WeatherDay = {
-  date: string
-  temp: number
-  description: string
-  icon: string
-}
-
-// OpenWeatherMap API response
-type OpenWeatherForecastItem = {
-  dt: number
-  main: { temp: number }
-  weather: { description: string; icon: string }[]
-}
-
-type OpenWeatherResponse = {
-  list: OpenWeatherForecastItem[]
-}
-
 interface MapProps {
   selectedStates: string[]
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
-  onWeatherUpdate: (forecast: WeatherDay[]) => void
 }
 
-const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions, onWeatherUpdate }) => {
+const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions }) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastClickedId, setLastClickedId] = useState<number | null>(null)
-
-  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY
 
   // Restore last clicked marker
   useEffect(() => {
@@ -119,31 +98,6 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
     }
     fetchSites()
   }, [])
-
-  // Fetch 5-day weather when marker is clicked
-  const fetchWeather = async (lat: number, lon: number) => {
-    try {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-      )
-      const data: OpenWeatherResponse = await res.json()
-      if (!data.list) return
-
-      // Take every 8th item (~once per day), limit to 5 days
-      const daily = data.list.filter((_, idx) => idx % 8 === 0).slice(0, 5)
-
-      const forecast: WeatherDay[] = daily.map((d) => ({
-        date: new Date(d.dt * 1000).toLocaleDateString(),
-        temp: d.main.temp,
-        description: d.weather[0].description,
-        icon: `https://openweathermap.org/img/wn/${d.weather[0].icon}.png`
-      }))
-
-      onWeatherUpdate(forecast)
-    } catch (err) {
-      console.error("Failed to fetch weather", err)
-    }
-  }
 
   // Apply filters
   const displayedSites = sites.filter((site) => {
@@ -196,7 +150,6 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
               click: () => {
                 setLastClickedId(site.id)
                 localStorage.setItem("lastClickedId", String(site.id))
-                fetchWeather(site.latitude, site.longitude)
               },
             }}
           >
