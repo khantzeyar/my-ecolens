@@ -1,18 +1,13 @@
-/**
- * This is the map for our website.
- * - It displays the location of forest-based camp sites in Malaysia.
- * - Filters: state, search term, price, attractions (all from CampPage).
- * - Clicking a site marker opens a detail page.
- */
-
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import "remixicon/fonts/remixicon.css"
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import 'leaflet.heat'
+import forestData from '../data/peninsular_forest_loss.json'
 
 // Default icon
 const defaultIcon = L.icon({
@@ -39,7 +34,7 @@ type CampSite = {
   state: string
   fees?: string
   tags?: string
-  price?: string   
+  price?: string
   attractions?: string[]
 }
 
@@ -50,20 +45,62 @@ interface MapProps {
   selectedAttractions: string[]
 }
 
-const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions }) => {
+// Heatmap component
+const HeatmapLayer: React.FC<{ sites: CampSite[] }> = ({ sites }) => {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map || sites.length === 0) return
+
+    const heatData = sites.map(site => {
+      const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
+      const weight = Math.min(Math.max(stateLoss / 50, 0.1), 1)
+      return [site.latitude, site.longitude, weight]
+    })
+
+    const heat = (L as any).heatLayer(heatData, {
+      radius: 35,
+      blur: 25,
+      maxZoom: 10,
+      gradient: {
+        0.2: 'blue',
+        0.4: 'lime',
+        0.6: 'orange',
+        0.8: 'red'
+      }
+    }).addTo(map)
+
+    return () => {
+      map.removeLayer(heat)
+    }
+  }, [map, sites])
+
+  return null
+}
+
+const Map: React.FC<MapProps> = ({
+  selectedStates,
+  searchTerm,
+  priceFilter,
+  selectedAttractions
+}) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastClickedId, setLastClickedId] = useState<number | null>(null)
 
+  // Heatmap toggle
+  const [heatmapEnabled, setHeatmapEnabled] = useState(false)
+
   // Restore last clicked marker
   useEffect(() => {
-    const savedId = localStorage.getItem("lastClickedId")
+    const savedId = localStorage.getItem('lastClickedId')
     if (savedId) {
       setLastClickedId(Number(savedId))
     }
   }, [])
 
+  // Fetch campsites
   useEffect(() => {
     const fetchSites = async () => {
       try {
@@ -72,20 +109,16 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
         const data = await res.json()
 
         const processed = data.map((site: CampSite) => {
-          let price: string = "paid"
-
+          let price: string = 'paid'
           if (site.fees) {
             if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
-              price = "free"
-            } else {
-              price = "paid"
+              price = 'free'
             }
           }
-
           return {
             ...site,
             price,
-            attractions: site.tags ? site.tags.split(",").map((t) => t.trim()) : []
+            attractions: site.tags ? site.tags.split(',').map((t) => t.trim()) : []
           }
         })
 
@@ -101,15 +134,29 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
 
   // Apply filters
   const displayedSites = sites.filter((site) => {
-    const matchState = selectedStates.length === 0 || selectedStates.includes(site.state)
-    const matchSearch = searchTerm.trim() === "" || site.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchPrice = priceFilter === "all" || site.price === priceFilter
+    const matchState =
+      selectedStates.length === 0 || selectedStates.includes(site.state)
+    const matchSearch =
+      searchTerm.trim() === '' ||
+      site.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchPrice = priceFilter === 'all' || site.price === priceFilter
     const matchAttractions =
       selectedAttractions.length === 0 ||
-      (site.attractions && selectedAttractions.every((attr) => site.attractions?.includes(attr)))
+      (site.attractions &&
+        selectedAttractions.every((attr) =>
+          site.attractions?.includes(attr)
+        ))
 
     return matchState && matchSearch && matchPrice && matchAttractions
   })
+
+  // Function to get loss summary bar color + label
+  const getLossInfo = (percent: number) => {
+    if (percent < 20) return { color: 'bg-green-500', label: 'Low' }
+    if (percent < 40) return { color: 'bg-yellow-400', label: 'Medium' }
+    if (percent < 60) return { color: 'bg-orange-500', label: 'High' }
+    return { color: 'bg-red-600', label: 'Critical' }
+  }
 
   return (
     <div className="h-[600px] w-full relative">
@@ -125,62 +172,94 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
       )}
 
       <MapContainer
-        center={[3.139, 101.6869]} // Kuala Lumpur
+        center={[3.139, 101.6869]}
         zoom={7}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: '100%', width: '100%' }}
         className="rounded-lg shadow-md"
         zoomControl={false}
-        dragging={false}
-        doubleClickZoom={false}
-        scrollWheelZoom={false}
-        boxZoom={false}
-        keyboard={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {displayedSites.map((site) => (
-          <Marker
-            key={site.id}
-            position={[site.latitude, site.longitude]}
-            icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
-            eventHandlers={{
-              click: () => {
-                setLastClickedId(site.id)
-                localStorage.setItem("lastClickedId", String(site.id))
-              },
-            }}
-          >
-            <Popup>
-              <div className="font-bold text-green-700">{site.name}</div>
-              <div className="text-xs text-gray-600">State: {site.state}</div>
-              <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
-              {site.price && (
-                <div className="text-xs text-gray-500">
-                  Price: {site.price === "free" ? "Free" : "Paid"}
-                </div>
-              )}
-              {site.attractions && site.attractions.length > 0 && (
-                <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
-              )}
-              <Link
-                href={`/camp/${site.id}`}
-                onClick={() => {
+        {/* Heatmap */}
+        {heatmapEnabled && <HeatmapLayer sites={displayedSites} />}
+
+        {displayedSites.map((site) => {
+          const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
+          const { color, label } = getLossInfo(stateLoss)
+
+          return (
+            <Marker
+              key={site.id}
+              position={[site.latitude, site.longitude]}
+              icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
+              eventHandlers={{
+                click: () => {
                   setLastClickedId(site.id)
-                  localStorage.setItem("lastClickedId", String(site.id))
-                }}
-                className="text-blue-600 underline text-sm mt-2 block"
-              >
-                View details →
-              </Link>
-            </Popup>
-          </Marker>
-        ))}
+                  localStorage.setItem('lastClickedId', String(site.id))
+                }
+              }}
+            >
+              <Popup>
+                <div className="font-bold text-green-700">{site.name}</div>
+                <div className="text-xs text-gray-600 mb-2">State: {site.state}</div>
+
+                {/* Quick forest loss summary bar */}
+                <div className="w-full bg-gray-200 rounded h-2 mb-1">
+                  <div
+                    className={`${color} h-2 rounded`}
+                    style={{ width: `${Math.min(stateLoss, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="text-xs text-gray-500 mb-2">
+                  Forest loss: {label} ({stateLoss.toFixed(1)}%)
+                </div>
+
+                {/* Buttons row */}
+                <div className="flex space-x-2 mt-2">
+                  {/* Forest Insights (绿色背景 + 箭头) */}
+                  <Link
+                    href={`/insights/${site.state}`}
+                    className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+                  >
+                    Forest Insights →
+                  </Link>
+
+                  {/* View details (绿色字 + 浅蓝背景 + 箭头) */}
+                  <Link
+                    href={`/camp/${site.id}`}
+                    onClick={() => {
+                      setLastClickedId(site.id)
+                      localStorage.setItem('lastClickedId', String(site.id))
+                    }}
+                    className="px-3 py-1 text-xs text-green-700 bg-blue-300 rounded-lg shadow hover:bg-blue-400"
+                  >
+                    View details →
+                  </Link>
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
 
         <ZoomControl position="topright" />
       </MapContainer>
+
+      {/* Floating Heatmap Toggle Button (top-left) */}
+      <div className="absolute top-4 left-4 z-[1000]">
+        <button
+          onClick={() => setHeatmapEnabled(!heatmapEnabled)}
+          className={`px-4 py-2 rounded-lg shadow-md font-semibold transition ${
+            heatmapEnabled
+              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700'
+              : 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600'
+          }`}
+        >
+          {heatmapEnabled ? 'Hide Heatmap 🌍' : 'View Heatmap 🌳'}
+        </button>
+      </div>
     </div>
   )
 }
