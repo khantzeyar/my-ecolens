@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
+// Import react-select dynamically to avoid hydration mismatch
+const Select = dynamic(() => import("react-select"), { ssr: false });
+
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 interface CampSite {
@@ -24,15 +27,7 @@ interface CampPageProps {
   searchParams?: Promise<Record<string, string>>;
 }
 
-// ✅ 改成 free / paid
 type PriceFilter = "all" | "free" | "paid";
-
-type WeatherDay = {
-  date: string;
-  temp: number;
-  description: string;
-  icon: string;
-};
 
 const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
@@ -40,12 +35,23 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
   const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
   const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
   const [attractions, setAttractions] = useState<string[]>([]);
-  const [weather, setWeather] = useState<WeatherDay[]>([]);
 
   const states: string[] = [
-    "Johor","Kedah","Kelantan","Melaka","Negeri Sembilan",
-    "Pahang","Perak","Perlis","Pulau Pinang","Selangor","Terengganu",
+    "Johor",
+    "Kedah",
+    "Kelantan",
+    "Melaka",
+    "Negeri Sembilan",
+    "Pahang",
+    "Perak",
+    "Perlis",
+    "Pulau Pinang",
+    "Selangor",
+    "Terengganu",
+    "W.P. Kuala Lumpur",
   ];
+
+  const stateOptions = states.map((state) => ({ value: state, label: state }));
 
   const fetchCampsites = async (): Promise<CampSite[]> => {
     const res = await fetch("/api/campsites");
@@ -68,23 +74,10 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
       .catch((err) => console.error("Error fetching attractions:", err));
   }, []);
 
-  const toggleState = (state: string) => {
-    setSelectedStates((prev) =>
-      prev.includes(state) ? prev.filter((s) => s !== state) : [...prev, state]
-    );
-  };
-
   const toggleAttraction = (attr: string) => {
     setSelectedAttractions((prev) =>
       prev.includes(attr) ? prev.filter((a) => a !== attr) : [...prev, attr]
     );
-  };
-
-  const resetFilters = () => {
-    setSelectedStates([]);
-    setSearchTerm("");
-    setPriceFilter("all");
-    setSelectedAttractions([]);
   };
 
   return (
@@ -92,8 +85,8 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
       className="pt-20 min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
-      {/* Banner */}
-      <section className="h-[350px] flex flex-col items-center justify-center text-center">
+      {/* Banner - reduced height by one third */}
+      <section className="h-[233px] flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl font-bold text-green-700 drop-shadow-md mb-2">
           Discover Camping Sites
         </h1>
@@ -103,127 +96,130 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
         </p>
       </section>
 
-      {/* Filter + Weather Side by Side */}
-      <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 -mt-2">
-        {/* Filter Panel */}
+      {/* Filter Panel */}
+      <section className="max-w-7xl mx-auto px-6 -mt-2">
         <div className="bg-white/70 shadow-md rounded-lg p-6 backdrop-blur-md">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          {/* Row 1: Search + Select States + Price */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {/* Search */}
             <div>
-              <h3 className="text-sm font-semibold mb-2 text-green-700">Search</h3>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">
+                Search
+              </h3>
               <input
                 type="text"
                 placeholder="Search by camp name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full h-[38px] p-2 border rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-transparent"
+              />
+            </div>
+
+            {/* Select States */}
+            <div>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">
+                Select States
+              </h3>
+              <Select
+                instanceId="states-select"
+                isMulti
+                options={stateOptions}
+                value={stateOptions.filter((opt) =>
+                  selectedStates.includes(opt.value)
+                )}
+                onChange={(selected) =>
+                  setSelectedStates(
+                    selected ? selected.map((opt) => opt.value) : []
+                  )
+                }
+                placeholder="Choose states..."
+                className="text-sm"
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    minHeight: "38px",
+                    height: "38px",
+                    borderRadius: "0.375rem",
+                    borderColor: "#000000", // black border
+                    boxShadow: "none",
+                    fontSize: "0.875rem",
+                    backgroundColor: "transparent", // match Price
+                    "&:hover": { borderColor: "#000000" },
+                  }),
+                  valueContainer: (base) => ({
+                    ...base,
+                    height: "38px",
+                    padding: "0 8px",
+                  }),
+                  input: (base) => ({
+                    ...base,
+                    margin: 0,
+                    padding: 0,
+                    color: "#374151",
+                  }),
+                  indicatorsContainer: (base) => ({
+                    ...base,
+                    height: "38px",
+                  }),
+                  singleValue: (base) => ({
+                    ...base,
+                    color: "#374151",
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: "#d1fae5",
+                  }),
+                  indicatorSeparator: () => ({ display: "none" }), // remove vertical line
+                  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  menu: (base) => ({ ...base, maxHeight: 400 }),
+                }}
+                menuPortalTarget={
+                  typeof document !== "undefined" ? document.body : null
+                }
               />
             </div>
 
             {/* Price */}
             <div>
-              <h3 className="text-sm font-semibold mb-2 text-green-700">Price</h3>
+              <h3 className="text-sm font-semibold mb-2 text-green-700">
+                Price
+              </h3>
               <select
                 value={priceFilter}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setPriceFilter(e.target.value as PriceFilter)
                 }
-                className="w-full p-2 border rounded-md"
+                className="w-full h-[38px] p-2 border border-black rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-transparent"
               >
                 <option value="all">All</option>
                 <option value="free">Free</option>
                 <option value="paid">Paid</option>
               </select>
             </div>
-
-            {/* Attractions */}
-            <div className="md:col-span-2">
-              <h3 className="text-sm font-semibold mb-2 text-green-700">Attractions</h3>
-              <div className="flex flex-wrap gap-2">
-                {attractions.map((attr) => (
-                  <button
-                    key={attr}
-                    type="button"
-                    onClick={() => toggleAttraction(attr)}
-                    className={`px-3 py-1 rounded-full text-green-700 ${
-                      selectedAttractions.includes(attr)
-                        ? "bg-green-300"
-                        : "bg-green-100"
-                    }`}
-                  >
-                    {attr}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
-          {/* States */}
+          {/* Row 2: Attractions */}
           <div className="mt-6">
-            <h3 className="text-sm font-semibold mb-2 text-green-700">States</h3>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
-              {states.map((state) => (
-                <label key={state} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedStates.includes(state)}
-                    onChange={() => toggleState(state)}
-                    className="accent-green-600"
-                  />
-                  <span>{state}</span>
-                </label>
+            <h3 className="text-sm font-semibold mb-2 text-green-700">
+              Attractions
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {attractions.map((attr) => (
+                <button
+                  key={attr}
+                  type="button"
+                  onClick={() => toggleAttraction(attr)}
+                  className={`px-3 py-1 rounded-full text-green-700 ${
+                    selectedAttractions.includes(attr)
+                      ? "bg-green-300"
+                      : "bg-green-100"
+                  }`}
+                >
+                  {attr}
+                </button>
               ))}
             </div>
           </div>
-
-          <button onClick={resetFilters} className="mt-4 text-green-600 underline">
-            Reset
-          </button>
-        </div>
-
-        {/* Weather Forecast */}
-        <div className="relative p-6 rounded-lg shadow-md bg-white/70 backdrop-blur-md">
-          <h3 className="text-xl font-bold mb-2 text-green-900">
-            Weather Forecast
-          </h3>
-
-          {weather.length === 0 ? (
-            <p className="text-green-800">
-              Click a campsite marker to view the weather forecast.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {/* 第一行：3 个 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {weather.slice(0, 3).map((day, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center p-2 bg-white/80 rounded-lg shadow"
-                  >
-                    <span className="text-sm font-medium text-gray-800">{day.date}</span>
-                    <img src={day.icon} alt={day.description} className="w-14 h-14 my-1" />
-                    <span className="text-sm text-gray-800">{day.temp}°C</span>
-                    <span className="text-xs text-gray-600">{day.description}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* 第二行：2 个，居中 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 justify-center">
-                {weather.slice(3, 5).map((day, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center p-2 bg-white/80 rounded-lg shadow"
-                  >
-                    <span className="text-sm font-medium text-gray-800">{day.date}</span>
-                    <img src={day.icon} alt={day.description} className="w-14 h-14 my-1" />
-                    <span className="text-sm text-gray-800">{day.temp}°C</span>
-                    <span className="text-xs text-gray-600">{day.description}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
@@ -235,7 +231,6 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
             searchTerm={searchTerm}
             priceFilter={priceFilter}
             selectedAttractions={selectedAttractions}
-            onWeatherUpdate={setWeather}
           />
         </div>
       </section>
