@@ -5,9 +5,19 @@ import Link from 'next/link'
 import "remixicon/fonts/remixicon.css"
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet'
-import L, { HeatLayer } from 'leaflet'
+import L from 'leaflet'
 import 'leaflet.heat'
-import forestData from '../data/peninsular_forest_loss.json'
+import rawForestData from '../data/peninsular_forest_loss.json'
+
+// ✅ 给 forestData 加强类型
+type ForestLossData = {
+  yearly_loss: Record<string, number>
+  cumulative_loss_percent: number
+}
+const forestData: Record<string, ForestLossData> = rawForestData as Record<
+  string,
+  ForestLossData
+>
 
 // Default icon
 const defaultIcon = L.icon({
@@ -58,19 +68,20 @@ const HeatmapLayer: React.FC<{ sites: CampSite[] }> = ({ sites }) => {
       return [site.latitude, site.longitude, weight]
     })
 
-    const heat: HeatLayer = (L as unknown as { heatLayer: (data: [number, number, number][], options: any) => HeatLayer })
-      .heatLayer(heatData, {
-        radius: 35,
-        blur: 25,
-        maxZoom: 10,
-        gradient: {
-          0.2: 'blue',
-          0.4: 'lime',
-          0.6: 'orange',
-          0.8: 'red'
-        }
-      })
-      .addTo(map)
+    // @ts-expect-error leaflet.heat 没有类型声明
+    const heat = L.heatLayer(heatData, {
+      radius: 35,
+      blur: 25,
+      maxZoom: 10,
+      gradient: {
+        0.2: 'blue',
+        0.4: 'lime',
+        0.6: 'orange',
+        0.8: 'red'
+      }
+    })
+
+    heat.addTo(map)
 
     return () => {
       map.removeLayer(heat)
@@ -225,15 +236,12 @@ const Map: React.FC<MapProps> = ({
 
                 {/* Buttons row */}
                 <div className="flex space-x-2 mt-2">
-                  {/* Forest Insights */}
                   <Link
                     href={`/insights/${site.state}`}
                     className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
                   >
                     Forest Insights →
                   </Link>
-
-                  {/* View details */}
                   <Link
                     href={`/camp/${site.id}`}
                     onClick={() => {
@@ -253,7 +261,7 @@ const Map: React.FC<MapProps> = ({
         <ZoomControl position="topright" />
       </MapContainer>
 
-      {/* Floating Heatmap Toggle Button (top-left) */}
+      {/* Floating Heatmap Toggle Button */}
       <div className="absolute top-4 left-4 z-[1000]">
         <button
           onClick={() => setHeatmapEnabled(!heatmapEnabled)}

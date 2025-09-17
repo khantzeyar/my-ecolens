@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
 import WeatherCard from "@/app/components/WeatherCard"; // Weather component
 
 // Extend global type for Prisma
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
@@ -15,6 +15,14 @@ if (process.env.NODE_ENV !== "production") globalThis.prisma = prisma;
 interface CampDetailProps {
   params: Promise<{ id: string }>;
 }
+
+type WeatherApiResponse = {
+  list: {
+    dt: number;
+    main: { temp: number };
+    weather: { description: string; icon: string }[];
+  }[];
+};
 
 export default async function CampDetail({ params }: CampDetailProps) {
   const { id } = await params;
@@ -27,7 +35,7 @@ export default async function CampDetail({ params }: CampDetailProps) {
     return <div className="p-6 text-red-600">Camp not found</div>;
   }
 
-  // ✅ Fetch 5-day weather forecast from OpenWeather
+  // ✅ Weather data with explicit type
   let weatherData: {
     date: string;
     temp: number;
@@ -41,13 +49,13 @@ export default async function CampDetail({ params }: CampDetailProps) {
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${camp.latitude}&lon=${camp.longitude}&appid=${API_KEY}&units=metric`
       );
-      const data = await res.json();
+      const data: WeatherApiResponse = await res.json();
 
       if (data.list) {
         weatherData = data.list
-          .filter((_: any, idx: number) => idx % 8 === 0) // one per day
+          .filter((_item, idx) => idx % 8 === 0) // one per day
           .slice(0, 5)
-          .map((d: any) => {
+          .map((d) => {
             const rawDate = new Date(d.dt * 1000);
             const formattedDate = rawDate.toLocaleDateString("en-GB", {
               day: "numeric",
@@ -84,9 +92,11 @@ export default async function CampDetail({ params }: CampDetailProps) {
         {/* Image */}
         <div>
           {camp.imageUrl ? (
-            <img
+            <Image
               src={camp.imageUrl}
               alt={camp.name}
+              width={800}
+              height={400}
               className="rounded-lg shadow-md w-full max-h-[400px] object-cover"
             />
           ) : (

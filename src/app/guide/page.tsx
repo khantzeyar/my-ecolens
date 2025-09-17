@@ -195,9 +195,6 @@ const categories = [
   },
 ];
 
-type ChecklistCategory = typeof categories[0];
-type TipsCategory = typeof categories[number] & { checklist?: undefined };
-
 export default function GuidePage() {
   const [activeCategory, setActiveCategory] = useState<string>("essentials");
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -253,7 +250,9 @@ export default function GuidePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {category.checklist.map((group, idx) => (
                   <div key={idx}>
-                    <h3 className="font-semibold text-gray-800 mb-2">{group.group}</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      {group.group}
+                    </h3>
                     <ul className="space-y-2">
                       {group.items.map((item) => (
                         <li key={item} className="flex items-center space-x-3">
@@ -289,7 +288,9 @@ export default function GuidePage() {
                   key={idx}
                   className="p-6 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-200"
                 >
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">{tip.title}</h2>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                    {tip.title}
+                  </h2>
                   <p className="text-gray-600 text-sm">{tip.description}</p>
                 </div>
               ))}

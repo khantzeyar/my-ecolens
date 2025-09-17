@@ -2,7 +2,15 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts'
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent'
 
 interface InsightsPanelProps {
   isOpen: boolean
@@ -20,6 +28,8 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   onClose,
   onToggleHeatmap
 }) => {
+  const [heatmapEnabled, setHeatmapEnabled] = React.useState(false)
+
   if (!isOpen || !data) return null
 
   const trends = Object.entries(data.yearly_loss).map(([year, loss]) => ({
@@ -29,8 +39,6 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
 
   const maxLoss = Math.max(...trends.map((d) => d.loss))
   const maxYear = trends.find((d) => d.loss === maxLoss)?.year
-
-  const [heatmapEnabled, setHeatmapEnabled] = React.useState(false)
 
   const handleToggle = () => {
     const newValue = !heatmapEnabled
@@ -73,16 +81,37 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
               <XAxis dataKey="year" interval={3} />
               <YAxis />
               <Tooltip
-                formatter={(value: number, name: string, props: any) => [
-                  `${value.toLocaleString()} ha lost`,
-                  `Year ${props.payload.year}`
-                ]}
+                formatter={(
+                  value: ValueType,
+                  _name: NameType,
+                  props?: unknown
+                ) => {
+                  const payload = (props as { payload?: { year?: string } })
+                    ?.payload
+                  return [
+                    `${Number(value).toLocaleString()} ha lost`,
+                    payload?.year ? `Year ${payload.year}` : ''
+                  ]
+                }}
               />
               <Bar
                 dataKey="loss"
                 fill="#82ca9d"
-                shape={(props: any) => {
-                  const { x, y, width, height, value } = props
+                // ✅ 用 unknown，内部再断言
+                shape={(props: unknown) => {
+                  const {
+                    x = 0,
+                    y = 0,
+                    width = 0,
+                    height = 0,
+                    value = 0
+                  } = props as {
+                    x?: number
+                    y?: number
+                    width?: number
+                    height?: number
+                    value?: number
+                  }
                   const color = value === maxLoss ? '#e74c3c' : '#82ca9d'
                   return (
                     <rect

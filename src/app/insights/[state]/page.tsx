@@ -2,8 +2,18 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import forestData from '../../data/peninsular_forest_loss.json'
+import forestRaw from '../../data/peninsular_forest_loss.json'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
+
+// ✅ 给 forestData 添加强类型
+type ForestLossData = {
+  yearly_loss: Record<string, number>
+  cumulative_loss_percent: number
+}
+const forestData: Record<string, ForestLossData> = forestRaw as Record<
+  string,
+  ForestLossData
+>
 
 export default function InsightsPage() {
   const { state } = useParams() as { state: string }
@@ -37,7 +47,9 @@ export default function InsightsPage() {
       {/* Summary */}
       <p className="mb-6 text-gray-700">
         Since 2001, {state} has lost{' '}
-        <span className="font-bold text-red-600">{data.cumulative_loss_percent}%</span>{' '}
+        <span className="font-bold text-red-600">
+          {data.cumulative_loss_percent}%
+        </span>{' '}
         of its tree cover.
       </p>
 

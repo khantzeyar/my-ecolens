@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { MultiValue } from "react-select";
 
 // Import react-select dynamically to avoid hydration mismatch
+// ⚠️ 动态引入的 Select 没有泛型签名，不能写 <{ value: string; label: string }>
 const Select = dynamic(() => import("react-select"), { ssr: false });
-
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 interface CampSite {
@@ -22,14 +23,9 @@ interface CampSite {
   contact?: string;
 }
 
-interface CampPageProps {
-  params?: Promise<Record<string, string>>;
-  searchParams?: Promise<Record<string, string>>;
-}
-
 type PriceFilter = "all" | "free" | "paid";
 
-const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
+const CampPage: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
@@ -85,7 +81,7 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
       className="pt-20 min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
-      {/* Banner - reduced height by one third */}
+      {/* Banner */}
       <section className="h-[233px] flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl font-bold text-green-700 drop-shadow-md mb-2">
           Discover Camping Sites
@@ -127,23 +123,26 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
                 value={stateOptions.filter((opt) =>
                   selectedStates.includes(opt.value)
                 )}
-                onChange={(selected) =>
+                // ✅ 用 unknown + 类型断言，避免泛型报错
+                onChange={(selected: unknown) =>
                   setSelectedStates(
-                    selected ? selected.map((opt) => opt.value) : []
+                    (selected as MultiValue<{ value: string; label: string }>)?.map(
+                      (opt) => opt.value
+                    ) ?? []
                   )
                 }
                 placeholder="Choose states..."
                 className="text-sm"
                 styles={{
-                  control: (base, state) => ({
+                  control: (base) => ({
                     ...base,
                     minHeight: "38px",
                     height: "38px",
                     borderRadius: "0.375rem",
-                    borderColor: "#000000", // black border
+                    borderColor: "#000000",
                     boxShadow: "none",
                     fontSize: "0.875rem",
-                    backgroundColor: "transparent", // match Price
+                    backgroundColor: "transparent",
                     "&:hover": { borderColor: "#000000" },
                   }),
                   valueContainer: (base) => ({
@@ -169,7 +168,7 @@ const CampPage: React.FC<CampPageProps> = ({ params, searchParams }) => {
                     ...base,
                     backgroundColor: "#d1fae5",
                   }),
-                  indicatorSeparator: () => ({ display: "none" }), // remove vertical line
+                  indicatorSeparator: () => ({ display: "none" }),
                   menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                   menu: (base) => ({ ...base, maxHeight: 400 }),
                 }}
