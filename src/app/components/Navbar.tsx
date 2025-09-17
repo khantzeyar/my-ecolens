@@ -1,7 +1,7 @@
 /** 
  * This is the main nav bar for our website.
  * - The logo will be displayed on the left
- * - The navigation links ("Home", "Camping Sites", "Guide") will be on the right.
+ * - The navigation links ("Home", "Camping Sites", "Forest", "Guide") will be on the right.
 */
 
 import React from 'react'
@@ -30,6 +30,9 @@ const Navbar = () => {
         </Link>
         <Link href='/camp' className='hover:text-green-600'>
           Camping Sites
+        </Link>
+        <Link href='/forest' className='hover:text-green-600'>
+          Forest
         </Link>
         <Link href='/guide' className='hover:text-green-600'>
           Guide
