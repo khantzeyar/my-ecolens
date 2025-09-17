@@ -1,18 +1,23 @@
-/**
- * This is the map for our website.
- * - It displays the location of forest-based camp sites in Malaysia.
- * - Filters: state, search term, price, attractions (all from CampPage).
- * - Clicking a site marker opens a detail page and fetches weather.
- */
-
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import "remixicon/fonts/remixicon.css"
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import 'leaflet.heat'
+import rawForestData from '../data/peninsular_forest_loss.json'
+
+// ✅ 给 forestData 加强类型
+type ForestLossData = {
+  yearly_loss: Record<string, number>
+  cumulative_loss_percent: number
+}
+const forestData: Record<string, ForestLossData> = rawForestData as Record<
+  string,
+  ForestLossData
+>
 
 // Default icon
 const defaultIcon = L.icon({
@@ -39,26 +44,8 @@ type CampSite = {
   state: string
   fees?: string
   tags?: string
-  price?: string   
+  price?: string
   attractions?: string[]
-}
-
-type WeatherDay = {
-  date: string
-  temp: number
-  description: string
-  icon: string
-}
-
-// OpenWeatherMap API response
-type OpenWeatherForecastItem = {
-  dt: number
-  main: { temp: number }
-  weather: { description: string; icon: string }[]
-}
-
-type OpenWeatherResponse = {
-  list: OpenWeatherForecastItem[]
 }
 
 interface MapProps {
@@ -66,53 +53,95 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
-  onWeatherUpdate: (forecast: WeatherDay[]) => void
 }
 
-const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions, onWeatherUpdate }) => {
+// Heatmap component
+const HeatmapLayer: React.FC<{ sites: CampSite[] }> = ({ sites }) => {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map || sites.length === 0) return
+
+    const heatData: [number, number, number][] = sites.map(site => {
+      const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
+      const weight = Math.min(Math.max(stateLoss / 50, 0.1), 1)
+      return [site.latitude, site.longitude, weight]
+    })
+
+    // @ts-expect-error leaflet.heat 没有类型声明
+    const heat = L.heatLayer(heatData, {
+      radius: 35,
+      blur: 25,
+      maxZoom: 10,
+      gradient: {
+        0.2: 'blue',
+        0.4: 'lime',
+        0.6: 'orange',
+        0.8: 'red'
+      }
+    })
+
+    heat.addTo(map)
+
+    return () => {
+      map.removeLayer(heat)
+    }
+  }, [map, sites])
+
+  return null
+}
+
+const Map: React.FC<MapProps> = ({
+  selectedStates,
+  searchTerm,
+  priceFilter,
+  selectedAttractions
+}) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastClickedId, setLastClickedId] = useState<number | null>(null)
 
-  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY
+  // Heatmap toggle
+  const [heatmapEnabled, setHeatmapEnabled] = useState(false)
 
   // Restore last clicked marker
   useEffect(() => {
-    const savedId = localStorage.getItem("lastClickedId")
+    const savedId = localStorage.getItem('lastClickedId')
     if (savedId) {
       setLastClickedId(Number(savedId))
     }
   }, [])
 
+  // Fetch campsites
   useEffect(() => {
     const fetchSites = async () => {
       try {
         const res = await fetch('/api/campsites')
         if (!res.ok) throw new Error('Failed to fetch campsites')
-        const data = await res.json()
+        const data: CampSite[] = await res.json()
 
-        const processed = data.map((site: CampSite) => {
-          let price: string = "paid"
-
+        const processed: CampSite[] = data.map((site) => {
+          let price: string = 'paid'
           if (site.fees) {
             if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
-              price = "free"
-            } else {
-              price = "paid"
+              price = 'free'
             }
           }
-
           return {
             ...site,
             price,
-            attractions: site.tags ? site.tags.split(",").map((t) => t.trim()) : []
+            attractions: site.tags ? site.tags.split(',').map((t) => t.trim()) : []
           }
         })
 
         setSites(processed)
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Unknown error')
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message)
+        } else {
+          setError('Unknown error')
+        }
       } finally {
         setLoading(false)
       }
@@ -120,42 +149,31 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
     fetchSites()
   }, [])
 
-  // Fetch 5-day weather when marker is clicked
-  const fetchWeather = async (lat: number, lon: number) => {
-    try {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-      )
-      const data: OpenWeatherResponse = await res.json()
-      if (!data.list) return
-
-      // Take every 8th item (~once per day), limit to 5 days
-      const daily = data.list.filter((_, idx) => idx % 8 === 0).slice(0, 5)
-
-      const forecast: WeatherDay[] = daily.map((d) => ({
-        date: new Date(d.dt * 1000).toLocaleDateString(),
-        temp: d.main.temp,
-        description: d.weather[0].description,
-        icon: `https://openweathermap.org/img/wn/${d.weather[0].icon}.png`
-      }))
-
-      onWeatherUpdate(forecast)
-    } catch (err) {
-      console.error("Failed to fetch weather", err)
-    }
-  }
-
   // Apply filters
   const displayedSites = sites.filter((site) => {
-    const matchState = selectedStates.length === 0 || selectedStates.includes(site.state)
-    const matchSearch = searchTerm.trim() === "" || site.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchPrice = priceFilter === "all" || site.price === priceFilter
+    const matchState =
+      selectedStates.length === 0 || selectedStates.includes(site.state)
+    const matchSearch =
+      searchTerm.trim() === '' ||
+      site.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchPrice = priceFilter === 'all' || site.price === priceFilter
     const matchAttractions =
       selectedAttractions.length === 0 ||
-      (site.attractions && selectedAttractions.every((attr) => site.attractions?.includes(attr)))
+      (site.attractions &&
+        selectedAttractions.every((attr) =>
+          site.attractions?.includes(attr)
+        ))
 
     return matchState && matchSearch && matchPrice && matchAttractions
   })
+
+  // Function to get loss summary bar color + label
+  const getLossInfo = (percent: number) => {
+    if (percent < 20) return { color: 'bg-green-500', label: 'Low' }
+    if (percent < 40) return { color: 'bg-yellow-400', label: 'Medium' }
+    if (percent < 60) return { color: 'bg-orange-500', label: 'High' }
+    return { color: 'bg-red-600', label: 'Critical' }
+  }
 
   return (
     <div className="h-[600px] w-full relative">
@@ -171,63 +189,91 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
       )}
 
       <MapContainer
-        center={[3.139, 101.6869]} // Kuala Lumpur
+        center={[3.139, 101.6869]}
         zoom={7}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: '100%', width: '100%' }}
         className="rounded-lg shadow-md"
         zoomControl={false}
-        dragging={false}
-        doubleClickZoom={false}
-        scrollWheelZoom={false}
-        boxZoom={false}
-        keyboard={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
         />
 
-        {displayedSites.map((site) => (
-          <Marker
-            key={site.id}
-            position={[site.latitude, site.longitude]}
-            icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
-            eventHandlers={{
-              click: () => {
-                setLastClickedId(site.id)
-                localStorage.setItem("lastClickedId", String(site.id))
-                fetchWeather(site.latitude, site.longitude)
-              },
-            }}
-          >
-            <Popup>
-              <div className="font-bold text-green-700">{site.name}</div>
-              <div className="text-xs text-gray-600">State: {site.state}</div>
-              <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
-              {site.price && (
-                <div className="text-xs text-gray-500">
-                  Price: {site.price === "free" ? "Free" : "Paid"}
-                </div>
-              )}
-              {site.attractions && site.attractions.length > 0 && (
-                <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
-              )}
-              <Link
-                href={`/camp/${site.id}`}
-                onClick={() => {
+        {/* Heatmap */}
+        {heatmapEnabled && <HeatmapLayer sites={displayedSites} />}
+
+        {displayedSites.map((site) => {
+          const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
+          const { color, label } = getLossInfo(stateLoss)
+
+          return (
+            <Marker
+              key={site.id}
+              position={[site.latitude, site.longitude]}
+              icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
+              eventHandlers={{
+                click: () => {
                   setLastClickedId(site.id)
-                  localStorage.setItem("lastClickedId", String(site.id))
-                }}
-                className="text-blue-600 underline text-sm mt-2 block"
-              >
-                View details →
-              </Link>
-            </Popup>
-          </Marker>
-        ))}
+                  localStorage.setItem('lastClickedId', String(site.id))
+                }
+              }}
+            >
+              <Popup>
+                <div className="font-bold text-green-700">{site.name}</div>
+                <div className="text-xs text-gray-600 mb-2">State: {site.state}</div>
+
+                {/* Quick forest loss summary bar */}
+                <div className="w-full bg-gray-200 rounded h-2 mb-1">
+                  <div
+                    className={`${color} h-2 rounded`}
+                    style={{ width: `${Math.min(stateLoss, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="text-xs text-gray-500 mb-2">
+                  Forest loss: {label} ({stateLoss.toFixed(1)}%)
+                </div>
+
+                {/* Buttons row */}
+                <div className="flex space-x-2 mt-2">
+                  <Link
+                    href={`/insights/${site.state}`}
+                    className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+                  >
+                    Forest Insights →
+                  </Link>
+                  <Link
+                    href={`/camp/${site.id}`}
+                    onClick={() => {
+                      setLastClickedId(site.id)
+                      localStorage.setItem('lastClickedId', String(site.id))
+                    }}
+                    className="px-3 py-1 text-xs text-green-700 bg-blue-300 rounded-lg shadow hover:bg-blue-400"
+                  >
+                    View details →
+                  </Link>
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
 
         <ZoomControl position="topright" />
       </MapContainer>
+
+      {/* Floating Heatmap Toggle Button */}
+      <div className="absolute top-4 left-4 z-[1000]">
+        <button
+          onClick={() => setHeatmapEnabled(!heatmapEnabled)}
+          className={`px-4 py-2 rounded-lg shadow-md font-semibold transition ${
+            heatmapEnabled
+              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700'
+              : 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600'
+          }`}
+        >
+          {heatmapEnabled ? 'Hide Heatmap 🌍' : 'View Heatmap 🌳'}
+        </button>
+      </div>
     </div>
   )
 }
