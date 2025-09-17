@@ -3,6 +3,7 @@
  * - It displays the location of forest-based camp sites in Malaysia.
  * - Filters: state, search term, price, attractions (all from CampPage).
  * - Clicking a site marker opens a detail page.
+ * - Now supports single camp mode for detail pages.
  */
 
 'use client'
@@ -48,9 +49,29 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
+  // New props for single camp mode
+  singleCampMode?: boolean
+  centerLat?: number
+  centerLng?: number
+  defaultZoom?: number
+  focusOnSingleLocation?: boolean
+  enableInteraction?: boolean
+  allowPageScroll?: boolean
 }
 
-const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions }) => {
+const Map: React.FC<MapProps> = ({ 
+  selectedStates, 
+  searchTerm, 
+  priceFilter, 
+  selectedAttractions,
+  singleCampMode = false,
+  centerLat,
+  centerLng,
+  defaultZoom = 7,
+  focusOnSingleLocation = false,
+  enableInteraction = false,
+  allowPageScroll = false
+}) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -111,6 +132,23 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
     return matchState && matchSearch && matchPrice && matchAttractions
   })
 
+  // Determine map center and zoom
+  const mapCenter: [number, number] = (centerLat && centerLng) 
+    ? [centerLat, centerLng] 
+    : [3.139, 101.6869] // Default to Kuala Lumpur
+  
+  const mapZoom = defaultZoom
+
+  // Map interaction settings
+  const mapSettings = {
+    zoomControl: false, // 禁用默认的缩放控制
+    dragging: enableInteraction || !singleCampMode,
+    doubleClickZoom: enableInteraction || !singleCampMode,
+    scrollWheelZoom: allowPageScroll ? false : (enableInteraction || !singleCampMode),
+    boxZoom: enableInteraction || !singleCampMode,
+    keyboard: enableInteraction || !singleCampMode,
+  }
+
   return (
     <div className="h-[600px] w-full relative">
       {loading && (
@@ -125,59 +163,65 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
       )}
 
       <MapContainer
-        center={[3.139, 101.6869]} // Kuala Lumpur
-        zoom={7}
+        center={mapCenter}
+        zoom={mapZoom}
         style={{ height: "100%", width: "100%" }}
         className="rounded-lg shadow-md"
-        zoomControl={false}
-        dragging={false}
-        doubleClickZoom={false}
-        scrollWheelZoom={false}
-        boxZoom={false}
-        keyboard={false}
+        {...mapSettings}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {displayedSites.map((site) => (
-          <Marker
-            key={site.id}
-            position={[site.latitude, site.longitude]}
-            icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
-            eventHandlers={{
-              click: () => {
-                setLastClickedId(site.id)
-                localStorage.setItem("lastClickedId", String(site.id))
-              },
-            }}
-          >
-            <Popup>
-              <div className="font-bold text-green-700">{site.name}</div>
-              <div className="text-xs text-gray-600">State: {site.state}</div>
-              <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
-              {site.price && (
-                <div className="text-xs text-gray-500">
-                  Price: {site.price === "free" ? "Free" : "Paid"}
-                </div>
-              )}
-              {site.attractions && site.attractions.length > 0 && (
-                <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
-              )}
-              <Link
-                href={`/camp/${site.id}`}
-                onClick={() => {
-                  setLastClickedId(site.id)
-                  localStorage.setItem("lastClickedId", String(site.id))
-                }}
-                className="text-blue-600 underline text-sm mt-2 block"
-              >
-                View details →
-              </Link>
-            </Popup>
-          </Marker>
-        ))}
+        {displayedSites.map((site) => {
+          // In single camp mode, highlight the matching camp
+          const isHighlighted = singleCampMode 
+            ? site.name.toLowerCase().includes(searchTerm.toLowerCase())
+            : site.id === lastClickedId
+
+          return (
+            <Marker
+              key={site.id}
+              position={[site.latitude, site.longitude]}
+              icon={isHighlighted ? highlightedIcon : defaultIcon}
+              eventHandlers={{
+                click: () => {
+                  if (!singleCampMode) {
+                    setLastClickedId(site.id)
+                    localStorage.setItem("lastClickedId", String(site.id))
+                  }
+                },
+              }}
+            >
+              <Popup>
+                <div className="font-bold text-green-700">{site.name}</div>
+                <div className="text-xs text-gray-600">State: {site.state}</div>
+                <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
+                {site.price && (
+                  <div className="text-xs text-gray-500">
+                    Price: {site.price === "free" ? "Free" : "Paid"}
+                  </div>
+                )}
+                {site.attractions && site.attractions.length > 0 && (
+                  <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
+                )}
+                <Link
+                  href={`/camp/${site.id}`}
+                  onClick={() => {
+                    if (!singleCampMode) {
+                      setLastClickedId(site.id)
+                      localStorage.setItem("lastClickedId", String(site.id))
+                    }
+                  }}
+                  className="text-blue-600 underline text-sm mt-2 block"
+                >
+                  View details →
+                </Link>
+              </Popup>
+            </Marker>
+          )
+        })}
 
         <ZoomControl position="topright" />
       </MapContainer>
@@ -186,3 +230,5 @@ const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, sele
 }
 
 export default Map
+
+
