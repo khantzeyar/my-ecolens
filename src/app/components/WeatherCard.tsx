@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 
 type WeatherDay = {
   date: string
@@ -57,15 +58,17 @@ const WeatherCard: React.FC<WeatherProps> = ({ weather = [] }) => {
         5-Day Weather Forecast
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        {safeWeather.map((day, idx) => (
+        {safeWeather.map((day) => (
           <div
-            key={idx}
+            key={day.date}
             className="flex flex-col items-center p-2 bg-white rounded-lg shadow"
           >
             <span className="text-sm font-medium">{day.date}</span>
-            <img
+            <Image
               src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
               alt={day.description}
+              width={48}
+              height={48}
               className="w-12 h-12"
             />
             <span className="text-sm">{day.temp}°C</span>

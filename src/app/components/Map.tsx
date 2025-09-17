@@ -5,7 +5,7 @@ import Link from 'next/link'
 import "remixicon/fonts/remixicon.css"
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet'
-import L from 'leaflet'
+import L, { HeatLayer } from 'leaflet'
 import 'leaflet.heat'
 import forestData from '../data/peninsular_forest_loss.json'
 
@@ -52,23 +52,25 @@ const HeatmapLayer: React.FC<{ sites: CampSite[] }> = ({ sites }) => {
   useEffect(() => {
     if (!map || sites.length === 0) return
 
-    const heatData = sites.map(site => {
+    const heatData: [number, number, number][] = sites.map(site => {
       const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
       const weight = Math.min(Math.max(stateLoss / 50, 0.1), 1)
       return [site.latitude, site.longitude, weight]
     })
 
-    const heat = (L as any).heatLayer(heatData, {
-      radius: 35,
-      blur: 25,
-      maxZoom: 10,
-      gradient: {
-        0.2: 'blue',
-        0.4: 'lime',
-        0.6: 'orange',
-        0.8: 'red'
-      }
-    }).addTo(map)
+    const heat: HeatLayer = (L as unknown as { heatLayer: (data: [number, number, number][], options: any) => HeatLayer })
+      .heatLayer(heatData, {
+        radius: 35,
+        blur: 25,
+        maxZoom: 10,
+        gradient: {
+          0.2: 'blue',
+          0.4: 'lime',
+          0.6: 'orange',
+          0.8: 'red'
+        }
+      })
+      .addTo(map)
 
     return () => {
       map.removeLayer(heat)
@@ -106,9 +108,9 @@ const Map: React.FC<MapProps> = ({
       try {
         const res = await fetch('/api/campsites')
         if (!res.ok) throw new Error('Failed to fetch campsites')
-        const data = await res.json()
+        const data: CampSite[] = await res.json()
 
-        const processed = data.map((site: CampSite) => {
+        const processed: CampSite[] = data.map((site) => {
           let price: string = 'paid'
           if (site.fees) {
             if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
@@ -123,8 +125,12 @@ const Map: React.FC<MapProps> = ({
         })
 
         setSites(processed)
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Unknown error')
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message)
+        } else {
+          setError('Unknown error')
+        }
       } finally {
         setLoading(false)
       }
@@ -180,7 +186,7 @@ const Map: React.FC<MapProps> = ({
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
         />
 
         {/* Heatmap */}
@@ -219,7 +225,7 @@ const Map: React.FC<MapProps> = ({
 
                 {/* Buttons row */}
                 <div className="flex space-x-2 mt-2">
-                  {/* Forest Insights (绿色背景 + 箭头) */}
+                  {/* Forest Insights */}
                   <Link
                     href={`/insights/${site.state}`}
                     className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
@@ -227,7 +233,7 @@ const Map: React.FC<MapProps> = ({
                     Forest Insights →
                   </Link>
 
-                  {/* View details (绿色字 + 浅蓝背景 + 箭头) */}
+                  {/* View details */}
                   <Link
                     href={`/camp/${site.id}`}
                     onClick={() => {

@@ -5,7 +5,7 @@ export default function ForestPage() {
     <main className="p-8">
       <h1 className="text-3xl font-bold mb-4">Forest Insights</h1>
       <p className="mb-6 text-lg text-gray-700">
-        Explore Malaysia's forest distribution, deforestation hotspots, and conservation areas.
+        Explore Malaysia&apos;s forest distribution, deforestation hotspots, and conservation areas.
       </p>
 
       <section className="bg-green-50 p-6 rounded-xl shadow-md">
