@@ -1,130 +1,164 @@
-/** 
+/**
  * This is the map for our website.
- * - It will display the location of forest based camp sites in Malaysia.
- * - The user can use the state filters to choose which sites are shown on the map.
- * - By clicking a site marker, the user can view that site's information.
-*/
+ * - It displays the location of forest-based camp sites in Malaysia.
+ * - Filters: state, search term, price, attractions (all from CampPage).
+ * - Clicking a site marker opens a detail page and fetches weather.
+ */
 
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import "remixicon/fonts/remixicon.css";
-import 'leaflet/dist/leaflet.css';
+import Link from 'next/link'
+import "remixicon/fonts/remixicon.css"
+import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
-import L from 'leaflet';
+import L from 'leaflet'
 
-// Custom site icon
-const siteIcon = L.icon({
+// Default icon
+const defaultIcon = L.icon({
   iconUrl: '/icons/site-icon.svg',
-  iconSize: [80, 80], 
-  iconAnchor: [20, 40],
-  popupAnchor: [20, -40],
-});
+  iconSize: [28, 28],
+  iconAnchor: [14, 28],
+  popupAnchor: [0, -28],
+})
 
-const STATES = [
-  "Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Pulau Pinang", "Selangor", "Terengganu"
-];
+// Highlighted icon
+const highlightedIcon = L.icon({
+  iconUrl: '/icons/site-icon-highlight.svg',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+})
 
 type CampSite = {
-  id: number;
-  type: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-  state: string;
-};
+  id: number
+  type: string
+  name: string
+  latitude: number
+  longitude: number
+  state: string
+  fees?: string
+  tags?: string
+  price?: string   
+  attractions?: string[]
+}
 
-const Map = () => {
-  const [search, setSearch] = useState("");
-  const filteredStates = STATES.filter(state => state.toLowerCase().includes(search.toLowerCase()));
+type WeatherDay = {
+  date: string
+  temp: number
+  description: string
+  icon: string
+}
 
-  // Campsite data state
-  const [sites, setSites] = useState<CampSite[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// OpenWeatherMap API response
+type OpenWeatherForecastItem = {
+  dt: number
+  main: { temp: number }
+  weather: { description: string; icon: string }[]
+}
 
-  // State filter logic
-  const [selectedStates, setSelectedStates] = useState<string[]>([]);
+type OpenWeatherResponse = {
+  list: OpenWeatherForecastItem[]
+}
 
-  // Handle checkbox toggle
-  const handleCheckboxChange = (state: string) => {
-    setSelectedStates(prev =>
-      prev.includes(state)
-        ? prev.filter(s => s !== state)
-        : [...prev, state]
-    );
-  };
+interface MapProps {
+  selectedStates: string[]
+  searchTerm: string
+  priceFilter: string
+  selectedAttractions: string[]
+  onWeatherUpdate: (forecast: WeatherDay[]) => void
+}
 
-  // Handle reset
-  const handleReset = () => {
-    setSelectedStates([]);
-    setSearch("");
-  };
+const Map: React.FC<MapProps> = ({ selectedStates, searchTerm, priceFilter, selectedAttractions, onWeatherUpdate }) => {
+  const [sites, setSites] = useState<CampSite[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [lastClickedId, setLastClickedId] = useState<number | null>(null)
 
-  // Filter sites by selected states
-  const displayedSites = selectedStates.length === 0
-    ? sites
-    : sites.filter(site => selectedStates.includes(site.state));
+  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY
+
+  // Restore last clicked marker
+  useEffect(() => {
+    const savedId = localStorage.getItem("lastClickedId")
+    if (savedId) {
+      setLastClickedId(Number(savedId))
+    }
+  }, [])
 
   useEffect(() => {
     const fetchSites = async () => {
       try {
-        const res = await fetch('/api/campsites');
-        if (!res.ok) throw new Error('Failed to fetch campsites');
-        const data = await res.json();
-        setSites(data);
+        const res = await fetch('/api/campsites')
+        if (!res.ok) throw new Error('Failed to fetch campsites')
+        const data = await res.json()
+
+        const processed = data.map((site: CampSite) => {
+          let price: string = "paid"
+
+          if (site.fees) {
+            if (/RM\s?0/i.test(site.fees) || /FREE/i.test(site.fees)) {
+              price = "free"
+            } else {
+              price = "paid"
+            }
+          }
+
+          return {
+            ...site,
+            price,
+            attractions: site.tags ? site.tags.split(",").map((t) => t.trim()) : []
+          }
+        })
+
+        setSites(processed)
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchSites();
-  }, []);
+    }
+    fetchSites()
+  }, [])
+
+  // Fetch 5-day weather when marker is clicked
+  const fetchWeather = async (lat: number, lon: number) => {
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+      )
+      const data: OpenWeatherResponse = await res.json()
+      if (!data.list) return
+
+      // Take every 8th item (~once per day), limit to 5 days
+      const daily = data.list.filter((_, idx) => idx % 8 === 0).slice(0, 5)
+
+      const forecast: WeatherDay[] = daily.map((d) => ({
+        date: new Date(d.dt * 1000).toLocaleDateString(),
+        temp: d.main.temp,
+        description: d.weather[0].description,
+        icon: `https://openweathermap.org/img/wn/${d.weather[0].icon}.png`
+      }))
+
+      onWeatherUpdate(forecast)
+    } catch (err) {
+      console.error("Failed to fetch weather", err)
+    }
+  }
+
+  // Apply filters
+  const displayedSites = sites.filter((site) => {
+    const matchState = selectedStates.length === 0 || selectedStates.includes(site.state)
+    const matchSearch = searchTerm.trim() === "" || site.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchPrice = priceFilter === "all" || site.price === priceFilter
+    const matchAttractions =
+      selectedAttractions.length === 0 ||
+      (site.attractions && selectedAttractions.every((attr) => site.attractions?.includes(attr)))
+
+    return matchState && matchSearch && matchPrice && matchAttractions
+  })
 
   return (
-    <div className="h-[700px] w-full relative">
-      {/* Sidebar filter UI */}
-      <div className="absolute top-8 left-4 z-10 border border-gray-300
-       bg-white bg-opacity-90 rounded-lg shadow-lg p-4 w-64 max-h-[90%] overflow-y-auto">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <i className="ri-filter-3-line text-green-600 text-xl"></i>
-            Filter
-          </h3>
-          <button
-            type="button"
-            className="text-gray-400 hover:text-gray-500 p-1 rounded cursor-pointer"
-            title="Reset filters"
-            onClick={handleReset}
-          >
-            <i className="ri-refresh-line"></i>
-            &nbsp; Reset
-          </button>
-        </div>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search state..."
-          className="mb-2 px-2 py-2 border border-gray-300 rounded w-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
-        <form className="flex flex-col gap-2">
-          {filteredStates.map((state) => (
-            <label key={state} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-green-600"
-                checked={selectedStates.includes(state)}
-                onChange={() => handleCheckboxChange(state)}
-              />
-              <span>{state}</span>
-            </label>
-          ))}
-        </form>
-      </div>
-
-      {/* Map with dynamic markers from DB */}
+    <div className="h-[600px] w-full relative">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-20">
           <span className="text-gray-600 text-lg">Loading campsites...</span>
@@ -135,29 +169,63 @@ const Map = () => {
           <span className="text-red-600 text-lg">{error}</span>
         </div>
       )}
-      <MapContainer 
-        center={[3.139, 101.6869]} // KL
-        zoom={7} 
-        scrollWheelZoom={true} 
-        className="h-full w-full rounded-lg shadow-md"
+
+      <MapContainer
+        center={[3.139, 101.6869]} // Kuala Lumpur
+        zoom={7}
+        style={{ height: "100%", width: "100%" }}
+        className="rounded-lg shadow-md"
         zoomControl={false}
+        dragging={false}
+        doubleClickZoom={false}
+        scrollWheelZoom={false}
+        boxZoom={false}
+        keyboard={false}
       >
-        {/* OpenStreetMap tile */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Dynamic markers from DB, filtered by state */}
-        {displayedSites.map(site => (
-          <Marker key={site.id} position={[site.latitude, site.longitude]} icon={siteIcon}>
+        {displayedSites.map((site) => (
+          <Marker
+            key={site.id}
+            position={[site.latitude, site.longitude]}
+            icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
+            eventHandlers={{
+              click: () => {
+                setLastClickedId(site.id)
+                localStorage.setItem("lastClickedId", String(site.id))
+                fetchWeather(site.latitude, site.longitude)
+              },
+            }}
+          >
             <Popup>
               <div className="font-bold text-green-700">{site.name}</div>
               <div className="text-xs text-gray-600">State: {site.state}</div>
               <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
+              {site.price && (
+                <div className="text-xs text-gray-500">
+                  Price: {site.price === "free" ? "Free" : "Paid"}
+                </div>
+              )}
+              {site.attractions && site.attractions.length > 0 && (
+                <div className="text-xs text-gray-500">Attractions: {site.attractions.join(", ")}</div>
+              )}
+              <Link
+                href={`/camp/${site.id}`}
+                onClick={() => {
+                  setLastClickedId(site.id)
+                  localStorage.setItem("lastClickedId", String(site.id))
+                }}
+                className="text-blue-600 underline text-sm mt-2 block"
+              >
+                View details →
+              </Link>
             </Popup>
           </Marker>
         ))}
+
         <ZoomControl position="topright" />
       </MapContainer>
     </div>
