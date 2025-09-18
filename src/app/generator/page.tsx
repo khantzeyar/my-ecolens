@@ -5,6 +5,7 @@ import { toPng } from "html-to-image";
 import Image from "next/image";
 
 const phrases = [
+  "", // empty option
   "Leave No Trace 🌿",
   "Take Only Memories, Leave Only Footprints 👣",
   "Protect Our Forests 🌲",
@@ -17,12 +18,22 @@ const phrases = [
   "Respect the Outdoors 🏞️",
 ];
 
+const defaultBg = "#ffffff"; // white background
+const defaultText = "#222";
+
 const CardGenerator = () => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [phrase, setPhrase] = useState(phrases[0]);
-  const [bgColor, setBgColor] = useState("#a8d5ba");
-  const [textColor, setTextColor] = useState("#222");
+  const [bgColor, setBgColor] = useState(defaultBg);
+  const [textColor, setTextColor] = useState(defaultText);
+  const [history, setHistory] = useState<
+    { phrase: string; bg: string; text: string }[]
+  >([]);
+
+  const saveHistory = () => {
+    setHistory((prev) => [...prev, { phrase, bg: bgColor, text: textColor }]);
+  };
 
   const handleDownload = async () => {
     if (cardRef.current) {
@@ -34,9 +45,28 @@ const CardGenerator = () => {
     }
   };
 
+  const handleUndo = () => {
+    const last = history.pop();
+    if (last) {
+      setPhrase(last.phrase);
+      setBgColor(last.bg);
+      setTextColor(last.text);
+      setHistory([...history]);
+    }
+  };
+
+  const handleReset = () => {
+    setPhrase(""); // empty phrase
+    setBgColor(defaultBg); // white background
+    setTextColor(defaultText);
+    setHistory([]);
+  };
+
   return (
     <div className="flex flex-col items-center p-6 space-y-6 pt-24">
-      <h1 className="text-2xl font-bold">Camping & Environment Card Generator</h1>
+      <h1 className="text-2xl font-bold">
+        Camping & Environment Card Generator
+      </h1>
 
       {/* Controls */}
       <div className="flex flex-col space-y-4 w-full max-w-md">
@@ -45,26 +75,32 @@ const CardGenerator = () => {
           <label className="block font-medium">Choose a Phrase</label>
           <select
             value={phrase}
-            onChange={(e) => setPhrase(e.target.value)}
+            onChange={(e) => {
+              saveHistory();
+              setPhrase(e.target.value);
+            }}
             className="w-full border rounded p-2"
           >
             {phrases.map((p, idx) => (
               <option key={idx} value={p}>
-                {p}
+                {p || "(blank)"}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Colors row */}
-        <div className="flex space-x-6">
+        {/* Options */}
+        <div className="flex items-center space-x-6">
           {/* Background color */}
           <div>
             <label className="block font-medium">Background Color</label>
             <input
               type="color"
               value={bgColor}
-              onChange={(e) => setBgColor(e.target.value)}
+              onChange={(e) => {
+                saveHistory();
+                setBgColor(e.target.value);
+              }}
             />
           </div>
 
@@ -74,9 +110,30 @@ const CardGenerator = () => {
             <input
               type="color"
               value={textColor}
-              onChange={(e) => setTextColor(e.target.value)}
+              onChange={(e) => {
+                saveHistory();
+                setTextColor(e.target.value);
+              }}
             />
           </div>
+
+          {/* Undo icon button */}
+          <button
+            onClick={handleUndo}
+            className="p-2 rounded hover:text-gray-300"
+            title="Undo"
+          >
+            <i className="ri-arrow-go-back-line text-xl"></i>
+          </button>
+
+          {/* Reset icon button */}
+          <button
+            onClick={handleReset}
+            className="p-2 rounded hover:text-gray-300"
+            title="Reset"
+          >
+            <i className="ri-refresh-line text-xl"></i>
+          </button>
         </div>
       </div>
 
