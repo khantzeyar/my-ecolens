@@ -5,9 +5,9 @@ import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { Feature, Geometry, GeoJsonProperties, FeatureCollection } from 'geojson';
-import malaysiaGeoJsonRaw from '../data/malaysia-map.json';
+import malaysiaGeoJsonRaw from '../data/peninsular-map.json';
 import { stateNameMap, districtNameMap } from '../utils/nameMap';
-import forestData from '../data/tree_cover_loss.json';
+import forestData from '../data/peninsular_tree_cover_loss.json'; // ✅ only Peninsular data
 import InsightsPanel from './InsightsPanel';
 import type { RawForestRecord, TransformedForestData } from '../utils/transformForestData';
 
@@ -26,18 +26,11 @@ const GeoJSON = dynamic(
   { ssr: false }
 );
 
+// ✅ normalize names via nameMap
 function getDistrictKey(rawName: string): string {
-  const mappedDistrict = Object.entries(districtNameMap).find(
-    ([, geoName]) => geoName === rawName
-  )?.[0];
-  if (mappedDistrict) return mappedDistrict;
-
-  const mappedState = Object.entries(stateNameMap).find(
-    ([, geoName]) => geoName === rawName
-  )?.[0];
-  if (mappedState) return mappedState;
-
-  return rawName.replace(/\s+/g, '');
+  if (districtNameMap[rawName]) return districtNameMap[rawName];
+  if (stateNameMap[rawName]) return stateNameMap[rawName];
+  return rawName.trim();
 }
 
 function computeAllRanks() {
@@ -89,16 +82,9 @@ function transformRecord(record: RawForestRecord): TransformedForestData & { nam
 const storyMap: Record<number, string> = {
   2001: 'In 2001, forest cover was still relatively stable.',
   2006: 'By 2006, early signs of deforestation became visible.',
-  2011: 'In 2011, deforestation accelerated in Sabah & Sarawak.',
+  2011: 'In 2011, deforestation accelerated in some states.',
   2016: '2016 saw major forest fires contributing to loss.',
   2021: 'By 2021, cumulative forest loss reached critical levels.',
-};
-
-const animalMap: Record<string, string> = {
-  Pahang: 'Malayan Tiger lives here!',
-  Sabah: 'Home to the Bornean Hornbill.',
-  Sarawak: 'Proboscis monkeys are found here.',
-  Johor: 'Habitat of the Malayan Tapir.',
 };
 
 interface ForestMapProps {
@@ -156,6 +142,7 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
         opacity: 1,
         color: 'white',
         fillOpacity: 0.7,
+        cursor: 'pointer',
       };
     },
     [year]
@@ -166,16 +153,15 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
     const districtKey = getDistrictKey(rawName);
     const value = getLossValue(districtKey, year);
 
-    let popupText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value} ha`;
+    let infoText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value} ha`;
 
-    if (animalMap[rawName]) {
-      popupText += `<br/><span style="color:green;font-weight:bold">${animalMap[rawName]}</span>`;
-    }
-
-    if ('bindPopup' in layer) {
-      (layer as L.Layer & { bindPopup: (s: string) => void }).bindPopup(
-        popupText + '<br/><i>Click for details</i>'
-      );
+    if ('bindTooltip' in layer) {
+      (layer as L.Layer & { bindTooltip: (s: string, o?: any) => void }).bindTooltip(infoText, {
+        sticky: true,
+        direction: 'top',
+        className: 'info-tooltip',
+        opacity: 0.9,
+      });
     }
 
     layer.on('click', () => {
@@ -218,7 +204,8 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
         </div>
       )}
 
-      <div className="absolute bottom-4 right-4 z-[1000] bg-white/90 p-3 rounded-lg shadow-md text-sm border border-gray-200">
+      {/* legend */}
+      <div className="absolute top-4 right-4 z-[999] bg-white/90 p-3 rounded-lg shadow-md text-sm border border-gray-200">
         <h4 className="font-semibold mb-1">Forest Loss (ha)</h4>
         <div className="flex flex-col gap-1">
           <div><span style={{ background: '#800026', display: 'inline-block', width: 20, height: 10, borderRadius: 2 }}></span> &gt; 5000</div>

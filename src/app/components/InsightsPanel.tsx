@@ -23,7 +23,7 @@ interface InsightsPanelProps {
     totalRegions?: number;
   } | null;
   onClose?: () => void; // ✅ modal 模式用
-  mode?: 'modal' | 'embed'; // ✅ 新增：支持两种模式
+  mode?: 'modal' | 'embed'; // ✅ 支持两种模式
 }
 
 const InsightsPanel: React.FC<InsightsPanelProps> = ({
@@ -34,7 +34,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
 }) => {
   if (!isOpen || !data) return null;
 
-  // format yearly data for chart
+  // 格式化数据
   const trends = data.yearly_loss
     ? Object.entries(data.yearly_loss).map(([year, loss]) => ({
         year,
@@ -45,7 +45,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   const maxLoss = trends.length > 0 ? Math.max(...trends.map((d) => d.loss)) : 0;
   const maxYear = trends.find((d) => d.loss === maxLoss)?.year;
 
-  // eco tips logic
+  // Eco Tips 逻辑
   const percent = data.cumulative_loss_percent ?? 0;
   let ecoTips: string[] = [];
 
@@ -69,7 +69,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
     ];
   }
 
-  // ✅ 根据 mode 切换容器
+  // ✅ 根据 mode 选择容器
   const Wrapper: any = mode === 'modal' ? motion.div : 'div';
   const wrapperClass =
     mode === 'modal'
@@ -88,7 +88,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
       }
       className={wrapperClass}
     >
-      {/* header */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6 border-b pb-2">
         <h2 className="text-xl font-bold text-green-700">
           Forest Insights – {data.name}
@@ -103,7 +103,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         )}
       </div>
 
-      {/* annual forest loss */}
+      {/* 年度森林损失 */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-3">Annual Forest Loss</h3>
         <div className="h-64">
@@ -170,7 +170,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         )}
       </div>
 
-      {/* cumulative summary */}
+      {/* 累积总结 */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-2">Cumulative Summary</h3>
         <p className="text-gray-700 leading-relaxed">
@@ -185,7 +185,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         )}
       </div>
 
-      {/* dynamic eco tips */}
+      {/* 动态生态提示 */}
       <div className="mb-6 p-4 bg-green-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-2">Eco Tips</h3>
         <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">

@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import forestData from "../data/tree_cover_loss.json";
+import forestData from "../data/peninsular_tree_cover_loss.json"; // ✅ 改成西马数据源
+
+// ✅ 动态导入 react-select（避免 hydration error）
+const Select = dynamic(() => import("react-select"), { ssr: false });
 
 // Define a type for forest data
 interface ForestRecord {
@@ -30,23 +33,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// National trend
-function computeNationalTrend(): { year: number; loss: number }[] {
-  const result: { year: number; loss: number }[] = [];
-  for (let year = 2001; year <= 2024; year++) {
-    const total = (forestData as ForestRecord[]).reduce(
-      (sum, d) =>
-        sum +
-        (typeof d[`tc_loss_ha_${year}`] === "number"
-          ? (d[`tc_loss_ha_${year}`] as number)
-          : 0),
-      0
-    );
-    result.push({ year, loss: total });
-  }
-  return result;
-}
-
 // State trend
 function computeStateTrend(stateName: string): { year: number; loss: number }[] {
   const result: { year: number; loss: number }[] = [];
@@ -73,18 +59,18 @@ export default function ForestPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [storyMode, setStoryMode] = useState(false);
 
-  // State selected for comparison chart
-  const [selectedState, setSelectedState] = useState("Pahang");
+  // ✅ 默认选中 Pahang
+  const [selectedStates, setSelectedStates] = useState<string[]>(["Pahang"]);
 
-  const nationalTrend = computeNationalTrend();
-  const stateTrend = computeStateTrend(selectedState);
-
-  // Combine data
-  const chartData = nationalTrend.map((nat, idx) => ({
-    year: nat.year,
-    national: nat.loss,
-    state: stateTrend[idx]?.loss || 0,
-  }));
+  // ✅ 组合数据（只包含选中的州）
+  const chartData = Array.from({ length: 2024 - 2001 + 1 }, (_, i) => {
+    const year = 2001 + i;
+    const entry: Record<string, number> = { year };
+    selectedStates.forEach((s) => {
+      entry[s] = computeStateTrend(s)[i]?.loss || 0;
+    });
+    return entry;
+  });
 
   // Auto play
   useEffect(() => {
@@ -116,12 +102,28 @@ export default function ForestPage() {
     return () => clearInterval(timer);
   }, [storyMode]);
 
-  // All states
+  // ✅ 所有州（不需要 excludedStates）
   const allStates = Array.from(
     new Set(
-      (forestData as ForestRecord[]).map((d) => d.subnational1).filter(Boolean)
+      (forestData as ForestRecord[])
+        .map((d) => d.subnational1)
+        .filter(Boolean)
     )
-  );
+  ) as string[];
+
+  const stateOptions = allStates.map((s) => ({ value: s, label: s }));
+
+  // ✅ 给州分配颜色
+  const colors = [
+    "#FF5722",
+    "#2196F3",
+    "#9C27B0",
+    "#FFC107",
+    "#009688",
+    "#795548",
+    "#E91E63",
+    "#00BCD4",
+  ];
 
   return (
     <main className="p-8 pt-28 space-y-10">
@@ -134,7 +136,7 @@ export default function ForestPage() {
         </p>
       </header>
 
-      {/* About the Data */}
+      {/* About the Data ✅ 保留说明 */}
       <section className="bg-yellow-50 p-8 rounded-2xl shadow-lg border border-yellow-200">
         <h2 className="text-2xl font-semibold mb-4">About the Data</h2>
         <p className="text-gray-700 mb-4">
@@ -147,8 +149,7 @@ export default function ForestPage() {
             <b>Annual Forest Loss (tc_loss_ha_YEAR)</b>: Hectares of tree cover lost in that year.
           </li>
           <li>
-            <b>National vs State Chart</b>: Compares Malaysia&apos;s total annual forest
-            loss with the selected state.
+            <b>State Chart</b>: Compare annual forest loss across selected states.
           </li>
           <li>
             <b>Forest Loss Map</b>: Shows where forest loss occurred in each district
@@ -162,38 +163,23 @@ export default function ForestPage() {
         </p>
       </section>
 
-      {/* Why Forests Matter */}
-      <section className="bg-gradient-to-r from-green-50 to-white p-8 rounded-2xl shadow-lg border border-green-100">
-        <h2 className="text-2xl font-semibold mb-4">Why Forests Matter</h2>
-        <ul className="list-disc list-inside text-gray-700 space-y-2">
-          <li>Maintain biodiversity and protect endangered species.</li>
-          <li>Regulate climate and reduce disaster risks.</li>
-          <li>Support local communities and sustainable livelihoods.</li>
-        </ul>
-      </section>
-
-      {/* National vs State Comparison */}
+      {/* State Comparison */}
       <section className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-        <h2 className="text-2xl font-semibold mb-2">National vs State Forest Loss</h2>
+        <h2 className="text-2xl font-semibold mb-2">State Forest Loss</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Compare Malaysia&apos;s total annual tree cover loss with the selected state.
-          Each point represents hectares of forest lost in that year.
+          Compare annual forest loss across selected states. Each line represents hectares of forest lost in that year.
         </p>
 
-        {/* State Selector */}
-        <div className="mb-6">
-          <label className="mr-2 font-medium">Select State:</label>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-            className="px-4 py-2 border rounded-lg shadow-sm text-gray-700 hover:border-green-500 focus:ring focus:ring-green-200"
-          >
-            {allStates.map((s) => (
-              <option key={s} value={s as string}>
-                {s}
-              </option>
-            ))}
-          </select>
+        {/* ✅ 多选州选择器 */}
+        <div className="mb-6 w-96">
+          <label className="mr-2 font-medium">Select States:</label>
+          <Select
+            isMulti
+            options={stateOptions}
+            value={selectedStates.map((s) => ({ value: s, label: s }))}
+            onChange={(vals) => setSelectedStates(vals.map((v) => v.value))}
+            className="mt-2"
+          />
         </div>
 
         {/* Line Chart */}
@@ -202,26 +188,19 @@ export default function ForestPage() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis />
-            <Tooltip
-              formatter={(value: number) => [`${value.toLocaleString()} ha lost`, ""]}
-            />
+            <Tooltip formatter={(value: number) => [`${value.toLocaleString()} ha lost`, ""]} />
             <Legend />
-            <Line
-              type="monotone"
-              dataKey="national"
-              stroke="#2E7D32"
-              strokeWidth={2}
-              dot={false}
-              name="National Total"
-            />
-            <Line
-              type="monotone"
-              dataKey="state"
-              stroke="#FF5722"
-              strokeWidth={2}
-              dot={false}
-              name={selectedState}
-            />
+            {selectedStates.map((s, idx) => (
+              <Line
+                key={s}
+                type="monotone"
+                dataKey={s}
+                stroke={colors[idx % colors.length]}
+                strokeWidth={2}
+                dot={false}
+                name={s}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </section>

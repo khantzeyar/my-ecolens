@@ -7,7 +7,7 @@ import InsightsPanel from "@/app/components/InsightsPanel";
 import dynamic from "next/dynamic";
 import { transformForestDataByState } from "@/app/utils/transformForestData";
 
-// ✅ state-level forest data
+// ✅ state-level forest data (Peninsular only)
 const forestData = transformForestDataByState();
 
 // ✅ dynamic import Map component
@@ -302,7 +302,7 @@ export default function CampDetail({ params }: CampDetailProps) {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* ✅ Embedded InsightsPanel */}
+              {/* ✅ Embedded InsightsPanel with state-level data */}
               <InsightsPanel
                 mode="embed"
                 data={{
@@ -315,7 +315,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 }}
               />
 
-              {/* ✅ Go to Forest 按钮 */}
+              {/* ✅ Go to Forest button */}
               <div className="mt-12 text-center">
                 <Link
                   href="/forest"

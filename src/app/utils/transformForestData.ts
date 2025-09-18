@@ -1,5 +1,5 @@
 // src/app/utils/transformForestData.ts
-import rawData from "../data/tree_cover_loss.json";
+import rawData from "../data/peninsular_tree_cover_loss.json"; // ✅ 改成西马数据源
 
 // Raw data record type
 export interface RawForestRecord {
@@ -18,16 +18,16 @@ export interface TransformedForestData {
   totalRegions?: number;
 }
 
-// Aggregate by state (for Camping page)
+// ✅ Aggregate by state (for Camping page)
 export function transformForestDataByState(): Record<string, TransformedForestData> {
-  const grouped: Record<string, TransformedForestData> = {};
+  const grouped: Record<string, { yearly_loss: Record<string, number>; extent: number }> = {};
 
   (rawData as RawForestRecord[]).forEach((item) => {
     const state = item.subnational1;
     if (!state) return;
 
     if (!grouped[state]) {
-      grouped[state] = { yearly_loss: {}, cumulative_loss_percent: 0 };
+      grouped[state] = { yearly_loss: {}, extent: 0 };
     }
 
     // yearly loss
@@ -41,17 +41,24 @@ export function transformForestDataByState(): Record<string, TransformedForestDa
       }
     });
 
-    // cumulative percent
-    const totalLoss = Object.values(grouped[state].yearly_loss).reduce(
-      (a, b) => a + b,
-      0
-    );
-    const base = item.extent_2000_ha ?? item.area_ha ?? 1;
-    grouped[state].cumulative_loss_percent = (totalLoss / base) * 100;
+    // 累计 extent（注意要加总）
+    grouped[state].extent += item.extent_2000_ha ?? item.area_ha ?? 0;
+  });
+
+  // 生成最终结果
+  const finalGrouped: Record<string, TransformedForestData> = {};
+  Object.entries(grouped).forEach(([state, data]) => {
+    const totalLoss = Object.values(data.yearly_loss).reduce((a, b) => a + b, 0);
+    const percent = data.extent > 0 ? (totalLoss / data.extent) * 100 : 0;
+
+    finalGrouped[state] = {
+      yearly_loss: data.yearly_loss,
+      cumulative_loss_percent: percent,
+    };
   });
 
   // ranking
-  const states = Object.entries(grouped).map(([name, data]) => ({
+  const states = Object.entries(finalGrouped).map(([name, data]) => ({
     name,
     loss: data.cumulative_loss_percent,
   }));
@@ -60,14 +67,14 @@ export function transformForestDataByState(): Record<string, TransformedForestDa
   const totalRegions = states.length;
 
   states.forEach((item, index) => {
-    grouped[item.name].rank = index + 1;
-    grouped[item.name].totalRegions = totalRegions;
+    finalGrouped[item.name].rank = index + 1;
+    finalGrouped[item.name].totalRegions = totalRegions;
   });
 
-  return grouped;
+  return finalGrouped;
 }
 
-// Aggregate by district (for Forest page)
+// ✅ Aggregate by district (for Forest page)
 export function transformForestDataByDistrict(): Record<string, TransformedForestData> {
   const grouped: Record<string, TransformedForestData> = {};
 
