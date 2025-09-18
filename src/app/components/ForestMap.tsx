@@ -4,12 +4,15 @@ import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import malaysiaGeoJson from '../data/malaysia-map.json';
+import type { Feature, Geometry, GeoJsonProperties, FeatureCollection } from 'geojson';
+import malaysiaGeoJsonRaw from '../data/malaysia-map.json';
 import { stateNameMap, districtNameMap } from '../utils/nameMap';
 import forestData from '../data/tree_cover_loss.json';
 import InsightsPanel from './InsightsPanel';
+import type { RawForestRecord, TransformedForestData } from '../utils/transformForestData';
 
-// ✅ 动态导入 react-leaflet，关闭 SSR
+const malaysiaGeoJson = malaysiaGeoJsonRaw as FeatureCollection<Geometry, GeoJsonProperties>;
+
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
   { ssr: false }
@@ -23,36 +26,36 @@ const GeoJSON = dynamic(
   { ssr: false }
 );
 
-// ✅ 获取统一的 key
-function getDistrictKey(rawName: string) {
+function getDistrictKey(rawName: string): string {
   const mappedDistrict = Object.entries(districtNameMap).find(
-    ([treeKey, geoName]) => geoName === rawName
+    ([, geoName]) => geoName === rawName
   )?.[0];
   if (mappedDistrict) return mappedDistrict;
 
   const mappedState = Object.entries(stateNameMap).find(
-    ([treeKey, geoName]) => geoName === rawName
+    ([, geoName]) => geoName === rawName
   )?.[0];
   if (mappedState) return mappedState;
 
   return rawName.replace(/\s+/g, '');
 }
 
-// ✅ 提前计算所有地区的累计损失百分比，用于排名
 function computeAllRanks() {
-  const ranking: { name: string; percent: number }[] = forestData.map((record: any) => {
-    const yearly_loss: Record<string, number> = {};
-    for (let year = 2001; year <= 2024; year++) {
-      yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] || 0;
+  const ranking: { name: string; percent: number }[] = (forestData as RawForestRecord[]).map(
+    (record) => {
+      const yearly_loss: Record<string, number> = {};
+      for (let year = 2001; year <= 2024; year++) {
+        yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] ?? 0;
+      }
+      const totalLoss = Object.values(yearly_loss).reduce((a, b) => a + b, 0);
+      const baseExtent = record.extent_2000_ha || 1;
+      const percent = (totalLoss / baseExtent) * 100;
+      return {
+        name: record.subnational2 || record.subnational1 || 'Unknown',
+        percent,
+      };
     }
-    const totalLoss = Object.values(yearly_loss).reduce((a, b) => a + b, 0);
-    const baseExtent = record['extent_2000_ha'] || 1;
-    const percent = (totalLoss / baseExtent) * 100;
-    return {
-      name: record.subnational2 || record.subnational1,
-      percent,
-    };
-  });
+  );
 
   ranking.sort((a, b) => b.percent - a.percent);
   return ranking;
@@ -60,71 +63,64 @@ function computeAllRanks() {
 
 const allRanks = computeAllRanks();
 
-// ✅ 转换 record 为 InsightsPanel 格式
-function transformRecord(record: any) {
+function transformRecord(record: RawForestRecord): TransformedForestData & { name: string } {
   const yearly_loss: Record<string, number> = {};
   for (let year = 2001; year <= 2024; year++) {
-    yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] || 0;
+    yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] ?? 0;
   }
 
   const totalLoss = Object.values(yearly_loss).reduce((a, b) => a + b, 0);
-  const baseExtent = record['extent_2000_ha'] || 1;
+  const baseExtent = record.extent_2000_ha || 1;
   const cumulative_loss_percent = (totalLoss / baseExtent) * 100;
 
-  const name = record.subnational2 || record.subnational1;
+  const name = record.subnational2 || record.subnational1 || 'Unknown';
   const rankIndex = allRanks.findIndex((d) => d.name === name);
-  const rank = rankIndex >= 0 ? rankIndex + 1 : null;
+  const rank = rankIndex >= 0 ? rankIndex + 1 : undefined;
 
   return {
     name,
     yearly_loss,
     cumulative_loss_percent,
     rank,
-    totalStates: allRanks.length,
+    totalRegions: allRanks.length,
   };
 }
 
-// ✅ 故事模式解说文本
 const storyMap: Record<number, string> = {
-  2001: "📌 In 2001, forest cover was still relatively stable.",
-  2006: "⚠️ By 2006, early signs of deforestation became visible.",
-  2011: "🌳 In 2011, deforestation accelerated in Sabah & Sarawak.",
-  2016: "🔥 2016 saw major forest fires contributing to loss.",
-  2021: "🌏 By 2021, cumulative forest loss reached critical levels.",
+  2001: 'In 2001, forest cover was still relatively stable.',
+  2006: 'By 2006, early signs of deforestation became visible.',
+  2011: 'In 2011, deforestation accelerated in Sabah & Sarawak.',
+  2016: '2016 saw major forest fires contributing to loss.',
+  2021: 'By 2021, cumulative forest loss reached critical levels.',
 };
 
-// ✅ 动物彩蛋
 const animalMap: Record<string, string> = {
-  "Pahang": "🐯 Malayan Tiger lives here!",
-  "Sabah": "🦜 Home to the Bornean Hornbill.",
-  "Sarawak": "🐒 Proboscis monkeys are found here.",
-  "Johor": "🦊 Habitat of the Malayan Tapir."
+  Pahang: 'Malayan Tiger lives here!',
+  Sabah: 'Home to the Bornean Hornbill.',
+  Sarawak: 'Proboscis monkeys are found here.',
+  Johor: 'Habitat of the Malayan Tapir.',
 };
 
 interface ForestMapProps {
-  year: number;         // ✅ 外部传入 year
-  storyMode?: boolean;  // ✅ 从 ForestPage 传入的 storyMode
+  year: number;
+  storyMode?: boolean;
 }
 
 export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
-  const [selectedData, setSelectedData] = useState<any | null>(null);
+  const [selectedData, setSelectedData] = useState<TransformedForestData & { name: string } | null>(
+    null
+  );
   const [panelOpen, setPanelOpen] = useState(false);
-  const [heatmapEnabled, setHeatmapEnabled] = useState(false);
+  const [storyText, setStoryText] = useState('');
 
-  // 故事模式文本
-  const [storyText, setStoryText] = useState("");
-
-  // 获取某区/县某年的 forest loss
   const getLossValue = (districtKey: string, year: number) => {
-    const record = forestData.find(
-      (d: any) =>
-        d.subnational1 === districtKey || d.subnational2 === districtKey
+    const record = (forestData as RawForestRecord[]).find(
+      (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
     );
     if (!record) return 0;
-    return record[`tc_loss_ha_${year}`] || 0;
+    return record[`tc_loss_ha_${year}`] ?? 0;
   };
 
-  // 颜色映射
   const getColor = (value: number) => {
     return value > 5000
       ? '#800026'
@@ -139,10 +135,18 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
       : '#FEB24C';
   };
 
-  // 样式
   const style = useCallback(
-    (feature: any) => {
-      const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1;
+    (feature?: Feature<Geometry, GeoJsonProperties>): L.PathOptions => {
+      if (!feature) {
+        return {
+          fillColor: '#ccc',
+          weight: 0.5,
+          opacity: 1,
+          color: 'white',
+          fillOpacity: 0.5,
+        };
+      }
+      const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1 || 'Unknown';
       const districtKey = getDistrictKey(rawName);
       const value = getLossValue(districtKey, year);
 
@@ -157,25 +161,26 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
     [year]
   );
 
-  // popup + 点击事件 → 打开 InsightsPanel
-  const onEachFeature = (feature: any, layer: any) => {
-    const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1;
+  const onEachFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
+    const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1 || 'Unknown';
     const districtKey = getDistrictKey(rawName);
     const value = getLossValue(districtKey, year);
 
     let popupText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value} ha`;
 
-    // ✅ 如果有动物信息，加进去
     if (animalMap[rawName]) {
       popupText += `<br/><span style="color:green;font-weight:bold">${animalMap[rawName]}</span>`;
     }
 
-    layer.bindPopup(popupText + "<br/><i>Click for details</i>");
+    if ('bindPopup' in layer) {
+      (layer as L.Layer & { bindPopup: (s: string) => void }).bindPopup(
+        popupText + '<br/><i>Click for details</i>'
+      );
+    }
 
     layer.on('click', () => {
-      const record = forestData.find(
-        (d: any) =>
-          d.subnational1 === districtKey || d.subnational2 === districtKey
+      const record = (forestData as RawForestRecord[]).find(
+        (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
       );
       if (record) {
         setSelectedData(transformRecord(record));
@@ -184,10 +189,9 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
     });
   };
 
-  // ✅ 故事模式自动播放
   useEffect(() => {
     if (!storyMode) {
-      setStoryText("");
+      setStoryText('');
       return;
     }
     let step = 2001;
@@ -198,25 +202,22 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
       step += 5;
       if (step > 2024) {
         clearInterval(timer);
-        setStoryText("");
+        setStoryText('');
       }
-    }, 2000); // 每 2 秒更新
+    }, 2000);
     return () => clearInterval(timer);
   }, [storyMode]);
 
-  // ✅ 计算马来西亚边界
-  const malaysiaBounds = L.geoJSON(malaysiaGeoJson as any).getBounds();
+  const malaysiaBounds = L.geoJSON(malaysiaGeoJson).getBounds();
 
   return (
     <div className="relative">
-      {/* 故事模式文本框 */}
       {storyMode && storyText && (
         <div className="absolute top-4 right-4 z-[1000] bg-white p-3 rounded-lg shadow-md w-64 text-sm border border-gray-300">
           {storyText}
         </div>
       )}
 
-      {/* 图例 (Legend) */}
       <div className="absolute bottom-4 right-4 z-[1000] bg-white/90 p-3 rounded-lg shadow-md text-sm border border-gray-200">
         <h4 className="font-semibold mb-1">Forest Loss (ha)</h4>
         <div className="flex flex-col gap-1">
@@ -229,7 +230,6 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
         </div>
       </div>
 
-      {/* 地图 */}
       <MapContainer
         bounds={malaysiaBounds}
         maxBounds={malaysiaBounds}
@@ -244,19 +244,13 @@ export default function ForestMap({ year, storyMode = false }: ForestMapProps) {
         />
         <GeoJSON
           key={year}
-          data={malaysiaGeoJson as any}
+          data={malaysiaGeoJson}
           style={style}
           onEachFeature={onEachFeature}
         />
       </MapContainer>
 
-      {/* Insights Panel */}
-      <InsightsPanel
-        isOpen={panelOpen}
-        data={selectedData}
-        onClose={() => setPanelOpen(false)}
-        onToggleHeatmap={setHeatmapEnabled}
-      />
+      <InsightsPanel isOpen={panelOpen} data={selectedData} onClose={() => setPanelOpen(false)} />
     </div>
   );
 }

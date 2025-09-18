@@ -5,6 +5,15 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import forestData from "../data/tree_cover_loss.json";
 
+// Define a type for forest data
+interface ForestRecord {
+  subnational1?: string;
+  subnational2?: string;
+  extent_2000_ha?: number;
+  area_ha?: number;
+  [key: string]: string | number | undefined;
+}
+
 // Dynamic import of ForestMap (disable SSR)
 const ForestMap = dynamic(() => import("../components/ForestMap"), {
   ssr: false,
@@ -23,11 +32,15 @@ import {
 } from "recharts";
 
 // National trend
-function computeNationalTrend() {
+function computeNationalTrend(): { year: number; loss: number }[] {
   const result: { year: number; loss: number }[] = [];
   for (let year = 2001; year <= 2024; year++) {
-    const total = forestData.reduce(
-      (sum: number, d: any) => sum + (d[`tc_loss_ha_${year}`] || 0),
+    const total = (forestData as ForestRecord[]).reduce(
+      (sum, d) =>
+        sum +
+        (typeof d[`tc_loss_ha_${year}`] === "number"
+          ? (d[`tc_loss_ha_${year}`] as number)
+          : 0),
       0
     );
     result.push({ year, loss: total });
@@ -36,12 +49,21 @@ function computeNationalTrend() {
 }
 
 // State trend
-function computeStateTrend(stateName: string) {
+function computeStateTrend(stateName: string): { year: number; loss: number }[] {
   const result: { year: number; loss: number }[] = [];
   for (let year = 2001; year <= 2024; year++) {
-    const total = forestData
-      .filter((d: any) => d.subnational1 === stateName || d.subnational2 === stateName)
-      .reduce((sum: number, d: any) => sum + (d[`tc_loss_ha_${year}`] || 0), 0);
+    const total = (forestData as ForestRecord[])
+      .filter(
+        (d) => d.subnational1 === stateName || d.subnational2 === stateName
+      )
+      .reduce(
+        (sum, d) =>
+          sum +
+          (typeof d[`tc_loss_ha_${year}`] === "number"
+            ? (d[`tc_loss_ha_${year}`] as number)
+            : 0),
+        0
+      );
     result.push({ year, loss: total });
   }
   return result;
@@ -97,7 +119,9 @@ export default function ForestPage() {
 
   // All states
   const allStates = Array.from(
-    new Set(forestData.map((d: any) => d.subnational1).filter(Boolean))
+    new Set(
+      (forestData as ForestRecord[]).map((d) => d.subnational1).filter(Boolean)
+    )
   );
 
   return (
@@ -134,7 +158,9 @@ export default function ForestPage() {
             className="px-4 py-2 border rounded-lg shadow-sm text-gray-700 hover:border-green-500 focus:ring focus:ring-green-200"
           >
             {allStates.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s as string}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
@@ -147,8 +173,22 @@ export default function ForestPage() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="national" stroke="#2E7D32" strokeWidth={2} dot={false} name="National Total" />
-            <Line type="monotone" dataKey="state" stroke="#FF5722" strokeWidth={2} dot={false} name={selectedState} />
+            <Line
+              type="monotone"
+              dataKey="national"
+              stroke="#2E7D32"
+              strokeWidth={2}
+              dot={false}
+              name="National Total"
+            />
+            <Line
+              type="monotone"
+              dataKey="state"
+              stroke="#FF5722"
+              strokeWidth={2}
+              dot={false}
+              name={selectedState}
+            />
           </LineChart>
         </ResponsiveContainer>
       </section>
