@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import forestRaw from '../../data/peninsular_forest_loss.json'
+import forestRaw from '../../data/peninsular_tree_cover_loss.json'
 import {
   ResponsiveContainer,
   BarChart,
