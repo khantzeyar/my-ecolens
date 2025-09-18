@@ -5,7 +5,7 @@ import { toPng } from "html-to-image";
 import Image from "next/image";
 
 const phrases = [
-  "", // empty option
+  "",
   "Leave No Trace 🌿",
   "Take Only Memories, Leave Only Footprints 👣",
   "Protect Our Forests 🌲",
@@ -18,7 +18,14 @@ const phrases = [
   "Respect the Outdoors 🏞️",
 ];
 
-const defaultBg = "#ffffff"; // white background
+const images = [
+  { label: "(none)", value: "" },
+  { label: "Flower", value: "/images/card-generator/flower.png" },
+  { label: "Monkey", value: "/images/card-generator/monkey.png" },
+  { label: "Tiger", value: "/images/card-generator/tiger.png" },
+];
+
+const defaultBg = "#ffffff";
 const defaultText = "#222";
 
 const CardGenerator = () => {
@@ -27,12 +34,16 @@ const CardGenerator = () => {
   const [phrase, setPhrase] = useState(phrases[0]);
   const [bgColor, setBgColor] = useState(defaultBg);
   const [textColor, setTextColor] = useState(defaultText);
+  const [selectedImage, setSelectedImage] = useState(images[0].value);
   const [history, setHistory] = useState<
-    { phrase: string; bg: string; text: string }[]
+    { phrase: string; bg: string; text: string; img: string }[]
   >([]);
 
   const saveHistory = () => {
-    setHistory((prev) => [...prev, { phrase, bg: bgColor, text: textColor }]);
+    setHistory((prev) => [
+      ...prev,
+      { phrase, bg: bgColor, text: textColor, img: selectedImage },
+    ]);
   };
 
   const handleDownload = async () => {
@@ -51,14 +62,16 @@ const CardGenerator = () => {
       setPhrase(last.phrase);
       setBgColor(last.bg);
       setTextColor(last.text);
+      setSelectedImage(last.img);
       setHistory([...history]);
     }
   };
 
   const handleReset = () => {
-    setPhrase(""); // empty phrase
-    setBgColor(defaultBg); // white background
+    setPhrase("");
+    setBgColor(defaultBg);
     setTextColor(defaultText);
+    setSelectedImage("");
     setHistory([]);
   };
 
@@ -89,6 +102,40 @@ const CardGenerator = () => {
           </select>
         </div>
 
+        {/* Image selector*/}
+        <div>
+          <label className="block font-medium mb-1">Choose an Image</label>
+          <div className="flex space-x-4">
+            {images.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  saveHistory();
+                  setSelectedImage(img.value);
+                }}
+                className={`w-16 h-16 border rounded flex items-center justify-center ${
+                  selectedImage === img.value
+                    ? "ring-2 ring-green-600"
+                    : "opacity-70 hover:opacity-100"
+                }`}
+                title={img.label}
+              >
+                {img.value ? (
+                  <Image
+                    src={img.value}
+                    alt={img.label}
+                    width={36}
+                    height={36}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500">(none)</span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Options */}
         <div className="flex items-center space-x-6">
           {/* Background color */}
@@ -117,22 +164,23 @@ const CardGenerator = () => {
             />
           </div>
 
-          {/* Undo icon button */}
-          <button
-            onClick={handleUndo}
-            className="p-2 rounded hover:text-gray-300"
-            title="Undo"
-          >
-            <i className="ri-arrow-go-back-line text-xl"></i>
+          {/* Undo */}
+          <button onClick={handleUndo} className="p-2 cursor-pointer" title="Undo">
+            <i className="ri-arrow-go-back-line text-xl hover:text-gray-300"></i>
           </button>
 
-          {/* Reset icon button */}
+          {/* Reset */}
+          <button onClick={handleReset} className="p-2 cursor-pointer" title="Reset">
+            <i className="ri-refresh-line text-xl hover:text-gray-300"></i>
+          </button>
+
+          {/* Download */}
           <button
-            onClick={handleReset}
-            className="p-2 rounded hover:text-gray-300"
-            title="Reset"
+            onClick={handleDownload}
+            className="p-2 cursor-pointer"
+            title="Download"
           >
-            <i className="ri-refresh-line text-xl"></i>
+            <i className="ri-download-line text-xl hover:text-gray-300"></i>
           </button>
         </div>
       </div>
@@ -145,7 +193,18 @@ const CardGenerator = () => {
       >
         <span className="text-3xl font-bold">{phrase}</span>
 
-        {/* Bottom-right icon */}
+        {/* Bottom-left image */}
+        {selectedImage && (
+          <Image
+            src={selectedImage}
+            alt="Selected decoration"
+            className="absolute bottom-4 left-4 opacity-90"
+            width={80}
+            height={80}
+          />
+        )}
+
+        {/* Bottom-right fixed icon */}
         <Image
           src="/icons/camp-eco.svg"
           alt="Eco Camping Icon"
@@ -154,14 +213,6 @@ const CardGenerator = () => {
           height={64}
         />
       </div>
-
-      {/* Download Button */}
-      <button
-        onClick={handleDownload}
-        className="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700"
-      >
-        Download as PNG
-      </button>
     </div>
   );
 };
