@@ -33,13 +33,21 @@ export default function InsightsPage() {
   const data = forestData[stateKey]
 
   if (!data) {
-    return <div className="p-6">No data available for {formatStateName(state)}</div>
+    return (
+      <div className="p-6">
+        No data available for {formatStateName(state)}
+      </div>
+    )
   }
 
+  // ✅ 格式化年度趋势数据
   const trends = Object.entries(data.yearly_loss).map(([year, loss]) => ({
     year,
     loss,
   }))
+
+  // ✅ 限制累计损失最大值不超过 100%
+  const cumulativeLoss = Math.min(data.cumulative_loss_percent, 100)
 
   return (
     <div className="p-6 max-w-3xl mx-auto mt-20">
@@ -67,7 +75,7 @@ export default function InsightsPage() {
       <p className="mb-6 text-gray-700">
         Since 2001, {formatStateName(state)} has lost{' '}
         <span className="font-bold text-red-600">
-          {data.cumulative_loss_percent.toFixed(1)}%
+          {cumulativeLoss.toFixed(1)}%
         </span>{' '}
         of its tree cover.
       </p>
@@ -79,7 +87,13 @@ export default function InsightsPage() {
           <BarChart data={trends}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
-            <YAxis label={{ value: 'ha', angle: -90, position: 'insideLeft' }} />
+            <YAxis
+              label={{
+                value: 'ha',
+                angle: -90,
+                position: 'insideLeft',
+              }}
+            />
             <Tooltip formatter={(v: number) => v.toLocaleString() + ' ha'} />
             <Bar dataKey="loss" fill="#4CAF50" />
           </BarChart>

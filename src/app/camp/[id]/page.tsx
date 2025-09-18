@@ -3,9 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import WeatherCard from "@/app/components/WeatherCard";
+import InsightsPanel from "@/app/components/InsightsPanel";
 import dynamic from "next/dynamic";
+import { transformForestDataByState } from "@/app/utils/transformForestData";
 
-// ✅ 动态导入 Map 组件
+// ✅ state-level forest data
+const forestData = transformForestDataByState();
+
+// ✅ dynamic import Map component
 const Map = dynamic(() => import("@/app/components/Map"), { ssr: false });
 
 interface CampSite {
@@ -43,12 +48,12 @@ export default function CampDetail({ params }: CampDetailProps) {
         const resolvedParams = await params;
         const { id } = resolvedParams;
 
-        // ✅ fetch campsite 数据
+        // ✅ fetch campsite data
         const campRes = await fetch(`/api/campsites/${id}`);
         const campData = await campRes.json();
         setCamp(campData);
 
-        // ✅ fetch 天气数据
+        // ✅ fetch weather data
         if (campData.latitude && campData.longitude) {
           const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY;
           const weatherRes = await fetch(
@@ -117,7 +122,7 @@ export default function CampDetail({ params }: CampDetailProps) {
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* 返回按钮 */}
+        {/* Back button */}
         <Link
           href="/camp"
           className="inline-flex items-center text-green-600 hover:text-green-800 transition-colors mb-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md"
@@ -133,7 +138,7 @@ export default function CampDetail({ params }: CampDetailProps) {
           Back to Camp Sites
         </Link>
 
-        {/* Tab 切换 */}
+        {/* Tab switch */}
         <div className="mb-6">
           <div className="bg-gray-100 rounded-full p-1 flex w-fit mx-auto">
             <button
@@ -159,11 +164,11 @@ export default function CampDetail({ params }: CampDetailProps) {
           </div>
         </div>
 
-        {/* 内容卡片 */}
+        {/* Content card */}
         <div className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl p-8">
           {activeTab === "detail" ? (
             <div className="space-y-8">
-              {/* 标题和标签 */}
+              {/* Title and tags */}
               <div className="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div>
                   <h1 className="text-4xl font-bold mb-4">{camp.name}</h1>
@@ -183,9 +188,9 @@ export default function CampDetail({ params }: CampDetailProps) {
                 )}
               </div>
 
-              {/* 主内容：左图右信息 */}
+              {/* Main content */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                {/* 左边：图片 + Weather */}
+                {/* Left side: Image + Weather */}
                 <div className="space-y-8">
                   <div className="w-full">
                     {camp.imageUrl ? (
@@ -224,9 +229,8 @@ export default function CampDetail({ params }: CampDetailProps) {
                   </div>
                 </div>
 
-                {/* 右边：Entry Fee + Opening Hours + Contact */}
+                {/* Right side: Fees + Hours + Contact */}
                 <div className="space-y-8">
-                  {/* Entry Fee */}
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800">Entry Fee</h2>
                     {camp.fees ? (
@@ -246,13 +250,11 @@ export default function CampDetail({ params }: CampDetailProps) {
                     )}
                   </div>
 
-                  {/* Opening Hours */}
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800">Opening Hours</h2>
                     <p className="text-gray-700">{camp.openingTime || "Not available"}</p>
                   </div>
 
-                  {/* Contact（删除了 Visit Website） */}
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800">Contact</h2>
                     <p className="text-gray-700">Tel: {camp.phone || "N/A"}</p>
@@ -260,7 +262,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 </div>
               </div>
 
-              {/* 地图 */}
+              {/* Map */}
               <div className="mt-16">
                 <h3 className="text-2xl font-bold mb-8 text-gray-800 text-center">Location Map</h3>
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200/60 max-w-3xl mx-auto">
@@ -299,9 +301,29 @@ export default function CampDetail({ params }: CampDetailProps) {
               </div>
             </div>
           ) : (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-gray-600 mb-4">Forest Insight</h3>
-              <p className="text-gray-500">Forest data and insights will be displayed here.</p>
+            <div className="space-y-6">
+              {/* ✅ Embedded InsightsPanel */}
+              <InsightsPanel
+                mode="embed"
+                data={{
+                  name: camp.state,
+                  yearly_loss: forestData[camp.state]?.yearly_loss || {},
+                  cumulative_loss_percent:
+                    forestData[camp.state]?.cumulative_loss_percent || 0,
+                  rank: forestData[camp.state]?.rank,
+                  totalRegions: forestData[camp.state]?.totalRegions,
+                }}
+              />
+
+              {/* ✅ Go to Forest 按钮 */}
+              <div className="mt-12 text-center">
+                <Link
+                  href="/forest"
+                  className="inline-block px-10 py-4 bg-green-700 text-white text-lg font-medium rounded-2xl shadow-lg hover:bg-green-800 transition"
+                >
+                  Go to Forest
+                </Link>
+              </div>
             </div>
           )}
         </div>

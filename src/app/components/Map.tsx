@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import "remixicon/fonts/remixicon.css"
+import 'remixicon/fonts/remixicon.css'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
@@ -232,28 +231,6 @@ const Map: React.FC<MapProps> = ({
                 </div>
                 <div className="text-xs text-gray-500 mb-2">
                   Forest loss: {label} ({stateLoss.toFixed(1)}%)
-                </div>
-
-                {/* Buttons row */}
-                <div className="flex space-x-2 mt-2">
-                  <Link
-                    href={`/insights/${site.state}`}
-                    className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-                  >
-                    Forest Insights →
-                  </Link>
-                  <Link
-                    href={`/camp/${site.id}`}
-                    onClick={() => {
-                      if (!singleCampMode) {
-                        setLastClickedId(site.id)
-                        localStorage.setItem('lastClickedId', String(site.id))
-                      }
-                    }}
-                    className="px-3 py-1 text-xs text-green-700 bg-blue-300 rounded-lg shadow hover:bg-blue-400"
-                  >
-                    View details →
-                  </Link>
                 </div>
               </Popup>
             </Marker>
