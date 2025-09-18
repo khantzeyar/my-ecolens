@@ -4,20 +4,12 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import "remixicon/fonts/remixicon.css"
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
-import 'leaflet.heat'
-import rawForestData from '../data/peninsular_forest_loss.json'
+import { transformForestDataByState } from '../utils/transformForestData'
 
-// ✅ 给 forestData 加强类型
-type ForestLossData = {
-  yearly_loss: Record<string, number>
-  cumulative_loss_percent: number
-}
-const forestData: Record<string, ForestLossData> = rawForestData as Record<
-  string,
-  ForestLossData
->
+// ✅ 转换好的州级森林数据
+const forestData = transformForestDataByState()
 
 // Default icon
 const defaultIcon = L.icon({
@@ -55,42 +47,6 @@ interface MapProps {
   selectedAttractions: string[]
 }
 
-// Heatmap component
-const HeatmapLayer: React.FC<{ sites: CampSite[] }> = ({ sites }) => {
-  const map = useMap()
-
-  useEffect(() => {
-    if (!map || sites.length === 0) return
-
-    const heatData: [number, number, number][] = sites.map(site => {
-      const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
-      const weight = Math.min(Math.max(stateLoss / 50, 0.1), 1)
-      return [site.latitude, site.longitude, weight]
-    })
-
-    // @ts-expect-error leaflet.heat 没有类型声明
-    const heat = L.heatLayer(heatData, {
-      radius: 35,
-      blur: 25,
-      maxZoom: 10,
-      gradient: {
-        0.2: 'blue',
-        0.4: 'lime',
-        0.6: 'orange',
-        0.8: 'red'
-      }
-    })
-
-    heat.addTo(map)
-
-    return () => {
-      map.removeLayer(heat)
-    }
-  }, [map, sites])
-
-  return null
-}
-
 const Map: React.FC<MapProps> = ({
   selectedStates,
   searchTerm,
@@ -101,9 +57,6 @@ const Map: React.FC<MapProps> = ({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastClickedId, setLastClickedId] = useState<number | null>(null)
-
-  // Heatmap toggle
-  const [heatmapEnabled, setHeatmapEnabled] = useState(false)
 
   // Restore last clicked marker
   useEffect(() => {
@@ -200,9 +153,6 @@ const Map: React.FC<MapProps> = ({
           attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
         />
 
-        {/* Heatmap */}
-        {heatmapEnabled && <HeatmapLayer sites={displayedSites} />}
-
         {displayedSites.map((site) => {
           const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
           const { color, label } = getLossInfo(stateLoss)
@@ -260,20 +210,6 @@ const Map: React.FC<MapProps> = ({
 
         <ZoomControl position="topright" />
       </MapContainer>
-
-      {/* Floating Heatmap Toggle Button */}
-      <div className="absolute top-4 left-4 z-[1000]">
-        <button
-          onClick={() => setHeatmapEnabled(!heatmapEnabled)}
-          className={`px-4 py-2 rounded-lg shadow-md font-semibold transition ${
-            heatmapEnabled
-              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700'
-              : 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600'
-          }`}
-        >
-          {heatmapEnabled ? 'Hide Heatmap 🌍' : 'View Heatmap 🌳'}
-        </button>
-      </div>
     </div>
   )
 }

@@ -1,0 +1,51 @@
+// 州名映射
+export const stateNameMap: Record<string, string> = {
+  "Pulau Pinang": "PulauPinang",
+  "Negeri Sembilan": "NegeriSembilan",
+  "Kuala Lumpur": "KualaLumpur"
+}
+
+// 区县名映射
+export const districtNameMap: Record<string, string> = {
+  "Kuala Kangsar": "KualaKangsar",
+  "Bandar Baharu": "BandarBaharu",
+  "Padang Terap": "PadangTerap",
+  "Hulu Selangor": "HuluSelangor",
+  "Sabak Bernam": "SabakBernam",
+  "Alor Gajah": "AlorGajah",
+  "Kuala Krai": "KualaKrai",
+  "Kubang Pasu": "KubangPasu",
+  "Hilir Perak": "HilirPerak",
+  "Melaka Tengah": "MelakaTengah",
+  "Kota Setar": "KotaSetar",
+  "Kuala Muda": "KualaMuda",
+  "Kota Bharu": "KotaBharu",
+  "Pasir Putih": "PasirPutih",
+  "Johor Baharu": "JohorBaharu",
+  "Pokok Sena": "PokokSena",
+  "Hulu Perak": "HuluPerak",
+  "Kuala Selangor": "KualaSelangor",
+  "Timur Laut": "TimurLaut",
+  "Kota Belud": "KotaBelud",
+  "Kuala Penyu": "KualaPenyu",
+  "Kota Tinggi": "KotaTinggi",
+  "Gua Musang": "GuaMusang",
+  "Perak Tengah": "PerakTengah",
+  "Tanah Merah": "TanahMerah",
+  "Hulu Langat": "HuluLangat",
+  "Barat Daya": "BaratDaya",
+  "Seberang Perai Utara": "SeberangPeraiUtara",
+  "Kuala Pilah": "KualaPilah",
+  "Batang Padang": "BatangPadang",
+  "Larut and Matang": "LarutMatangSelama",
+  "Port Dickson": "PortDickson",
+  "Pasir Mas": "PasirMas",
+  "Seberang Perai Tengah": "SeberangPeraiTengah",
+  "Cameron Highlands": "CameronHighlands",
+  "Seberang Perai Selatan": "SeberangPeraiSelatan",
+  "Lubok Antu": "LubokAntu",
+  "Sri Aman": "SriAman",
+  "Kota Marudu": "KotaMarudu",
+  "Kota Kinabalu": "KotaKinabalu",
+  "Lahad Datu": "LahadDatu"
+}
