@@ -45,7 +45,7 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
-  // 来自 Epic-3 的新增属性
+  // Epic-3 新增属性
   singleCampMode?: boolean
   centerLat?: number
   centerLng?: number

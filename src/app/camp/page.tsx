@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-
-// 动态引入，避免 SSR 错误
-const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 interface CampSite {
   id: string;
@@ -125,11 +121,6 @@ const CampPage: React.FC = () => {
     setPriceFilter("all");
     setSelectedAttractions([]);
     setCurrentPage(1);
-  };
-
-  const isFree = (fees?: string) => {
-    if (!fees) return true;
-    return fees.toLowerCase().includes("free");
   };
 
   // 分页
@@ -330,16 +321,6 @@ const CampPage: React.FC = () => {
                   )}
                 </div>
               )}
-            </div>
-
-            {/* Map (保留 Epic-1 的逻辑) */}
-            <div className="mt-8 h-[600px] border rounded-lg overflow-hidden shadow-md bg-white/60 backdrop-blur-sm">
-              <Map
-                selectedStates={selectedStates}
-                searchTerm={searchTerm}
-                priceFilter={priceFilter}
-                selectedAttractions={selectedAttractions}
-              />
             </div>
           </div>
         </div>
