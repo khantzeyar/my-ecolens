@@ -31,10 +31,34 @@ interface CampDetailProps {
 
 type TabType = "detail" | "insight";
 
+// Types for Weather API response
+interface WeatherApiEntry {
+  dt: number;
+  main: {
+    temp: number;
+  };
+  weather: {
+    description: string;
+    icon: string;
+  }[];
+}
+
+interface WeatherApiResponse {
+  list: WeatherApiEntry[];
+}
+
+// Processed weather data for display
+export interface ProcessedWeather {
+  date: string;
+  temp: number;
+  description: string;
+  icon: string;
+}
+
 export default function CampDetail({ params }: CampDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>("detail");
   const [camp, setCamp] = useState<CampSite | null>(null);
-  const [weatherData, setWeatherData] = useState<any[]>([]);
+  const [weatherData, setWeatherData] = useState<ProcessedWeather[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +68,7 @@ export default function CampDetail({ params }: CampDetailProps) {
         const { id } = resolvedParams;
 
         const campRes = await fetch(`/api/campsites/${id}`);
-        const campData = await campRes.json();
+        const campData: CampSite = await campRes.json();
         setCamp(campData);
 
         if (campData.latitude && campData.longitude) {
@@ -52,13 +76,13 @@ export default function CampDetail({ params }: CampDetailProps) {
           const weatherRes = await fetch(
             `https://api.openweathermap.org/data/2.5/forecast?lat=${campData.latitude}&lon=${campData.longitude}&appid=${API_KEY}&units=metric`
           );
-          const weatherApiData = await weatherRes.json();
+          const weatherApiData: WeatherApiResponse = await weatherRes.json();
 
           if (weatherApiData.list) {
-            const processedWeatherData = weatherApiData.list
-              .filter((_: any, idx: number) => idx % 8 === 0)
-              .slice(0, 5)
-              .map((d: any) => {
+            const processedWeatherData: ProcessedWeather[] = weatherApiData.list
+              .filter((_, idx) => idx % 8 === 0) // get daily forecast
+              .slice(0, 5) // limit to 5 days
+              .map((d) => {
                 const rawDate = new Date(d.dt * 1000);
                 const formattedDate = rawDate.toLocaleDateString("en-GB", {
                   day: "numeric",
@@ -75,6 +99,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   icon: d.weather[0].icon,
                 };
               });
+
             setWeatherData(processedWeatherData);
           }
         }
@@ -100,7 +125,9 @@ export default function CampDetail({ params }: CampDetailProps) {
     return (
       <div className="pt-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Camp not found</h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Camp not found
+          </h1>
           <Link href="/camp" className="text-green-600 underline">
             Back to Camp Sites
           </Link>
@@ -115,12 +142,22 @@ export default function CampDetail({ params }: CampDetailProps) {
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
       <div className="max-w-6xl mx-auto px-6 py-8">
-        <Link 
-          href="/camp" 
+        <Link
+          href="/camp"
           className="inline-flex items-center text-green-600 hover:text-green-800 transition-colors mb-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md"
         >
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg
+            className="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           Back to Camp Sites
         </Link>
@@ -159,7 +196,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <h1 className="text-4xl font-bold mb-4">{camp.name}</h1>
                   <p className="text-lg text-gray-600">{camp.type}</p>
                 </div>
-                
+
                 {camp.tags && (
                   <div className="flex flex-wrap gap-2 lg:mt-2">
                     {camp.tags.split(",").map((tag, idx) => (
@@ -187,7 +224,8 @@ export default function CampDetail({ params }: CampDetailProps) {
                         className="rounded-2xl shadow-xl w-full h-72 object-cover ring-1 ring-gray-200/50"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80";
+                          target.src =
+                            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80";
                         }}
                       />
                     ) : (
@@ -201,23 +239,52 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
                       <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg
+                          className="w-4 h-4 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
                         </svg>
                       </div>
                       Location
                     </h2>
-                    <p className="text-gray-900 font-medium text-lg">{camp.state}</p>
-                    <p className="text-gray-500 mt-2 leading-relaxed">{camp.address}</p>
+                    <p className="text-gray-900 font-medium text-lg">
+                      {camp.state}
+                    </p>
+                    <p className="text-gray-500 mt-2 leading-relaxed">
+                      {camp.address}
+                    </p>
                   </div>
 
                   {/* Weather */}
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
                     <h3 className="text-xl font-semibold mb-6 text-gray-800 flex items-center">
                       <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                        <svg
+                          className="w-4 h-4 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                          />
                         </svg>
                       </div>
                       Weather Forecast
@@ -225,7 +292,9 @@ export default function CampDetail({ params }: CampDetailProps) {
                     {weatherData.length > 0 ? (
                       <WeatherCard weather={weatherData} />
                     ) : (
-                      <p className="text-gray-400 text-sm">Weather data not available</p>
+                      <p className="text-gray-400 text-sm">
+                        Weather data not available
+                      </p>
                     )}
                   </div>
                 </div>
@@ -236,8 +305,18 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 h-fit">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800 flex items-center">
                       <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        <svg
+                          className="w-4 h-4 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                          />
                         </svg>
                       </div>
                       Entry Fee
@@ -273,36 +352,64 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 h-fit">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800 flex items-center">
                       <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-4 h-4 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                       </div>
                       Opening Hours
                     </h2>
-                    <p className="text-gray-700 text-base leading-relaxed">{camp.openingTime || "Not available"}</p>
+                    <p className="text-gray-700 text-base leading-relaxed">
+                      {camp.openingTime || "Not available"}
+                    </p>
                   </div>
 
                   {/* Contact */}
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 h-fit">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800 flex items-center">
                       <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        <svg
+                          className="w-4 h-4 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
                         </svg>
                       </div>
                       Contact
                     </h2>
                     <div className="space-y-4">
                       <div className="flex items-start">
-                        <span className="text-gray-500 font-medium w-20 flex-shrink-0">Phone:</span>
-                        <span className="text-gray-700">{camp.phone || "N/A"}</span>
+                        <span className="text-gray-500 font-medium w-20 flex-shrink-0">
+                          Phone:
+                        </span>
+                        <span className="text-gray-700">
+                          {camp.phone || "N/A"}
+                        </span>
                       </div>
                       {camp.website && (
                         <div className="flex items-start">
-                          <span className="text-gray-500 font-medium w-20 flex-shrink-0">Website:</span>
-                          <a 
-                            href={camp.website} 
-                            target="_blank" 
+                          <span className="text-gray-500 font-medium w-20 flex-shrink-0">
+                            Website:
+                          </span>
+                          <a
+                            href={camp.website}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-700 hover:text-gray-900 underline decoration-gray-300 hover:decoration-gray-600 transition-colors break-all"
                           >
@@ -317,7 +424,9 @@ export default function CampDetail({ params }: CampDetailProps) {
 
               {/* Location Map - Centered */}
               <div className="mt-16">
-                <h3 className="text-2xl font-bold mb-8 text-gray-800 text-center">Location Map</h3>
+                <h3 className="text-2xl font-bold mb-8 text-gray-800 text-center">
+                  Location Map
+                </h3>
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200/60 max-w-3xl mx-auto">
                   <div className="h-[320px] w-full relative">
                     {camp.latitude && camp.longitude ? (
@@ -337,10 +446,22 @@ export default function CampDetail({ params }: CampDetailProps) {
                     ) : (
                       <div className="h-full flex items-center justify-center bg-gray-50">
                         <div className="text-center">
-                          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3" />
+                          <svg
+                            className="mx-auto h-12 w-12 text-gray-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"
+                            />
                           </svg>
-                          <p className="mt-2 text-sm text-gray-500">Map not available</p>
+                          <p className="mt-2 text-sm text-gray-500">
+                            Map not available
+                          </p>
                         </div>
                       </div>
                     )}
@@ -351,14 +472,18 @@ export default function CampDetail({ params }: CampDetailProps) {
                         {camp.latitude && camp.longitude ? (
                           <>
                             <p className="text-sm font-medium text-gray-700">
-                              <span className="text-gray-500">Coordinates:</span> {camp.latitude?.toFixed(4)}, {camp.longitude?.toFixed(4)}
+                              <span className="text-gray-500">Coordinates:</span>{" "}
+                              {camp.latitude?.toFixed(4)},{" "}
+                              {camp.longitude?.toFixed(4)}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
                               {camp.state}, Malaysia
                             </p>
                           </>
                         ) : (
-                          <p className="text-sm text-gray-500">Location coordinates not available</p>
+                          <p className="text-sm text-gray-500">
+                            Location coordinates not available
+                          </p>
                         )}
                       </div>
                       {camp.latitude && camp.longitude && (
@@ -368,8 +493,18 @@ export default function CampDetail({ params }: CampDetailProps) {
                           rel="noopener noreferrer"
                           className="px-5 py-2.5 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-900 transition-colors flex items-center shadow-sm"
                         >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            />
                           </svg>
                           Open in Maps
                         </Link>
@@ -392,9 +527,15 @@ export default function CampDetail({ params }: CampDetailProps) {
           ) : (
             <div className="space-y-6">
               <div className="text-center py-12">
-                <h3 className="text-xl font-semibold text-gray-600 mb-4">Forest Insight</h3>
-                <p className="text-gray-500">Forest data and insights will be displayed here.</p>
-                <p className="text-sm text-gray-400 mt-2">Connect to your forest data source to view analytics.</p>
+                <h3 className="text-xl font-semibold text-gray-600 mb-4">
+                  Forest Insight
+                </h3>
+                <p className="text-gray-500">
+                  Forest data and insights will be displayed here.
+                </p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Connect to your forest data source to view analytics.
+                </p>
               </div>
             </div>
           )}
