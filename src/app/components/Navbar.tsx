@@ -37,6 +37,9 @@ const Navbar = () => {
         <Link href='/guide' className='hover:text-green-600'>
           Guide
         </Link>
+        <Link href='/generator' className='hover:text-green-600'>
+          Card Generator
+        </Link>
       </ul>
     </nav>
   )
