@@ -25,6 +25,27 @@ const images = [
   { label: "Tiger", value: "/images/card-generator/tiger.png" },
 ];
 
+const templates = [
+  {
+    phrase: "Leave No Trace 🌿",
+    bg: "#e6ffe6",
+    text: "#14532d",
+    img: "/images/card-generator/flower.png",
+  },
+  {
+    phrase: "Adventure Awaits ⛺",
+    bg: "#fff7e6",
+    text: "#7c2d12",
+    img: "/images/card-generator/monkey.png",
+  },
+  {
+    phrase: "Protect Our Forests 🌲",
+    bg: "#e0f2fe",
+    text: "#082f49",
+    img: "/images/card-generator/tiger.png",
+  },
+];
+
 const defaultBg = "#ffffff";
 const defaultText = "#222";
 
@@ -75,12 +96,27 @@ const CardGenerator = () => {
     setHistory([]);
   };
 
+  // Apply template
+  const applyTemplate = (tpl: {
+    phrase: string;
+    bg: string;
+    text: string;
+    img: string;
+  }) => {
+    saveHistory();
+    setPhrase(tpl.phrase);
+    setBgColor(tpl.bg);
+    setTextColor(tpl.text);
+    setSelectedImage(tpl.img);
+  };
+
   return (
-    <div className="flex flex-col items-center p-6 space-y-6 pt-24">
-      <h1 className="text-2xl font-bold">
+  <div className="flex flex-row justify-center p-6 pt-24 space-y-12">
+    {/* Generator */}
+    <div className="flex flex-col items-center space-y-6 w-full max-w-3xl">
+      <h1 className="text-2xl font-bold text-center">
         Camping & Environment Card Generator
       </h1>
-
       {/* Controls */}
       <div className="flex flex-col space-y-4 w-full max-w-md">
         {/* Phrase selector */}
@@ -102,7 +138,7 @@ const CardGenerator = () => {
           </select>
         </div>
 
-        {/* Image selector*/}
+        {/* Image selector */}
         <div>
           <label className="block font-medium mb-1">Choose an Image</label>
           <div className="flex space-x-4">
@@ -137,7 +173,7 @@ const CardGenerator = () => {
         </div>
 
         {/* Options */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6 flex-wrap">
           {/* Background color */}
           <div>
             <label className="block font-medium">Background Color</label>
@@ -164,22 +200,14 @@ const CardGenerator = () => {
             />
           </div>
 
-          {/* Undo */}
+          {/* Buttons */}
           <button onClick={handleUndo} className="p-2 cursor-pointer" title="Undo">
             <i className="ri-arrow-go-back-line text-xl hover:text-gray-300"></i>
           </button>
-
-          {/* Reset */}
           <button onClick={handleReset} className="p-2 cursor-pointer" title="Reset">
             <i className="ri-refresh-line text-xl hover:text-gray-300"></i>
           </button>
-
-          {/* Download */}
-          <button
-            onClick={handleDownload}
-            className="p-2 cursor-pointer"
-            title="Download"
-          >
+          <button onClick={handleDownload} className="p-2 cursor-pointer" title="Download">
             <i className="ri-download-line text-xl hover:text-gray-300"></i>
           </button>
         </div>
@@ -193,7 +221,6 @@ const CardGenerator = () => {
       >
         <span className="text-3xl font-bold">{phrase}</span>
 
-        {/* Bottom-left image */}
         {selectedImage && (
           <Image
             src={selectedImage}
@@ -204,7 +231,6 @@ const CardGenerator = () => {
           />
         )}
 
-        {/* Bottom-right fixed icon */}
         <Image
           src="/icons/camp-eco.svg"
           alt="Eco Camping Icon"
@@ -214,7 +240,34 @@ const CardGenerator = () => {
         />
       </div>
     </div>
-  );
+    {/* Template Gallery */}
+    <div className="w-2xl max-w-4xl">
+      <h2 className="text-xl font-semibold mb-4 text-center">Templates</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {templates.map((tpl, idx) => (
+          <button
+            key={idx}
+            onClick={() => applyTemplate(tpl)}
+            className="relative w-full h-40 rounded-lg shadow border flex items-center justify-center hover:scale-105 transition-transform"
+            style={{ background: tpl.bg, color: tpl.text }}
+          >
+            <span className="font-bold text-lg text-center">{tpl.phrase}</span>
+            {tpl.img && (
+              <Image
+                src={tpl.img}
+                alt="template image"
+                width={48}
+                height={48}
+                className="absolute bottom-2 left-2"
+              />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 };
 
 export default CardGenerator;
