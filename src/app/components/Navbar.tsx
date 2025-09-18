@@ -188,6 +188,17 @@ const Navbar = () => {
           >
             Guide
           </Link>
+
+          <Link
+            href='/forest'
+            className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap font-inter ${
+              getTextStyles(pathname.startsWith('/forest')).className
+            }`}
+            style={getTextStyles(pathname.startsWith('/forest')).style}
+          >
+            Dashboard
+          </Link>
+
         </div>
       </div>
     </nav>
