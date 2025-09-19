@@ -195,7 +195,7 @@ const CardGenerator = () => {
             </div>
           </div>
 
-          {/* Font Size only (no text position selector) */}
+          {/* Font Size only */}
           <div>
             <label className="block font-semibold mb-1">Font Size</label>
             <input
@@ -208,7 +208,7 @@ const CardGenerator = () => {
             />
           </div>
 
-          {/* Colors and Actions */}
+          {/* Colors */}
           <div className="flex items-center space-x-6 flex-wrap">
             <div>
               <label className="block font-semibold mb-1">Background</label>
@@ -235,14 +235,29 @@ const CardGenerator = () => {
                 className="w-14 h-10 rounded cursor-pointer"
               />
             </div>
+          </div>
 
-            <button onClick={handleUndo} className="p-3 hover:bg-gray-100 rounded-full" title="Undo">
+          {/* Actions in one row */}
+          <div className="flex items-center space-x-6 mt-4">
+            <button
+              onClick={handleUndo}
+              className="p-3 hover:bg-gray-100 rounded-full"
+              title="Undo"
+            >
               <i className="ri-arrow-go-back-line text-2xl text-gray-600"></i>
             </button>
-            <button onClick={handleReset} className="p-3 hover:bg-gray-100 rounded-full" title="Reset">
+            <button
+              onClick={handleReset}
+              className="p-3 hover:bg-gray-100 rounded-full"
+              title="Reset"
+            >
               <i className="ri-refresh-line text-2xl text-gray-600"></i>
             </button>
-            <button onClick={handleDownload} className="p-3 hover:bg-gray-100 rounded-full" title="Download">
+            <button
+              onClick={handleDownload}
+              className="p-3 hover:bg-gray-100 rounded-full"
+              title="Download"
+            >
               <i className="ri-download-line text-2xl text-gray-600"></i>
             </button>
           </div>
@@ -260,7 +275,10 @@ const CardGenerator = () => {
             alignItems: "center",
           }}
         >
-          <span className="font-bold text-center" style={{ fontSize: `${fontSize}px` }}>
+          <span
+            className="font-bold text-center"
+            style={{ fontSize: `${fontSize}px` }}
+          >
             {phrase}
           </span>
 
