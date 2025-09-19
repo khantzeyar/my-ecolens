@@ -107,7 +107,8 @@ const CardGenerator = () => {
           Camping & Environment Card Generator
         </h1>
         <p className="text-gray-600 mt-4 max-w-xl mx-auto text-lg">
-          Choose phrases, images and templates to generate your own eco-friendly cards!
+          Choose phrases, images and templates to generate your own eco-friendly
+          cards!
         </p>
       </div>
 
@@ -120,7 +121,14 @@ const CardGenerator = () => {
           {templates.map((tpl, idx) => (
             <div
               key={idx}
-              className="relative w-full h-40 rounded-2xl shadow-md border flex items-center justify-center bg-white"
+              onClick={() => {
+                saveHistory();
+                setPhrase(tpl.phrase);
+                setBgColor(tpl.bg);
+                setTextColor(tpl.text);
+                setSelectedImage(tpl.img);
+              }}
+              className="relative w-full h-40 rounded-2xl shadow-md border flex items-center justify-center cursor-pointer hover:scale-105 hover:shadow-xl transition"
               style={{ background: tpl.bg, color: tpl.text }}
             >
               <span className="font-bold text-lg">{tpl.phrase}</span>
@@ -141,17 +149,19 @@ const CardGenerator = () => {
       {/* Main Content: Controls (left) and Preview (right) */}
       <div className="flex flex-col lg:flex-row gap-12 w-full max-w-6xl justify-center">
         {/* Left - Control Panel */}
-        <div className="flex flex-col space-y-6 w-full max-w-md bg-white/90 backdrop-blur-xl p-8 rounded-2xl shadow-lg border border-gray-200">
+        <div className="flex flex-col space-y-8 w-full max-w-md bg-white/95 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-gray-100">
           {/* Phrase */}
           <div>
-            <label className="block font-semibold mb-2">Choose a Phrase</label>
+            <label className="block font-semibold mb-3 text-gray-700 text-lg">
+              Choose a Phrase
+            </label>
             <select
               value={phrase}
               onChange={(e) => {
                 saveHistory();
                 setPhrase(e.target.value);
               }}
-              className="w-full border rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-green-400"
+              className="w-full border rounded-xl p-3 text-base shadow-sm focus:ring-2 focus:ring-green-400 transition bg-gray-50 hover:bg-white"
             >
               {phrases.map((p, idx) => (
                 <option key={idx} value={p}>
@@ -163,7 +173,9 @@ const CardGenerator = () => {
 
           {/* Image */}
           <div>
-            <label className="block font-semibold mb-2">Choose an Image</label>
+            <label className="block font-semibold mb-3 text-gray-700 text-lg">
+              Choose an Image
+            </label>
             <div className="flex flex-wrap gap-5">
               {images.map((img, idx) => (
                 <button
@@ -172,9 +184,9 @@ const CardGenerator = () => {
                     saveHistory();
                     setSelectedImage(img.value);
                   }}
-                  className={`w-20 h-20 border rounded-xl flex items-center justify-center bg-gray-50 shadow-sm hover:shadow-md transition ${
+                  className={`w-20 h-20 border rounded-2xl flex items-center justify-center bg-gray-50 shadow-sm hover:shadow-lg transition ${
                     selectedImage === img.value
-                      ? "ring-2 ring-green-600"
+                      ? "ring-4 ring-green-500 scale-105"
                       : "opacity-70 hover:opacity-100"
                   }`}
                   title={img.label}
@@ -188,30 +200,35 @@ const CardGenerator = () => {
                       className="object-contain"
                     />
                   ) : (
-                    <span className="text-xs text-gray-500">(none)</span>
+                    <span className="text-xs text-gray-400">(none)</span>
                   )}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Font Size only */}
+          {/* Font Size */}
           <div>
-            <label className="block font-semibold mb-1">Font Size</label>
+            <label className="block font-semibold mb-3 text-gray-700 text-lg">
+              Font Size
+            </label>
             <input
               type="range"
               min="16"
               max="60"
               value={fontSize}
               onChange={(e) => setFontSize(Number(e.target.value))}
-              className="w-full"
+              className="w-full accent-green-500"
             />
           </div>
 
           {/* Colors */}
-          <div className="flex items-center space-x-6 flex-wrap">
-            <div>
-              <label className="block font-semibold mb-1">Background</label>
+          <div className="flex justify-between items-center">
+            {/* Background */}
+            <div className="flex flex-col items-center">
+              <label className="block font-semibold mb-2 text-gray-700">
+                Background
+              </label>
               <input
                 type="color"
                 value={bgColor}
@@ -219,12 +236,15 @@ const CardGenerator = () => {
                   saveHistory();
                   setBgColor(e.target.value);
                 }}
-                className="w-14 h-10 rounded cursor-pointer"
+                className="w-32 h-12 rounded-lg border shadow cursor-pointer"
               />
             </div>
 
-            <div>
-              <label className="block font-semibold mb-1">Text</label>
+            {/* Text */}
+            <div className="flex flex-col items-center">
+              <label className="block font-semibold mb-2 text-gray-700">
+                Text
+              </label>
               <input
                 type="color"
                 value={textColor}
@@ -232,33 +252,33 @@ const CardGenerator = () => {
                   saveHistory();
                   setTextColor(e.target.value);
                 }}
-                className="w-14 h-10 rounded cursor-pointer"
+                className="w-32 h-12 rounded-lg border shadow cursor-pointer"
               />
             </div>
           </div>
 
-          {/* Actions in one row */}
-          <div className="flex items-center space-x-6 mt-4">
+          {/* Actions */}
+          <div className="flex items-center space-x-8 mt-6 justify-center">
             <button
               onClick={handleUndo}
-              className="p-3 hover:bg-gray-100 rounded-full"
+              className="p-4 bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 rounded-full shadow transition"
               title="Undo"
             >
-              <i className="ri-arrow-go-back-line text-2xl text-gray-600"></i>
+              <i className="ri-arrow-go-back-line text-2xl text-gray-700"></i>
             </button>
             <button
               onClick={handleReset}
-              className="p-3 hover:bg-gray-100 rounded-full"
+              className="p-4 bg-gradient-to-r from-yellow-200 to-yellow-300 hover:from-yellow-300 hover:to-yellow-400 rounded-full shadow transition"
               title="Reset"
             >
-              <i className="ri-refresh-line text-2xl text-gray-600"></i>
+              <i className="ri-refresh-line text-2xl text-yellow-700"></i>
             </button>
             <button
               onClick={handleDownload}
-              className="p-3 hover:bg-gray-100 rounded-full"
+              className="p-4 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 rounded-full shadow-lg transition"
               title="Download"
             >
-              <i className="ri-download-line text-2xl text-gray-600"></i>
+              <i className="ri-download-line text-2xl text-white"></i>
             </button>
           </div>
         </div>
@@ -266,9 +286,10 @@ const CardGenerator = () => {
         {/* Right - Preview */}
         <div
           ref={cardRef}
-          className="relative w-[600px] h-[400px] flex rounded-2xl shadow-xl hover:shadow-2xl transition p-6 border border-gray-200 bg-white"
+          className="relative w-[600px] h-[400px] flex rounded-3xl shadow-2xl hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] transition p-6 border border-gray-200 bg-white"
           style={{
-            background: `${bgColor} url('/images/paper-texture.png')`,
+            backgroundColor: bgColor,
+            backgroundImage: "url('/images/paper-texture.png')",
             backgroundSize: "cover",
             color: textColor,
             justifyContent: "center",
@@ -276,7 +297,7 @@ const CardGenerator = () => {
           }}
         >
           <span
-            className="font-bold text-center"
+            className="font-bold text-center drop-shadow"
             style={{ fontSize: `${fontSize}px` }}
           >
             {phrase}
