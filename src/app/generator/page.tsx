@@ -56,6 +56,8 @@ const CardGenerator = () => {
   const [bgColor, setBgColor] = useState(defaultBg);
   const [textColor, setTextColor] = useState(defaultText);
   const [selectedImage, setSelectedImage] = useState(images[0].value);
+  const [fontSize, setFontSize] = useState(32);
+  const [textPosition] = useState("center"); // fixed center
   const [history, setHistory] = useState<
     { phrase: string; bg: string; text: string; img: string }[]
   >([]);
@@ -93,42 +95,63 @@ const CardGenerator = () => {
     setBgColor(defaultBg);
     setTextColor(defaultText);
     setSelectedImage("");
+    setFontSize(32);
     setHistory([]);
   };
 
-  const applyTemplate = (tpl: {
-    phrase: string;
-    bg: string;
-    text: string;
-    img: string;
-  }) => {
-    saveHistory();
-    setPhrase(tpl.phrase);
-    setBgColor(tpl.bg);
-    setTextColor(tpl.text);
-    setSelectedImage(tpl.img);
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row justify-center p-8 pt-28 gap-12 bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen">
-      {/* Generator */}
-      <div className="flex flex-col items-center space-y-6 w-full max-w-3xl">
-        <h1 className="text-4xl font-extrabold text-center bg-gradient-to-r from-green-600 to-emerald-400 text-transparent bg-clip-text drop-shadow-sm">
+    <div className="flex flex-col items-center p-8 pt-28 gap-12 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 min-h-screen">
+      {/* Title */}
+      <div className="text-center">
+        <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-600 via-emerald-500 to-lime-400 text-transparent bg-clip-text drop-shadow-lg">
           Camping & Environment Card Generator
         </h1>
+        <p className="text-gray-600 mt-4 max-w-xl mx-auto text-lg">
+          Choose phrases, images and templates to generate your own eco-friendly cards!
+        </p>
+      </div>
 
-        {/* Controls */}
-        <div className="flex flex-col space-y-6 w-full max-w-md bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-gray-200">
-          {/* Phrase selector */}
+      {/* Example Templates */}
+      <div className="w-full max-w-5xl">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Example Templates
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {templates.map((tpl, idx) => (
+            <div
+              key={idx}
+              className="relative w-full h-40 rounded-2xl shadow-md border flex items-center justify-center bg-white"
+              style={{ background: tpl.bg, color: tpl.text }}
+            >
+              <span className="font-bold text-lg">{tpl.phrase}</span>
+              {tpl.img && (
+                <Image
+                  src={tpl.img}
+                  alt="template image"
+                  width={48}
+                  height={48}
+                  className="absolute bottom-3 left-3"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content: Controls (left) and Preview (right) */}
+      <div className="flex flex-col lg:flex-row gap-12 w-full max-w-6xl justify-center">
+        {/* Left - Control Panel */}
+        <div className="flex flex-col space-y-6 w-full max-w-md bg-white/90 backdrop-blur-xl p-8 rounded-2xl shadow-lg border border-gray-200">
+          {/* Phrase */}
           <div>
-            <label className="block font-semibold mb-1">Choose a Phrase</label>
+            <label className="block font-semibold mb-2">Choose a Phrase</label>
             <select
               value={phrase}
               onChange={(e) => {
                 saveHistory();
                 setPhrase(e.target.value);
               }}
-              className="w-full border rounded-lg p-2 shadow-sm focus:ring-2 focus:ring-green-400"
+              className="w-full border rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-green-400"
             >
               {phrases.map((p, idx) => (
                 <option key={idx} value={p}>
@@ -138,10 +161,10 @@ const CardGenerator = () => {
             </select>
           </div>
 
-          {/* Image selector */}
+          {/* Image */}
           <div>
-            <label className="block font-semibold mb-1">Choose an Image</label>
-            <div className="flex space-x-4">
+            <label className="block font-semibold mb-2">Choose an Image</label>
+            <div className="flex flex-wrap gap-5">
               {images.map((img, idx) => (
                 <button
                   key={idx}
@@ -149,7 +172,7 @@ const CardGenerator = () => {
                     saveHistory();
                     setSelectedImage(img.value);
                   }}
-                  className={`w-16 h-16 border rounded-xl flex items-center justify-center bg-gray-50 shadow-sm hover:shadow-md transition ${
+                  className={`w-20 h-20 border rounded-xl flex items-center justify-center bg-gray-50 shadow-sm hover:shadow-md transition ${
                     selectedImage === img.value
                       ? "ring-2 ring-green-600"
                       : "opacity-70 hover:opacity-100"
@@ -160,8 +183,8 @@ const CardGenerator = () => {
                     <Image
                       src={img.value}
                       alt={img.label}
-                      width={36}
-                      height={36}
+                      width={40}
+                      height={40}
                       className="object-contain"
                     />
                   ) : (
@@ -172,9 +195,21 @@ const CardGenerator = () => {
             </div>
           </div>
 
-          {/* Options */}
+          {/* Font Size only (no text position selector) */}
+          <div>
+            <label className="block font-semibold mb-1">Font Size</label>
+            <input
+              type="range"
+              min="16"
+              max="60"
+              value={fontSize}
+              onChange={(e) => setFontSize(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+
+          {/* Colors and Actions */}
           <div className="flex items-center space-x-6 flex-wrap">
-            {/* Background color */}
             <div>
               <label className="block font-semibold mb-1">Background</label>
               <input
@@ -184,11 +219,10 @@ const CardGenerator = () => {
                   saveHistory();
                   setBgColor(e.target.value);
                 }}
-                className="w-12 h-8 rounded cursor-pointer"
+                className="w-14 h-10 rounded cursor-pointer"
               />
             </div>
 
-            {/* Text color */}
             <div>
               <label className="block font-semibold mb-1">Text</label>
               <input
@@ -198,30 +232,37 @@ const CardGenerator = () => {
                   saveHistory();
                   setTextColor(e.target.value);
                 }}
-                className="w-12 h-8 rounded cursor-pointer"
+                className="w-14 h-10 rounded cursor-pointer"
               />
             </div>
 
-            {/* Buttons */}
-            <button onClick={handleUndo} className="p-2 hover:bg-gray-100 rounded-lg" title="Undo">
-              <i className="ri-arrow-go-back-line text-xl text-gray-600"></i>
+            <button onClick={handleUndo} className="p-3 hover:bg-gray-100 rounded-full" title="Undo">
+              <i className="ri-arrow-go-back-line text-2xl text-gray-600"></i>
             </button>
-            <button onClick={handleReset} className="p-2 hover:bg-gray-100 rounded-lg" title="Reset">
-              <i className="ri-refresh-line text-xl text-gray-600"></i>
+            <button onClick={handleReset} className="p-3 hover:bg-gray-100 rounded-full" title="Reset">
+              <i className="ri-refresh-line text-2xl text-gray-600"></i>
             </button>
-            <button onClick={handleDownload} className="p-2 hover:bg-gray-100 rounded-lg" title="Download">
-              <i className="ri-download-line text-xl text-gray-600"></i>
+            <button onClick={handleDownload} className="p-3 hover:bg-gray-100 rounded-full" title="Download">
+              <i className="ri-download-line text-2xl text-gray-600"></i>
             </button>
           </div>
         </div>
 
-        {/* Card Preview */}
+        {/* Right - Preview */}
         <div
           ref={cardRef}
-          className="relative w-[600px] h-[400px] flex items-center justify-center rounded-2xl shadow-xl hover:shadow-2xl transition p-6 text-center border border-gray-200 bg-white"
-          style={{ background: bgColor, color: textColor }}
+          className="relative w-[600px] h-[400px] flex rounded-2xl shadow-xl hover:shadow-2xl transition p-6 border border-gray-200 bg-white"
+          style={{
+            background: `${bgColor} url('/images/paper-texture.png')`,
+            backgroundSize: "cover",
+            color: textColor,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <span className="text-3xl font-bold">{phrase}</span>
+          <span className="font-bold text-center" style={{ fontSize: `${fontSize}px` }}>
+            {phrase}
+          </span>
 
           {selectedImage && (
             <Image
@@ -233,39 +274,14 @@ const CardGenerator = () => {
             />
           )}
 
+          {/* Watermark */}
           <Image
             src="/icons/camp-eco.svg"
             alt="Eco Camping Icon"
-            className="absolute bottom-4 right-4 opacity-80"
-            width={64}
-            height={64}
+            className="absolute bottom-3 right-3 opacity-60"
+            width={72}
+            height={72}
           />
-        </div>
-      </div>
-
-      {/* Template Gallery */}
-      <div className="w-2xl max-w-4xl">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Templates</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {templates.map((tpl, idx) => (
-            <button
-              key={idx}
-              onClick={() => applyTemplate(tpl)}
-              className="relative w-full h-40 rounded-2xl shadow-md hover:shadow-xl transition-transform border flex items-center justify-center hover:scale-105 bg-white"
-              style={{ background: tpl.bg, color: tpl.text }}
-            >
-              <span className="font-bold text-lg text-center">{tpl.phrase}</span>
-              {tpl.img && (
-                <Image
-                  src={tpl.img}
-                  alt="template image"
-                  width={48}
-                  height={48}
-                  className="absolute bottom-3 left-3"
-                />
-              )}
-            </button>
-          ))}
         </div>
       </div>
     </div>
