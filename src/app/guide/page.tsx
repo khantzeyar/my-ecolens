@@ -196,7 +196,14 @@ const categories = [
   },
 ];
 
-const GuideCard = ({ title, description, onClick }) => (
+// ✅ 定义 props 类型
+interface GuideCardProps {
+  title: string;
+  description?: string;
+  onClick: () => void;
+}
+
+const GuideCard: React.FC<GuideCardProps> = ({ title, description, onClick }) => (
   <div
     className="relative group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl"
     onClick={onClick}

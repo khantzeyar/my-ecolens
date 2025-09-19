@@ -10,21 +10,66 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
+  RectangleProps,
 } from 'recharts';
 import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface InsightsPanelProps {
-  isOpen?: boolean; // ✅ 可选，embed 模式不需要
+  isOpen?: boolean;
   data: {
-    name: string; // ✅ state/district name
+    name: string;
     yearly_loss?: Record<string, number>;
     cumulative_loss_percent?: number;
     rank?: number;
     totalRegions?: number;
   } | null;
-  onClose?: () => void; // ✅ modal 模式用
-  mode?: 'modal' | 'embed'; // ✅ 支持两种模式
+  onClose?: () => void;
+  mode?: 'modal' | 'embed';
 }
+
+interface BarShapeProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  value?: number;
+  year?: string;
+  maxLoss: number;
+}
+
+const CustomBarShape: React.FC<BarShapeProps> = ({
+  x = 0,
+  y = 0,
+  width = 0,
+  height = 0,
+  value = 0,
+  year,
+  maxLoss,
+}) => {
+  const isPrediction = year && Number(year) >= 2025;
+  let color = value === maxLoss ? '#e74c3c' : '#82ca9d';
+  if (isPrediction) {
+    color = '#999999';
+  }
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      fill={color}
+      rx={3}
+      ry={3}
+      stroke={isPrediction ? '#666' : undefined}
+      strokeDasharray={isPrediction ? '4 2' : undefined}
+    />
+  );
+};
+
+// 自定义 shape props 类型（包含 payload）
+type CustomShapeProps = RectangleProps & {
+  payload: { year?: string; loss?: number };
+};
 
 const InsightsPanel: React.FC<InsightsPanelProps> = ({
   isOpen = true,
@@ -34,18 +79,16 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
 }) => {
   if (!isOpen || !data) return null;
 
-  // 格式化数据
   const trends = data.yearly_loss
-    ? Object.entries(data.yearly_loss).map(([year, loss]) => ({
-        year,
-        loss,
-      }))
+    ? Array.from({ length: 30 }, (_, i) => {
+        const year = 2001 + i;
+        return { year: String(year), loss: data.yearly_loss?.[year] ?? 0 };
+      })
     : [];
 
   const maxLoss = trends.length > 0 ? Math.max(...trends.map((d) => d.loss)) : 0;
   const maxYear = trends.find((d) => d.loss === maxLoss)?.year;
 
-  // Eco Tips 逻辑
   const percent = data.cumulative_loss_percent ?? 0;
   let ecoTips: string[] = [];
 
@@ -69,8 +112,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
     ];
   }
 
-  // ✅ 根据 mode 选择容器
-  const Wrapper: any = mode === 'modal' ? motion.div : 'div';
+  const Wrapper = mode === 'modal' ? motion.div : 'div';
   const wrapperClass =
     mode === 'modal'
       ? 'fixed bottom-0 left-0 w-full bg-white shadow-xl rounded-t-2xl p-6 z-50 max-h-[80vh] overflow-y-auto'
@@ -117,9 +159,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                   formatter={(
                     value: ValueType,
                     _name: NameType,
-                    props?: unknown
+                    props?: { payload?: { year?: string } }
                   ) => {
-                    const payload = (props as { payload?: { year?: string } })?.payload;
+                    const payload = props?.payload;
                     return [
                       `${Number(value).toLocaleString()} ha`,
                       payload?.year ? `Year ${payload.year}` : '',
@@ -130,29 +172,20 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                   dataKey="loss"
                   fill="#82ca9d"
                   shape={(props: unknown) => {
-                    const {
-                      x = 0,
-                      y = 0,
-                      width = 0,
-                      height = 0,
-                      value = 0,
-                    } = props as {
-                      x?: number;
-                      y?: number;
-                      width?: number;
-                      height?: number;
-                      value?: number;
-                    };
-                    const color = value === maxLoss ? '#e74c3c' : '#82ca9d';
+                    const p = props as CustomShapeProps;
                     return (
-                      <rect
-                        x={x}
-                        y={y}
-                        width={width}
-                        height={height}
-                        fill={color}
-                        rx={3}
-                        ry={3}
+                      <CustomBarShape
+                        x={p.x != null ? Number(p.x) : 0}
+                        y={p.y != null ? Number(p.y) : 0}
+                        width={p.width != null ? Number(p.width) : 0}
+                        height={p.height != null ? Number(p.height) : 0}
+                        value={
+                          typeof p.payload.loss === 'number'
+                            ? p.payload.loss
+                            : 0
+                        }
+                        year={p.payload.year}
+                        maxLoss={maxLoss}
                       />
                     );
                   }}
@@ -168,6 +201,18 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
             Peak loss in {maxYear}: {maxLoss.toLocaleString()} ha
           </p>
         )}
+        {/* 图例 */}
+        <div className="flex gap-4 mt-3 text-xs text-gray-600">
+          <div className="flex items-center gap-1">
+            <span className="w-4 h-3 bg-green-400 rounded-sm"></span> Historical
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-4 h-3 bg-gray-400 border border-gray-500 border-dashed rounded-sm"></span> Prediction
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-4 h-3 bg-red-500 rounded-sm"></span> Peak Year
+          </div>
+        </div>
       </div>
 
       {/* 累积总结 */}

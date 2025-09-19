@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image"; // ✅ 用 next/image 替代 <img>
 import WeatherCard from "@/app/components/WeatherCard";
 import InsightsPanel from "@/app/components/InsightsPanel";
 import dynamic from "next/dynamic";
 import { transformForestDataByState } from "@/app/utils/transformForestData";
+import statePredictions from "@/app/data/state_tree_loss_predictions.json"; // ✅ 加载预测数据
 
 // ✅ state-level forest data (Peninsular only)
 const forestData = transformForestDataByState();
@@ -34,12 +36,34 @@ interface CampDetailProps {
   params: Promise<{ id: string }>;
 }
 
+// ✅ 定义天气数据类型
+interface WeatherData {
+  date: string;
+  temp: number;
+  description: string;
+  icon: string;
+}
+
+// ✅ 定义 OpenWeatherMap API 单条数据类型
+interface WeatherApiItem {
+  dt: number;
+  main: { temp: number };
+  weather: { description: string; icon: string }[];
+}
+
+// ✅ 定义预测数据类型
+interface StatePrediction {
+  state: string;
+  year: number;
+  tc_loss_pred: number;
+}
+
 type TabType = "detail" | "insight";
 
 export default function CampDetail({ params }: CampDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>("detail");
   const [camp, setCamp] = useState<CampSite | null>(null);
-  const [weatherData, setWeatherData] = useState<any[]>([]);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +74,7 @@ export default function CampDetail({ params }: CampDetailProps) {
 
         // ✅ fetch campsite data
         const campRes = await fetch(`/api/campsites/${id}`);
-        const campData = await campRes.json();
+        const campData: CampSite = await campRes.json();
         setCamp(campData);
 
         // ✅ fetch weather data
@@ -59,13 +83,14 @@ export default function CampDetail({ params }: CampDetailProps) {
           const weatherRes = await fetch(
             `https://api.openweathermap.org/data/2.5/forecast?lat=${campData.latitude}&lon=${campData.longitude}&appid=${API_KEY}&units=metric`
           );
-          const weatherApiData = await weatherRes.json();
+          const weatherApiData: { list?: WeatherApiItem[] } =
+            await weatherRes.json();
 
           if (weatherApiData.list) {
-            const processedWeatherData = weatherApiData.list
-              .filter((_: any, idx: number) => idx % 8 === 0)
+            const processedWeatherData: WeatherData[] = weatherApiData.list
+              .filter((_, idx: number) => idx % 8 === 0)
               .slice(0, 5)
-              .map((d: any) => {
+              .map((d: WeatherApiItem) => {
                 const rawDate = new Date(d.dt * 1000);
                 const formattedDate = rawDate.toLocaleDateString("en-GB", {
                   day: "numeric",
@@ -116,10 +141,20 @@ export default function CampDetail({ params }: CampDetailProps) {
     );
   }
 
+  // ✅ 合并历史数据 + 预测数据（有类型约束，不再用 any）
+  const mergedYearlyLoss: Record<number, number> = {
+    ...(forestData[camp.state]?.yearly_loss || {}),
+    ...Object.fromEntries(
+      (statePredictions as StatePrediction[])
+        .filter((p) => p.state === camp.state)
+        .map((p) => [p.year, p.tc_loss_pred])
+    ),
+  };
+
   return (
     <main
       className="pt-20 min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
+      style={{ backgroundImage: "url('/images/camping.jpg')" }}
     >
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Back button */}
@@ -167,6 +202,7 @@ export default function CampDetail({ params }: CampDetailProps) {
         {/* Content card */}
         <div className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl p-8">
           {activeTab === "detail" ? (
+            // ✅ Detail 信息
             <div className="space-y-8">
               {/* Title and tags */}
               <div className="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
@@ -190,19 +226,17 @@ export default function CampDetail({ params }: CampDetailProps) {
 
               {/* Main content */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                {/* Left side: Image + Weather */}
+                {/* Left: Image + Weather */}
                 <div className="space-y-8">
                   <div className="w-full">
                     {camp.imageUrl ? (
-                      <img
+                      <Image
                         src={camp.imageUrl}
                         alt={camp.name}
+                        width={800}
+                        height={400}
                         className="rounded-2xl shadow-xl w-full h-72 object-cover ring-1 ring-gray-200/50"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src =
-                            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80";
-                        }}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-full h-72 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400 ring-1 ring-gray-200">
@@ -229,7 +263,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   </div>
                 </div>
 
-                {/* Right side: Fees + Hours + Contact */}
+                {/* Right: Fees + Hours + Contact */}
                 <div className="space-y-8">
                   <div className="p-8 bg-white border border-gray-200/60 rounded-2xl shadow-sm">
                     <h2 className="text-xl font-semibold mb-6 text-gray-800">Entry Fee</h2>
@@ -277,7 +311,6 @@ export default function CampDetail({ params }: CampDetailProps) {
                         centerLat={camp.latitude}
                         centerLng={camp.longitude}
                         defaultZoom={10}
-                        focusOnSingleLocation={true}
                         enableInteraction={true}
                         allowPageScroll={true}
                       />
@@ -301,13 +334,13 @@ export default function CampDetail({ params }: CampDetailProps) {
               </div>
             </div>
           ) : (
+            // ✅ Forest Insight
             <div className="space-y-6">
-              {/* ✅ Embedded InsightsPanel with state-level data */}
               <InsightsPanel
                 mode="embed"
                 data={{
                   name: camp.state,
-                  yearly_loss: forestData[camp.state]?.yearly_loss || {},
+                  yearly_loss: mergedYearlyLoss,
                   cumulative_loss_percent:
                     forestData[camp.state]?.cumulative_loss_percent || 0,
                   rank: forestData[camp.state]?.rank,
@@ -315,7 +348,6 @@ export default function CampDetail({ params }: CampDetailProps) {
                 }}
               />
 
-              {/* ✅ Go to Forest button */}
               <div className="mt-12 text-center">
                 <Link
                   href="/forest"

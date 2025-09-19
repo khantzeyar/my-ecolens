@@ -49,7 +49,6 @@ interface MapProps {
   centerLat?: number
   centerLng?: number
   defaultZoom?: number
-  focusOnSingleLocation?: boolean
   enableInteraction?: boolean
   allowPageScroll?: boolean
 }
@@ -63,7 +62,6 @@ const Map: React.FC<MapProps> = ({
   centerLat,
   centerLng,
   defaultZoom = 7,
-  focusOnSingleLocation = false,
   enableInteraction = false,
   allowPageScroll = false
 }) => {

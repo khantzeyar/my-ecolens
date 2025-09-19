@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image"; // ✅ 使用 next/image
 
 interface CampSite {
   id: string;
@@ -132,7 +133,7 @@ const CampPage: React.FC = () => {
   return (
     <main
       className="pt-20 min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
+      style={{ backgroundImage: "url('/images/camping.jpg')" }}
     >
       {/* Banner */}
       <section className="h-[233px] flex flex-col items-center justify-center text-center">
@@ -268,14 +269,15 @@ const CampPage: React.FC = () => {
                       key={camp.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
                     >
-                      <div className="h-40 bg-gray-100 overflow-hidden">
-                        <img
+                      <div className="h-40 bg-gray-100 overflow-hidden relative">
+                        <Image
                           src={
                             camp.imageUrl ||
                             "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
                           }
                           alt={camp.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       </div>
                       <div className="p-4 flex-1 flex flex-col">
