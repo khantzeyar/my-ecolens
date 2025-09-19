@@ -25,7 +25,7 @@ export default function Home() {
         {/* Information */}
         <div className="relative z-10 text-center text-white max-w-6xl mx-auto px-6">
           <h1 className="text-5xl font-bold mb-6 leading-tight">
-            MYEcoLens
+            Campeco
             <span className="block text-3xl text-green-300 mt-3">
               Malaysian Forest Protection for Campers
             </span>
