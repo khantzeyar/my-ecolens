@@ -1,6 +1,6 @@
 /**
  * Navbar (Epic-1 + Epic-2 + Epic-8 with Epic-3 UI)
- * - Epic-1 routes: Home, Camping Sites, Forest, Guide
+ * - Epic-1 routes: Home, Camping Sites, Guide
  * - Epic-2: Forest Insights (/insights)
  * - Epic-8: Card Generator (/generator)
  * - UI: Epic-3 glassmorphism
@@ -39,7 +39,6 @@ const Navbar = () => {
     if (pathname === '/') return 'dark';
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
-    if (pathname.startsWith('/forest')) return 'light';
     if (pathname.startsWith('/insights')) return 'light';
     if (pathname.startsWith('/generator')) return 'light';
     return 'light';
@@ -137,7 +136,6 @@ const Navbar = () => {
           {[
             { href: '/', label: 'Home', active: pathname === '/' },
             { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
-            { href: '/forest', label: 'Forest', active: pathname.startsWith('/forest') },
             { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
             { href: '/generator', label: 'Card Generator', active: pathname.startsWith('/generator') },

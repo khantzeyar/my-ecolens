@@ -350,10 +350,10 @@ export default function CampDetail({ params }: CampDetailProps) {
 
               <div className="mt-12 text-center">
                 <Link
-                  href="/forest"
+                  href="/insights"
                   className="inline-block px-10 py-4 bg-green-700 text-white text-lg font-medium rounded-2xl shadow-lg hover:bg-green-800 transition"
                 >
-                  Go to Forest
+                  Go to Forest Insights
                 </Link>
               </div>
             </div>
