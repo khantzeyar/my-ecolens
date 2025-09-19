@@ -165,6 +165,19 @@ export default function ForestMap({
   const [panelOpen, setPanelOpen] = useState(false);
   const [storyText, setStoryText] = useState('');
 
+  // ✅ 初始化默认区（Lipis）
+  useEffect(() => {
+    if (!selectedData) {
+      const defaultRecord = (forestData as RawForestRecord[]).find(
+        (d) => d.subnational2 === 'Lipis' || d.subnational1 === 'Lipis'
+      );
+      if (defaultRecord) {
+        setSelectedData(transformRecord(defaultRecord));
+        setPanelOpen(true);
+      }
+    }
+  }, [selectedData]);
+
   // color scale
   const getColor = (value: number) => {
     return value > 5000
@@ -253,34 +266,22 @@ export default function ForestMap({
 
   return (
     <div className="relative">
-      {/* story box in top-left shifted right to avoid zoom control */}
+      {/* story box */}
       {storyMode && storyText && (
         <div className="absolute top-4 left-20 z-[1000] bg-white p-3 rounded-lg shadow-md w-96 text-sm border border-gray-300">
           {storyText}
         </div>
       )}
 
-      {/* legend fixed top-right */}
+      {/* legend */}
       <div className="absolute top-4 right-4 z-[1000] bg-white p-3 rounded-lg shadow-md text-xs border border-gray-300">
         <div className="font-semibold mb-1">Forest Loss (ha)</div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#800026]"></span> &gt; 5000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#BD0026]"></span> 2000–5000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#E31A1C]"></span> 1000–2000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#FC4E2A]"></span> 500–1000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#FD8D3C]"></span> 100–500
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-3 bg-[#FEB24C]"></span> &lt;= 100
-        </div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#800026]"></span> &gt; 5000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#BD0026]"></span> 2000–5000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#E31A1C]"></span> 1000–2000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#FC4E2A]"></span> 500–1000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#FD8D3C]"></span> 100–500</div>
+        <div className="flex items-center gap-2"><span className="w-4 h-3 bg-[#FEB24C]"></span> &lt;= 100</div>
       </div>
 
       <MapContainer
@@ -298,6 +299,7 @@ export default function ForestMap({
         <GeoJSON key={year} data={malaysiaGeoJson} style={style} onEachFeature={onEachFeature} />
       </MapContainer>
 
+      {/* ✅ 默认 Lipis 会显示 */}
       <InsightsPanel isOpen={panelOpen} data={selectedData} onClose={() => setPanelOpen(false)} />
     </div>
   );
