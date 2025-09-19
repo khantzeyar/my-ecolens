@@ -7,10 +7,12 @@
       "iteration-2": true,
       "iteration-3": true,
       "dev": false,
+      "epic-1-forest-insights": false,
       "epic-2-predictive-analytics": false,
       "epic-3-camping-sites": false,
       "epic-4-static-guide": false,
-      "epic-6-chatbot": false
+      "epic-6-chatbot": false,
+      "epic-8-card-generator": false
     }
   }
 }
