@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import "remixicon/fonts/remixicon.css"
+import 'remixicon/fonts/remixicon.css'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
@@ -45,13 +44,26 @@ interface MapProps {
   searchTerm: string
   priceFilter: string
   selectedAttractions: string[]
+  // Epic-3 新增属性
+  singleCampMode?: boolean
+  centerLat?: number
+  centerLng?: number
+  defaultZoom?: number
+  enableInteraction?: boolean
+  allowPageScroll?: boolean
 }
 
 const Map: React.FC<MapProps> = ({
   selectedStates,
   searchTerm,
   priceFilter,
-  selectedAttractions
+  selectedAttractions,
+  singleCampMode = false,
+  centerLat,
+  centerLng,
+  defaultZoom = 7,
+  enableInteraction = false,
+  allowPageScroll = false
 }) => {
   const [sites, setSites] = useState<CampSite[]>([])
   const [loading, setLoading] = useState(true)
@@ -128,6 +140,23 @@ const Map: React.FC<MapProps> = ({
     return { color: 'bg-red-600', label: 'Critical' }
   }
 
+  // Map center and zoom
+  const mapCenter: [number, number] = (centerLat && centerLng)
+    ? [centerLat, centerLng]
+    : [3.139, 101.6869]
+
+  const mapZoom = defaultZoom
+
+  // Map interaction settings
+  const mapSettings = {
+    zoomControl: false,
+    dragging: enableInteraction || !singleCampMode,
+    doubleClickZoom: enableInteraction || !singleCampMode,
+    scrollWheelZoom: allowPageScroll ? false : (enableInteraction || !singleCampMode),
+    boxZoom: enableInteraction || !singleCampMode,
+    keyboard: enableInteraction || !singleCampMode,
+  }
+
   return (
     <div className="h-[600px] w-full relative">
       {loading && (
@@ -142,11 +171,11 @@ const Map: React.FC<MapProps> = ({
       )}
 
       <MapContainer
-        center={[3.139, 101.6869]}
-        zoom={7}
+        center={mapCenter}
+        zoom={mapZoom}
         style={{ height: '100%', width: '100%' }}
         className="rounded-lg shadow-md"
-        zoomControl={false}
+        {...mapSettings}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -157,21 +186,39 @@ const Map: React.FC<MapProps> = ({
           const stateLoss = forestData[site.state]?.cumulative_loss_percent || 0
           const { color, label } = getLossInfo(stateLoss)
 
+          // 判断是否高亮
+          const isHighlighted = singleCampMode
+            ? site.name.toLowerCase().includes(searchTerm.toLowerCase())
+            : site.id === lastClickedId
+
           return (
             <Marker
               key={site.id}
               position={[site.latitude, site.longitude]}
-              icon={site.id === lastClickedId ? highlightedIcon : defaultIcon}
+              icon={isHighlighted ? highlightedIcon : defaultIcon}
               eventHandlers={{
                 click: () => {
-                  setLastClickedId(site.id)
-                  localStorage.setItem('lastClickedId', String(site.id))
+                  if (!singleCampMode) {
+                    setLastClickedId(site.id)
+                    localStorage.setItem('lastClickedId', String(site.id))
+                  }
                 }
               }}
             >
               <Popup>
                 <div className="font-bold text-green-700">{site.name}</div>
-                <div className="text-xs text-gray-600 mb-2">State: {site.state}</div>
+                <div className="text-xs text-gray-600">State: {site.state}</div>
+                <div className="text-xs text-gray-500 mt-1">Type: {site.type}</div>
+                {site.price && (
+                  <div className="text-xs text-gray-500">
+                    Price: {site.price === 'free' ? 'Free' : 'Paid'}
+                  </div>
+                )}
+                {site.attractions && site.attractions.length > 0 && (
+                  <div className="text-xs text-gray-500 mb-2">
+                    Attractions: {site.attractions.join(', ')}
+                  </div>
+                )}
 
                 {/* Quick forest loss summary bar */}
                 <div className="w-full bg-gray-200 rounded h-2 mb-1">
@@ -182,26 +229,6 @@ const Map: React.FC<MapProps> = ({
                 </div>
                 <div className="text-xs text-gray-500 mb-2">
                   Forest loss: {label} ({stateLoss.toFixed(1)}%)
-                </div>
-
-                {/* Buttons row */}
-                <div className="flex space-x-2 mt-2">
-                  <Link
-                    href={`/insights/${site.state}`}
-                    className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-                  >
-                    Forest Insights →
-                  </Link>
-                  <Link
-                    href={`/camp/${site.id}`}
-                    onClick={() => {
-                      setLastClickedId(site.id)
-                      localStorage.setItem('lastClickedId', String(site.id))
-                    }}
-                    className="px-3 py-1 text-xs text-green-700 bg-blue-300 rounded-lg shadow hover:bg-blue-400"
-                  >
-                    View details →
-                  </Link>
                 </div>
               </Popup>
             </Marker>

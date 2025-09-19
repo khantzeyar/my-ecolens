@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 const categories = [
+  // ⚠️ 用 Epic-1 的数据，不动
   {
     id: "essentials",
     title: "Essentials",
@@ -195,8 +196,34 @@ const categories = [
   },
 ];
 
+// ✅ 定义 props 类型
+interface GuideCardProps {
+  title: string;
+  description?: string;
+  onClick: () => void;
+}
+
+const GuideCard: React.FC<GuideCardProps> = ({ title, description, onClick }) => (
+  <div
+    className="relative group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+    onClick={onClick}
+  >
+    <div className="relative h-56 rounded-3xl overflow-hidden backdrop-blur-md bg-white/20 border border-white/30 shadow-xl">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/10 to-transparent"></div>
+      <div className="relative h-full p-6 flex flex-col justify-between">
+        <h3 className="text-xl font-bold text-white mb-3 drop-shadow">
+          {title}
+        </h3>
+        <p className="text-sm text-white/80 leading-relaxed drop-shadow-sm">
+          {description || "Explore more details"}
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
 export default function GuidePage() {
-  const [activeCategory, setActiveCategory] = useState<string>("essentials");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   const category = categories.find((c) => c.id === activeCategory);
@@ -206,6 +233,89 @@ export default function GuidePage() {
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
     );
   };
+
+  const handleBack = () => setActiveCategory(null);
+
+  if (activeCategory && category) {
+    return (
+      <main
+        className="pt-24 px-6 pb-20 min-h-screen"
+        style={{
+          backgroundImage: "url('/images/bg-camping.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <button
+            onClick={handleBack}
+            className="mb-6 flex items-center space-x-2 text-white hover:text-emerald-300 transition-colors bg-black/30 px-4 py-2 rounded-lg"
+          >
+            <i className="ri-arrow-left-line text-xl"></i>
+            <span className="font-medium">Back to Guide</span>
+          </button>
+
+          <h2 className="text-3xl font-bold text-white mb-6 drop-shadow-lg">
+            {category.id === "essentials"
+              ? "Packing Checklist"
+              : category.title}
+          </h2>
+
+          {/* Checklist UI */}
+          {category.checklist && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {category.checklist.map((group, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white/85 rounded-xl p-6 shadow-md hover:shadow-lg transition"
+                >
+                  <h3 className="font-semibold text-gray-900 mb-4">
+                    {group.group}
+                  </h3>
+                  <ul className="space-y-3">
+                    {group.items.map((item) => (
+                      <li key={item} className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={checkedItems.includes(item)}
+                          onChange={() => toggleCheck(item)}
+                          className="w-4 h-4 text-green-600 border-gray-300 rounded"
+                        />
+                        <span
+                          className={`text-sm ${
+                            checkedItems.includes(item)
+                              ? "line-through text-gray-400"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Tips UI */}
+          {category.tips && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {category.tips.map((tip, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 bg-white/90 rounded-xl shadow-lg hover:shadow-xl transition"
+                >
+                  <h3 className="font-bold text-gray-800 mb-2">{tip.title}</h3>
+                  <p className="text-gray-600 text-sm">{tip.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main
@@ -217,86 +327,33 @@ export default function GuidePage() {
       }}
     >
       <div className="max-w-7xl mx-auto">
-        {/* Page title */}
-        <h1 className="text-4xl font-bold text-white text-center mb-12 drop-shadow-lg mt-12">
-          Camping Guide
-        </h1>
-
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-4 justify-center mb-10">
-          {categories.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setActiveCategory(c.id)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition ${
-                activeCategory === c.id
-                  ? "bg-green-600 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-green-100"
-              }`}
-            >
-              {c.title}
-            </button>
-          ))}
+        <div className="text-center mb-12 mt-16">
+          <h1 className="text-4xl font-bold text-white mb-6 drop-shadow-lg">
+            Camping Guide
+          </h1>
+          <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4 drop-shadow-lg">
+            Choose Your Camping Phase
+          </h2>
+          <p className="text-lg text-emerald-100 max-w-2xl mx-auto leading-relaxed drop-shadow">
+            Select a camping phase to explore checklists and safety tips
+          </p>
         </div>
 
-        {/* Content */}
-        <section>
-          {/* Essentials checklist */}
-          {category && "checklist" in category && category.checklist && (
-            <div className="p-6 bg-white/80 rounded-xl shadow-md border border-green-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Packing Checklist
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {category.checklist.map((group, idx) => (
-                  <div key={idx}>
-                    <h3 className="font-semibold text-gray-800 mb-2">
-                      {group.group}
-                    </h3>
-                    <ul className="space-y-2">
-                      {group.items.map((item) => (
-                        <li key={item} className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
-                            checked={checkedItems.includes(item)}
-                            onChange={() => toggleCheck(item)}
-                            className="w-4 h-4 text-green-600 border-gray-300 rounded"
-                          />
-                          <span
-                            className={`text-sm ${
-                              checkedItems.includes(item)
-                                ? "line-through text-gray-400"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Other categories */}
-          {category && "tips" in category && category.tips && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {category.tips.map((tip, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 bg-white/80 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-200"
-                >
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
-                    {tip.title}
-                  </h2>
-                  <p className="text-gray-600 text-sm">{tip.description}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        {/* 卡片选择 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {categories.map((cat) => (
+            <GuideCard
+              key={cat.id}
+              title={cat.title}
+              description={
+                "checklist" in cat
+                  ? "Essential items for camping"
+                  : "Important guidance and tips"
+              }
+              onClick={() => setActiveCategory(cat.id)}
+            />
+          ))}
+        </div>
       </div>
     </main>
   );
