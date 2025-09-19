@@ -3,16 +3,16 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import forestData from "../data/peninsular_tree_cover_loss.json";
-import districtPredictions from "../data/district_tree_loss_predictions.json"; // ✅ 预测数据按区县
+import districtPredictions from "../data/district_tree_loss_predictions.json"; // ✅ district-level predictions
 import { MultiValue } from "react-select";
 
-// 定义 Option 类型
+// Option type
 interface OptionType {
   value: string;
   label: string;
 }
 
-// ✅ 动态导入 react-select（避免 hydration error）
+// ✅ Dynamic import react-select (avoid hydration error)
 const Select = dynamic(
   () => import("react-select") as unknown as Promise<
     React.ComponentType<{
@@ -26,7 +26,7 @@ const Select = dynamic(
   { ssr: false }
 );
 
-// 定义 forest 数据
+// Forest data type
 interface ForestRecord {
   subnational1?: string;
   subnational2?: string;
@@ -42,7 +42,7 @@ interface DistrictPrediction {
   tc_loss_pred: number;
 }
 
-// 动态导入地图
+// Map component
 const ForestMap = dynamic(() => import("../components/ForestMap"), {
   ssr: false,
 });
@@ -59,7 +59,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// ✅ 计算州的趋势（历史 + 区县预测聚合）
+// ✅ Compute state-level trends (historical + aggregated predictions)
 function computeStateTrend(stateName: string): { year: number; loss: number }[] {
   const result: { year: number; loss: number }[] = [];
 
@@ -94,14 +94,14 @@ export default function ForestPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [storyMode, setStoryMode] = useState(false);
 
-  // ✅ 默认选中
+  // ✅ Default states
   const [selectedStates, setSelectedStates] = useState<string[]>([
     "Pahang",
     "Johor",
     "Kelantan",
   ]);
 
-  // ✅ 图表数据
+  // ✅ Chart data
   const chartData = Array.from({ length: 2030 - 2001 + 1 }, (_, i) => {
     const year = 2001 + i;
     const entry: Record<string, number> = { year };
@@ -141,7 +141,7 @@ export default function ForestPage() {
     return () => clearInterval(timer);
   }, [storyMode]);
 
-  // ✅ 所有州
+  // ✅ All states
   const allStates = Array.from(
     new Set(
       (forestData as ForestRecord[])
@@ -155,7 +155,7 @@ export default function ForestPage() {
     label: s,
   }));
 
-  // ✅ 颜色
+  // ✅ Colors
   const colors = [
     "#FF5722",
     "#2196F3",
@@ -190,12 +190,16 @@ export default function ForestPage() {
         </h2>
         <p className="text-gray-700 mb-4 leading-relaxed">
           The charts and maps on this page are based on tree cover loss data from
-          <b> Global Forest Watch (2001–2024)</b> plus{" "}
-          <b>district-level projections (2025–2030)</b>.
+          <b> Global Forest Watch (2001–2024)</b>, combined with{" "}
+          <b>state- and district-level projections (2025–2030)</b>. To ensure
+          consistency, all datasets use a <b>canopy density threshold of 30%</b>.
+          This means only areas with at least 30% tree cover in the year 2000 are
+          counted as “forest.” The threshold is widely used in scientific
+          analyses to balance accuracy between sparse vegetation and dense forest.
         </p>
         <ul className="list-disc list-inside space-y-2 text-gray-700">
           <li>
-            <b>Annual Forest Loss (tc_loss_ha_YEAR)</b>: Hectares of tree cover
+            <b>Annual Forest Loss (tc_loss_ha_YEAR)</b>: Hectares of forest cover
             lost in that year.
           </li>
           <li>
@@ -219,7 +223,7 @@ export default function ForestPage() {
           represents hectares of forest lost in that year.
         </p>
 
-        {/* ✅ 多选州 */}
+        {/* ✅ Multi-select states */}
         <div className="mb-6 max-w-lg">
           <label className="block font-medium mb-2">Select States:</label>
           <Select
@@ -291,7 +295,7 @@ export default function ForestPage() {
             {storyMode ? "Stop Story" : "Story Mode"}
           </button>
 
-          {/* ✅ 年份滑动条 */}
+          {/* ✅ Year slider */}
           <div className="flex items-center gap-3">
             <input
               type="range"

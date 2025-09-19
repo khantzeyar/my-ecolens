@@ -17,8 +17,8 @@ import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipCont
 interface InsightsPanelProps {
   isOpen?: boolean;
   data: {
-    name: string;
-    yearly_loss?: Record<string, number>;
+    name: string;  // district 名字
+    yearly_loss?: Record<string, number>; // ✅ 区县级数据
     cumulative_loss_percent?: number;
     rank?: number;
     totalRegions?: number;
@@ -66,7 +66,7 @@ const CustomBarShape: React.FC<BarShapeProps> = ({
   );
 };
 
-// 自定义 shape props 类型（包含 payload）
+// Recharts 自定义 shape props
 type CustomShapeProps = RectangleProps & {
   payload: { year?: string; loss?: number };
 };
@@ -79,6 +79,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
 }) => {
   if (!isOpen || !data) return null;
 
+  // ✅ 区县级 yearly_loss 数据
   const trends = data.yearly_loss
     ? Array.from({ length: 30 }, (_, i) => {
         const year = 2001 + i;
@@ -90,8 +91,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   const maxYear = trends.find((d) => d.loss === maxLoss)?.year;
 
   const percent = data.cumulative_loss_percent ?? 0;
-  let ecoTips: string[] = [];
 
+  // 动态生成 Eco Tips
+  let ecoTips: string[] = [];
   if (percent < 10) {
     ecoTips = [
       'Keep up the good work! Choose eco-friendly campsites.',
