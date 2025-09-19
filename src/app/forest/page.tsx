@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import forestData from "../data/peninsular_tree_cover_loss.json";
 import districtPredictions from "../data/district_tree_loss_predictions.json"; // ✅ 预测数据按区县
-import { MultiValue, ActionMeta } from "react-select";
+import { MultiValue } from "react-select";
 
 // 定义 Option 类型
 interface OptionType {
@@ -19,10 +19,7 @@ const Select = dynamic(
       isMulti: true;
       options: OptionType[];
       value: OptionType[];
-      onChange: (
-        newValue: MultiValue<OptionType>,
-        actionMeta: ActionMeta<OptionType>
-      ) => void;
+      onChange: (newValue: MultiValue<OptionType>) => void;
       className?: string;
     }>
   >,
@@ -229,10 +226,9 @@ export default function ForestPage() {
             isMulti
             options={stateOptions}
             value={selectedStates.map((s) => ({ value: s, label: s }))}
-            onChange={(
-              vals: MultiValue<OptionType>,
-              _actionMeta: ActionMeta<OptionType>
-            ) => setSelectedStates(vals.map((v) => v.value))}
+            onChange={(vals: MultiValue<OptionType>) =>
+              setSelectedStates(vals.map((v) => v.value))
+            }
             className="text-gray-700"
           />
         </div>
