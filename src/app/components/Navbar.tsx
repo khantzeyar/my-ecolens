@@ -1,14 +1,16 @@
 /**
- * Enhanced Navbar (Epic-1 logic + Epic-3 UI)
- * - Keeps Epic-1 routes: Home, Camping Sites, Forest, Guide
- * - Uses Epic-3 adaptive glassmorphism UI
+ * Navbar (Epic-1 + Epic-2 + Epic-8 with Epic-3 UI)
+ * - Epic-1 routes: Home, Camping Sites, Forest, Guide
+ * - Epic-2: Forest Insights (/insights)
+ * - Epic-8: Card Generator (/generator)
+ * - UI: Epic-3 glassmorphism
  */
 'use client';
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -20,7 +22,7 @@ const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
-      
+
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false);
       } else if (currentScrollY < lastScrollY) {
@@ -33,19 +35,19 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Page theme: decide background type
   const getPageTheme = () => {
     if (pathname === '/') return 'dark';
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/forest')) return 'light';
+    if (pathname.startsWith('/insights')) return 'light';
+    if (pathname.startsWith('/generator')) return 'light';
     return 'light';
   };
 
   const pageTheme = getPageTheme();
   const isDarkBackground = pageTheme === 'dark';
 
-  // Style calculations
   const getNavbarStyles = () => {
     const scrollProgress = Math.min(scrollY / 200, 1);
     if (isDarkBackground) {
@@ -65,53 +67,54 @@ const Navbar = () => {
 
   const styles = getNavbarStyles();
 
-  // Text styles
   const getTextStyles = (isActive: boolean) => {
     if (isActive) {
       return {
-        className: 'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
-        style: {}
+        className:
+          'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
+        style: {},
       };
     }
     if (isDarkBackground) {
       return {
-        className: 'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
-        style: { textShadow: '0 1px 3px rgba(0,0,0,0.7)' }
+        className:
+          'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
+        style: { textShadow: '0 1px 3px rgba(0,0,0,0.7)' },
       };
     } else {
       return {
-        className: 'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
-        style: { textShadow: '0 1px 2px rgba(255,255,255,0.8)' }
+        className:
+          'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
+        style: { textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
       };
     }
   };
 
   return (
-    <nav 
+    <nav
       className={`fixed top-0 w-full z-50 p-4 transition-all duration-300 ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
       style={{
-        background: isDarkBackground 
+        background: isDarkBackground
           ? `linear-gradient(to bottom, rgba(0,0,0,${styles.backdropOpacity}), transparent)`
           : `linear-gradient(to bottom, rgba(255,255,255,${styles.backdropOpacity}), transparent)`,
       }}
     >
-      <div 
+      <div
         className="flex items-center justify-between py-3 px-6 mx-auto max-w-7xl backdrop-blur-xl rounded-xl shadow-xl transition-all duration-300 hover:shadow-2xl"
         style={{
           backgroundColor: `rgba(255, 255, 255, ${styles.bgOpacity})`,
-          border: isDarkBackground 
+          border: isDarkBackground
             ? `1px solid rgba(255, 255, 255, ${styles.borderOpacity})`
             : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.15)})`,
         }}
       >
-        {/* Logo */}
-        <Link href='/' className="cursor-pointer group">
+        <Link href="/" className="cursor-pointer group">
           <div className="flex items-center">
             <Image
-              src='/logo.svg'
-              alt='Logo'
+              src="/logo.svg"
+              alt="Logo"
               width={50}
               height={50}
               className="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg"
@@ -120,12 +123,13 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* Navigation Links */}
-        <div 
+        <div
           className="flex items-center backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg"
           style={{
-            backgroundColor: `rgba(255, 255, 255, ${Math.max(0.2, styles.bgOpacity + 0.1)})`,
-            border: isDarkBackground 
+            backgroundColor: `rgba(255, 255, 255, ${
+              Math.max(0.2, styles.bgOpacity + 0.1)
+            })`,
+            border: isDarkBackground
               ? `1px solid rgba(255, 255, 255, ${styles.borderOpacity})`
               : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.1)})`,
           }}
@@ -134,7 +138,9 @@ const Navbar = () => {
             { href: '/', label: 'Home', active: pathname === '/' },
             { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
             { href: '/forest', label: 'Forest', active: pathname.startsWith('/forest') },
+            { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
+            { href: '/generator', label: 'Card Generator', active: pathname.startsWith('/generator') },
           ].map((link, idx, arr) => (
             <React.Fragment key={link.href}>
               <Link
@@ -147,12 +153,12 @@ const Navbar = () => {
                 {link.label}
               </Link>
               {idx < arr.length - 1 && (
-                <div 
+                <div
                   className="w-px h-4 mx-1 shadow-sm"
                   style={{
-                    backgroundColor: isDarkBackground 
-                      ? `rgba(255, 255, 255, 0.4)` 
-                      : `rgba(0, 0, 0, 0.2)`
+                    backgroundColor: isDarkBackground
+                      ? `rgba(255, 255, 255, 0.4)`
+                      : `rgba(0, 0, 0, 0.2)`,
                   }}
                 ></div>
               )}
@@ -161,7 +167,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
