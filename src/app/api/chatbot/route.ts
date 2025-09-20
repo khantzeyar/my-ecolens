@@ -15,6 +15,7 @@ const PAGE_MAPPINGS = [
   { keyword: "home", page: "/", description: "Landing Page." },
   { keyword: "camping", page: "/camp", description: "Camping Sites" },
   { keyword: "guide", page: "/guide", description: "Eco-friendly Tips." },
+  { keyword: "insights", page: "/insights", description: "Forest Insights" },
 ];
 
 // Helper: fallback responses if Gemini fails
@@ -22,9 +23,11 @@ function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   if (input.includes("camp")) return "🏕️ : [Camping Sites](/camp)";
   if (input.includes("tips")) return "🌱 : [Eco-friendly Tips](/guide)";
+  if (input.includes("forest insights")) return "🌱 : [Forest Insights](/insights)";
   return `⚠️ Sorry, I am temporarily unavailable. Meanwhile, you can explore:
   - 🏕️ : [Camping Sites](/camp)
   - 🌱 : [Eco-friendly Tips](/guide)
+  - 📊 : [Forest Insights](/insights)
   `;
 }
 
