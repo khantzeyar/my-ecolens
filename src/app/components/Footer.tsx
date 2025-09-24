@@ -54,6 +54,21 @@ const Footer = () => {
                   Action Guide
                 </Link>
               </li>
+              <li>
+                <Link href="/insights" className="hover:text-white transition-colors duration-200">
+                  Forest Insights
+                </Link>
+              </li>
+              <li>
+                <Link href="/why" className="hover:text-white transition-colors duration-200">
+                  Why Responsible Camping
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors duration-200">
+                  About Us
+                </Link>
+              </li>
             </ul>
           </div>
 

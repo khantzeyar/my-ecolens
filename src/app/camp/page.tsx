@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image"; // ✅ 使用 next/image
+import Image from "next/image";
 
 interface CampSite {
   id: string;
@@ -130,6 +130,9 @@ const CampPage: React.FC = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentCampsites = filteredCampsites.slice(startIndex, endIndex);
 
+  // 假天气数据（后续可替换 API）
+  const fakeWeather = ["☀️", "🌧️", "🌤️", "⛅", "🌫️"];
+
   return (
     <main
       className="pt-20 min-h-screen bg-cover bg-center"
@@ -152,6 +155,7 @@ const CampPage: React.FC = () => {
           {/* Sidebar Filters */}
           <aside className="w-80 flex-shrink-0">
             <div className="bg-white/90 shadow-md rounded-lg p-6 backdrop-blur-md">
+              {/* Filters content (unchanged) */}
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-green-700">Filters</h2>
                 <button
@@ -264,11 +268,17 @@ const CampPage: React.FC = () => {
                 <p className="text-center text-gray-500">Loading campsites...</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {currentCampsites.map((camp) => (
+                  {currentCampsites.map((camp, index) => (
                     <div
                       key={camp.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
+                      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col relative"
                     >
+                      {/* Weather Icon */}
+                      <div className="absolute top-2 right-2 bg-white/80 px-2 py-1 rounded-full text-sm">
+                        {fakeWeather[index % fakeWeather.length]}
+                      </div>
+
+                      {/* Image */}
                       <div className="h-40 bg-gray-100 overflow-hidden relative">
                         <Image
                           src={
@@ -280,6 +290,8 @@ const CampPage: React.FC = () => {
                           className="object-cover"
                         />
                       </div>
+
+                      {/* Info */}
                       <div className="p-4 flex-1 flex flex-col">
                         <h3 className="font-semibold text-base text-gray-900 mb-2 line-clamp-2">
                           {camp.name}
@@ -290,11 +302,23 @@ const CampPage: React.FC = () => {
                         <p className="text-sm text-gray-500 mb-2">
                           📍 {camp.state}
                         </p>
-                        <div className="mt-auto">
+
+                        <div className="mt-auto space-y-3">
                           <Link href={`/camp/${camp.id}`}>
                             <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200 font-medium">
                               View Details
                             </button>
+                          </Link>
+
+                          {/* 分隔线 */}
+                          <hr className="border-t border-gray-200" />
+
+                          {/* Link to Page A */}
+                          <Link
+                            href="/why"
+                            className="block text-center text-xs text-green-700 underline hover:text-green-900"
+                          >
+                            Why Responsible Camping Matters →
                           </Link>
                         </div>
                       </div>
