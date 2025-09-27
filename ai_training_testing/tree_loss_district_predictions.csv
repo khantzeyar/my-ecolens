@@ -1,0 +1,517 @@
+state,district,year,tc_loss_pred
+Johor,Batu Pahat,2025,2297.49
+Johor,Batu Pahat,2026,2360.215
+Johor,Batu Pahat,2027,2428.12
+Johor,Batu Pahat,2028,2463.995
+Johor,Batu Pahat,2029,2456.555
+Johor,Batu Pahat,2030,2458.66
+Johor,Johor Baharu,2025,808.31
+Johor,Johor Baharu,2026,819.365
+Johor,Johor Baharu,2027,838.8
+Johor,Johor Baharu,2028,851.38
+Johor,Johor Baharu,2029,860.81
+Johor,Johor Baharu,2030,867.96
+Johor,Keluang,2025,3478.105
+Johor,Keluang,2026,3429.34
+Johor,Keluang,2027,3365.195
+Johor,Keluang,2028,3308.93
+Johor,Keluang,2029,3323.65
+Johor,Keluang,2030,3309.79
+Johor,Kota Tinggi,2025,1844.365
+Johor,Kota Tinggi,2026,1840.12
+Johor,Kota Tinggi,2027,1836.95
+Johor,Kota Tinggi,2028,1834.595
+Johor,Kota Tinggi,2029,1834.595
+Johor,Kota Tinggi,2030,1834.595
+Johor,Kulaijaya,2025,995.05
+Johor,Kulaijaya,2026,994.49
+Johor,Kulaijaya,2027,992.255
+Johor,Kulaijaya,2028,988.905
+Johor,Kulaijaya,2029,988.175
+Johor,Kulaijaya,2030,988.175
+Johor,Ledang,2025,1323.07
+Johor,Ledang,2026,1337.985
+Johor,Ledang,2027,1345.485
+Johor,Ledang,2028,1347.24
+Johor,Ledang,2029,1355.21
+Johor,Ledang,2030,1357.425
+Johor,Mersing,2025,2155.76
+Johor,Mersing,2026,2147.355
+Johor,Mersing,2027,2119.54
+Johor,Mersing,2028,2093.16
+Johor,Mersing,2029,2069.245
+Johor,Mersing,2030,2061.705
+Johor,Muar,2025,1660.53
+Johor,Muar,2026,1685.395
+Johor,Muar,2027,1696.17
+Johor,Muar,2028,1703.93
+Johor,Muar,2029,1714.735
+Johor,Muar,2030,1713.765
+Johor,Pontian,2025,906.405
+Johor,Pontian,2026,902.73
+Johor,Pontian,2027,902.085
+Johor,Pontian,2028,901.235
+Johor,Pontian,2029,900.395
+Johor,Pontian,2030,900.38
+Johor,Segamat,2025,3952.85
+Johor,Segamat,2026,3907.115
+Johor,Segamat,2027,3859.18
+Johor,Segamat,2028,3754.11
+Johor,Segamat,2029,3715.43
+Johor,Segamat,2030,3682.485
+Kedah,Baling,2025,1842.635
+Kedah,Baling,2026,1840.37
+Kedah,Baling,2027,1836.95
+Kedah,Baling,2028,1834.595
+Kedah,Baling,2029,1834.595
+Kedah,Baling,2030,1834.595
+Kedah,Bandar Baharu,2025,352.895
+Kedah,Bandar Baharu,2026,332.91
+Kedah,Bandar Baharu,2027,314.615
+Kedah,Bandar Baharu,2028,303.71
+Kedah,Bandar Baharu,2029,297.53
+Kedah,Bandar Baharu,2030,295.66
+Kedah,Kota Setar,2025,2.43
+Kedah,Kota Setar,2026,5.515
+Kedah,Kota Setar,2027,7.41
+Kedah,Kota Setar,2028,8.375
+Kedah,Kota Setar,2029,10.06
+Kedah,Kota Setar,2030,11.97
+Kedah,Kuala Muda,2025,359.21
+Kedah,Kuala Muda,2026,336.21
+Kedah,Kuala Muda,2027,316.04
+Kedah,Kuala Muda,2028,303.47
+Kedah,Kuala Muda,2029,297.53
+Kedah,Kuala Muda,2030,295.66
+Kedah,Kubang Pasu,2025,456.18
+Kedah,Kubang Pasu,2026,460.795
+Kedah,Kubang Pasu,2027,463.22
+Kedah,Kubang Pasu,2028,464.22
+Kedah,Kubang Pasu,2029,464.22
+Kedah,Kubang Pasu,2030,464.22
+Kedah,Kulim,2025,899.23
+Kedah,Kulim,2026,902.38
+Kedah,Kulim,2027,901.235
+Kedah,Kulim,2028,900.395
+Kedah,Kulim,2029,900.38
+Kedah,Kulim,2030,900.38
+Kedah,Langkawi,2025,78.655
+Kedah,Langkawi,2026,78.09
+Kedah,Langkawi,2027,76.96
+Kedah,Langkawi,2028,74.375
+Kedah,Langkawi,2029,73.78
+Kedah,Langkawi,2030,73.3
+Kedah,Padang Terap,2025,1064.72
+Kedah,Padang Terap,2026,1063.365
+Kedah,Padang Terap,2027,1063.365
+Kedah,Padang Terap,2028,1063.365
+Kedah,Padang Terap,2029,1063.365
+Kedah,Padang Terap,2030,1063.365
+Kedah,Pendang,2025,442.785
+Kedah,Pendang,2026,453.1
+Kedah,Pendang,2027,459.515
+Kedah,Pendang,2028,462.375
+Kedah,Pendang,2029,464.22
+Kedah,Pendang,2030,464.22
+Kedah,Pokok Sena,2025,307.865
+Kedah,Pokok Sena,2026,297.165
+Kedah,Pokok Sena,2027,294.585
+Kedah,Pokok Sena,2028,288.715
+Kedah,Pokok Sena,2029,285.865
+Kedah,Pokok Sena,2030,279.985
+Kedah,Sik,2025,1095.895
+Kedah,Sik,2026,1094.23
+Kedah,Sik,2027,1094.23
+Kedah,Sik,2028,1094.23
+Kedah,Sik,2029,1094.23
+Kedah,Sik,2030,1094.23
+Kedah,Yan,2025,34.15
+Kedah,Yan,2026,40.32
+Kedah,Yan,2027,43.535
+Kedah,Yan,2028,45.71
+Kedah,Yan,2029,48.765
+Kedah,Yan,2030,50.335
+Kelantan,Bachok,2025,434.04
+Kelantan,Bachok,2026,436.595
+Kelantan,Bachok,2027,441.13
+Kelantan,Bachok,2028,452.015
+Kelantan,Bachok,2029,458.96
+Kelantan,Bachok,2030,462.375
+Kelantan,Gua Musang,2025,9597.94
+Kelantan,Gua Musang,2026,9092.685
+Kelantan,Gua Musang,2027,8933.705
+Kelantan,Gua Musang,2028,8670.54
+Kelantan,Gua Musang,2029,8252.85
+Kelantan,Gua Musang,2030,7641.735
+Kelantan,Jeli,2025,1214.54
+Kelantan,Jeli,2026,1205.31
+Kelantan,Jeli,2027,1190.56
+Kelantan,Jeli,2028,1172.925
+Kelantan,Jeli,2029,1156.595
+Kelantan,Jeli,2030,1149.445
+Kelantan,Kota Bharu,2025,483.735
+Kelantan,Kota Bharu,2026,478.585
+Kelantan,Kota Bharu,2027,472.915
+Kelantan,Kota Bharu,2028,471.415
+Kelantan,Kota Bharu,2029,470.33
+Kelantan,Kota Bharu,2030,468.975
+Kelantan,Kuala Krai,2025,3160.925
+Kelantan,Kuala Krai,2026,3179.065
+Kelantan,Kuala Krai,2027,3178.91
+Kelantan,Kuala Krai,2028,3178.91
+Kelantan,Kuala Krai,2029,3178.91
+Kelantan,Kuala Krai,2030,3178.91
+Kelantan,Machang,2025,637.615
+Kelantan,Machang,2026,639.43
+Kelantan,Machang,2027,640.205
+Kelantan,Machang,2028,641.57
+Kelantan,Machang,2029,642.035
+Kelantan,Machang,2030,642.035
+Kelantan,Pasir Mas,2025,1296.24
+Kelantan,Pasir Mas,2026,1312.045
+Kelantan,Pasir Mas,2027,1325.225
+Kelantan,Pasir Mas,2028,1339.57
+Kelantan,Pasir Mas,2029,1345.485
+Kelantan,Pasir Mas,2030,1347.24
+Kelantan,Pasir Putih,2025,621.125
+Kelantan,Pasir Putih,2026,620.84
+Kelantan,Pasir Putih,2027,620.12
+Kelantan,Pasir Putih,2028,620.12
+Kelantan,Pasir Putih,2029,620.12
+Kelantan,Pasir Putih,2030,620.12
+Kelantan,Tanah Merah,2025,1467.01
+Kelantan,Tanah Merah,2026,1493.915
+Kelantan,Tanah Merah,2027,1508.14
+Kelantan,Tanah Merah,2028,1517.53
+Kelantan,Tanah Merah,2029,1521.005
+Kelantan,Tanah Merah,2030,1524.155
+Kelantan,Tumpat,2025,176.645
+Kelantan,Tumpat,2026,185.525
+Kelantan,Tumpat,2027,193.205
+Kelantan,Tumpat,2028,197.49
+Kelantan,Tumpat,2029,199.385
+Kelantan,Tumpat,2030,199.03
+Kuala Lumpur,Kuala Lumpur,2025,15.925
+Kuala Lumpur,Kuala Lumpur,2026,16.105
+Kuala Lumpur,Kuala Lumpur,2027,16.015
+Kuala Lumpur,Kuala Lumpur,2028,16.015
+Kuala Lumpur,Kuala Lumpur,2029,16.015
+Kuala Lumpur,Kuala Lumpur,2030,16.015
+Melaka,Alor Gajah,2025,1082.985
+Melaka,Alor Gajah,2026,1079.745
+Melaka,Alor Gajah,2027,1074.81
+Melaka,Alor Gajah,2028,1070.885
+Melaka,Alor Gajah,2029,1067.8
+Melaka,Alor Gajah,2030,1068.99
+Melaka,Jasin,2025,921.215
+Melaka,Jasin,2026,949.5
+Melaka,Jasin,2027,964.88
+Melaka,Jasin,2028,974.695
+Melaka,Jasin,2029,974.9
+Melaka,Jasin,2030,974.9
+Melaka,Melaka Tengah,2025,131.78
+Melaka,Melaka Tengah,2026,139.79
+Melaka,Melaka Tengah,2027,148.5
+Melaka,Melaka Tengah,2028,155.925
+Melaka,Melaka Tengah,2029,162.39
+Melaka,Melaka Tengah,2030,174.1
+Negeri Sembilan,Jelebu,2025,613.55
+Negeri Sembilan,Jelebu,2026,615.205
+Negeri Sembilan,Jelebu,2027,617.935
+Negeri Sembilan,Jelebu,2028,619.44
+Negeri Sembilan,Jelebu,2029,619.44
+Negeri Sembilan,Jelebu,2030,619.44
+Negeri Sembilan,Jempol,2025,1541.92
+Negeri Sembilan,Jempol,2026,1542.92
+Negeri Sembilan,Jempol,2027,1542.92
+Negeri Sembilan,Jempol,2028,1542.92
+Negeri Sembilan,Jempol,2029,1542.92
+Negeri Sembilan,Jempol,2030,1542.92
+Negeri Sembilan,Kuala Pilah,2025,729.11
+Negeri Sembilan,Kuala Pilah,2026,727.325
+Negeri Sembilan,Kuala Pilah,2027,721.13
+Negeri Sembilan,Kuala Pilah,2028,707.49
+Negeri Sembilan,Kuala Pilah,2029,695.895
+Negeri Sembilan,Kuala Pilah,2030,687.75
+Negeri Sembilan,Port Dickson,2025,576.91
+Negeri Sembilan,Port Dickson,2026,586.1
+Negeri Sembilan,Port Dickson,2027,587.615
+Negeri Sembilan,Port Dickson,2028,587.9
+Negeri Sembilan,Port Dickson,2029,587.9
+Negeri Sembilan,Port Dickson,2030,587.9
+Negeri Sembilan,Rembau,2025,313.085
+Negeri Sembilan,Rembau,2026,300.64
+Negeri Sembilan,Rembau,2027,294.065
+Negeri Sembilan,Rembau,2028,288.715
+Negeri Sembilan,Rembau,2029,285.865
+Negeri Sembilan,Rembau,2030,279.985
+Negeri Sembilan,Seremban,2025,1020.715
+Negeri Sembilan,Seremban,2026,1024.185
+Negeri Sembilan,Seremban,2027,1030.49
+Negeri Sembilan,Seremban,2028,1052.485
+Negeri Sembilan,Seremban,2029,1062.375
+Negeri Sembilan,Seremban,2030,1062.785
+Negeri Sembilan,Tampin,2025,1053.575
+Negeri Sembilan,Tampin,2026,1062.375
+Negeri Sembilan,Tampin,2027,1062.785
+Negeri Sembilan,Tampin,2028,1062.785
+Negeri Sembilan,Tampin,2029,1062.785
+Negeri Sembilan,Tampin,2030,1062.785
+Pahang,Bentong,2025,1575.35
+Pahang,Bentong,2026,1555.645
+Pahang,Bentong,2027,1548.08
+Pahang,Bentong,2028,1544.795
+Pahang,Bentong,2029,1543.33
+Pahang,Bentong,2030,1543.33
+Pahang,Bera,2025,4049.165
+Pahang,Bera,2026,4011.015
+Pahang,Bera,2027,3964.87
+Pahang,Bera,2028,3937.33
+Pahang,Bera,2029,3887.615
+Pahang,Bera,2030,3851.34
+Pahang,Cameron Highlands,2025,155.615
+Pahang,Cameron Highlands,2026,162.39
+Pahang,Cameron Highlands,2027,174.1
+Pahang,Cameron Highlands,2028,184.32
+Pahang,Cameron Highlands,2029,193.265
+Pahang,Cameron Highlands,2030,197.49
+Pahang,Jerantut,2025,5810.205
+Pahang,Jerantut,2026,5698.155
+Pahang,Jerantut,2027,5683.81
+Pahang,Jerantut,2028,5683.81
+Pahang,Jerantut,2029,5683.81
+Pahang,Jerantut,2030,5683.81
+Pahang,Kuantan,2025,3265.175
+Pahang,Kuantan,2026,3259.25
+Pahang,Kuantan,2027,3256.465
+Pahang,Kuantan,2028,3256.465
+Pahang,Kuantan,2029,3256.465
+Pahang,Kuantan,2030,3256.465
+Pahang,Lipis,2025,4652.175
+Pahang,Lipis,2026,4847.435
+Pahang,Lipis,2027,4872.245
+Pahang,Lipis,2028,4876.67
+Pahang,Lipis,2029,4876.67
+Pahang,Lipis,2030,4876.67
+Pahang,Maran,2025,2142.43
+Pahang,Maran,2026,2111.64
+Pahang,Maran,2027,2085.41
+Pahang,Maran,2028,2065.005
+Pahang,Maran,2029,2053.1
+Pahang,Maran,2030,2040.02
+Pahang,Pekan,2025,5856.325
+Pahang,Pekan,2026,5698.155
+Pahang,Pekan,2027,5683.81
+Pahang,Pekan,2028,5683.81
+Pahang,Pekan,2029,5683.81
+Pahang,Pekan,2030,5683.81
+Pahang,Raub,2025,1873.07
+Pahang,Raub,2026,1876.96
+Pahang,Raub,2027,1876.96
+Pahang,Raub,2028,1876.96
+Pahang,Raub,2029,1876.96
+Pahang,Raub,2030,1876.96
+Pahang,Rompin,2025,6566.85
+Pahang,Rompin,2026,6310.81
+Pahang,Rompin,2027,6171.005
+Pahang,Rompin,2028,6011.705
+Pahang,Rompin,2029,5953.18
+Pahang,Rompin,2030,5806.72
+Pahang,Temerloh,2025,2186.41
+Pahang,Temerloh,2026,2244.99
+Pahang,Temerloh,2027,2305.225
+Pahang,Temerloh,2028,2363.64
+Pahang,Temerloh,2029,2435.33
+Pahang,Temerloh,2030,2466.53
+Perak,Batang Padang,2025,2218.11
+Perak,Batang Padang,2026,2272.475
+Perak,Batang Padang,2027,2337.135
+Perak,Batang Padang,2028,2400.42
+Perak,Batang Padang,2029,2459.775
+Perak,Batang Padang,2030,2455.005
+Perak,Hilir Perak,2025,2454.555
+Perak,Hilir Perak,2026,2458.66
+Perak,Hilir Perak,2027,2455.005
+Perak,Hilir Perak,2028,2458.66
+Perak,Hilir Perak,2029,2455.005
+Perak,Hilir Perak,2030,2458.66
+Perak,Hulu Perak,2025,2360.185
+Perak,Hulu Perak,2026,2428.12
+Perak,Hulu Perak,2027,2463.995
+Perak,Hulu Perak,2028,2456.555
+Perak,Hulu Perak,2029,2458.66
+Perak,Hulu Perak,2030,2455.005
+Perak,Kampar,2025,376.505
+Perak,Kampar,2026,378.4
+Perak,Kampar,2027,379.61
+Perak,Kampar,2028,391.075
+Perak,Kampar,2029,405.305
+Perak,Kampar,2030,412.945
+Perak,Kerian,2025,518.765
+Perak,Kerian,2026,512.115
+Perak,Kerian,2027,507.485
+Perak,Kerian,2028,501.96
+Perak,Kerian,2029,498.625
+Perak,Kerian,2030,492.64
+Perak,Kinta,2025,1265.28
+Perak,Kinta,2026,1285.57
+Perak,Kinta,2027,1306.455
+Perak,Kinta,2028,1317.21
+Perak,Kinta,2029,1334.99
+Perak,Kinta,2030,1345.195
+Perak,Kuala Kangsar,2025,1827.035
+Perak,Kuala Kangsar,2026,1833.27
+Perak,Kuala Kangsar,2027,1834.595
+Perak,Kuala Kangsar,2028,1834.595
+Perak,Kuala Kangsar,2029,1834.595
+Perak,Kuala Kangsar,2030,1834.595
+Perak,Larut and Matang,2025,1112.135
+Perak,Larut and Matang,2026,1111.96
+Perak,Larut and Matang,2027,1111.96
+Perak,Larut and Matang,2028,1111.96
+Perak,Larut and Matang,2029,1111.96
+Perak,Larut and Matang,2030,1111.96
+Perak,Manjung,2025,1074.83
+Perak,Manjung,2026,1070.885
+Perak,Manjung,2027,1067.8
+Perak,Manjung,2028,1068.99
+Perak,Manjung,2029,1067.66
+Perak,Manjung,2030,1068.99
+Perak,Perak Tengah,2025,1621.86
+Perak,Perak Tengah,2026,1672.805
+Perak,Perak Tengah,2027,1689.98
+Perak,Perak Tengah,2028,1698.085
+Perak,Perak Tengah,2029,1704.835
+Perak,Perak Tengah,2030,1714.735
+Perlis,Perlis,2025,279.595
+Perlis,Perlis,2026,278.81
+Perlis,Perlis,2027,273.755
+Perlis,Perlis,2028,256.345
+Perlis,Perlis,2029,249.21
+Perlis,Perlis,2030,250.575
+Pulau Pinang,Barat Daya,2025,40.925
+Pulau Pinang,Barat Daya,2026,43.665
+Pulau Pinang,Barat Daya,2027,45.71
+Pulau Pinang,Barat Daya,2028,48.765
+Pulau Pinang,Barat Daya,2029,50.335
+Pulau Pinang,Barat Daya,2030,50.71
+Pulau Pinang,Seberang Perai Selatan,2025,139.775
+Pulau Pinang,Seberang Perai Selatan,2026,148.5
+Pulau Pinang,Seberang Perai Selatan,2027,155.925
+Pulau Pinang,Seberang Perai Selatan,2028,162.39
+Pulau Pinang,Seberang Perai Selatan,2029,174.1
+Pulau Pinang,Seberang Perai Selatan,2030,184.32
+Pulau Pinang,Seberang Perai Tengah,2025,100.865
+Pulau Pinang,Seberang Perai Tengah,2026,103.34
+Pulau Pinang,Seberang Perai Tengah,2027,103.99
+Pulau Pinang,Seberang Perai Tengah,2028,104.29
+Pulau Pinang,Seberang Perai Tengah,2029,104.29
+Pulau Pinang,Seberang Perai Tengah,2030,104.29
+Pulau Pinang,Seberang Perai Utara,2025,117.83
+Pulau Pinang,Seberang Perai Utara,2026,120.665
+Pulau Pinang,Seberang Perai Utara,2027,126.305
+Pulau Pinang,Seberang Perai Utara,2028,134.79
+Pulau Pinang,Seberang Perai Utara,2029,144.96
+Pulau Pinang,Seberang Perai Utara,2030,148.82
+Pulau Pinang,Timur Laut,2025,18.745
+Pulau Pinang,Timur Laut,2026,18.37
+Pulau Pinang,Timur Laut,2027,18.13
+Pulau Pinang,Timur Laut,2028,18.13
+Pulau Pinang,Timur Laut,2029,18.13
+Pulau Pinang,Timur Laut,2030,18.13
+Selangor,Gombak,2025,486.075
+Selangor,Gombak,2026,479.125
+Selangor,Gombak,2027,475.28
+Selangor,Gombak,2028,472.375
+Selangor,Gombak,2029,471.415
+Selangor,Gombak,2030,470.33
+Selangor,Hulu Langat,2025,258.86
+Selangor,Hulu Langat,2026,250.23
+Selangor,Hulu Langat,2027,250.25
+Selangor,Hulu Langat,2028,250.25
+Selangor,Hulu Langat,2029,250.25
+Selangor,Hulu Langat,2030,250.25
+Selangor,Hulu Selangor,2025,1125.705
+Selangor,Hulu Selangor,2026,1127.165
+Selangor,Hulu Selangor,2027,1129.265
+Selangor,Hulu Selangor,2028,1130.745
+Selangor,Hulu Selangor,2029,1130.245
+Selangor,Hulu Selangor,2030,1130.745
+Selangor,Klang,2025,289.49
+Selangor,Klang,2026,285.865
+Selangor,Klang,2027,279.985
+Selangor,Klang,2028,278.81
+Selangor,Klang,2029,273.755
+Selangor,Klang,2030,256.345
+Selangor,Kuala Langat,2025,932.715
+Selangor,Kuala Langat,2026,951.06
+Selangor,Kuala Langat,2027,965.335
+Selangor,Kuala Langat,2028,974.155
+Selangor,Kuala Langat,2029,974.9
+Selangor,Kuala Langat,2030,974.9
+Selangor,Kuala Selangor,2025,761.025
+Selangor,Kuala Selangor,2026,785.135
+Selangor,Kuala Selangor,2027,813.69
+Selangor,Kuala Selangor,2028,835.325
+Selangor,Kuala Selangor,2029,847.42
+Selangor,Kuala Selangor,2030,860.945
+Selangor,Petaling,2025,118.7
+Selangor,Petaling,2026,124.31
+Selangor,Petaling,2027,134.27
+Selangor,Petaling,2028,143.32
+Selangor,Petaling,2029,148.35
+Selangor,Petaling,2030,155.925
+Selangor,Sabak Bernam,2025,538.845
+Selangor,Sabak Bernam,2026,547.355
+Selangor,Sabak Bernam,2027,555.355
+Selangor,Sabak Bernam,2028,566.485
+Selangor,Sabak Bernam,2029,584.705
+Selangor,Sabak Bernam,2030,588.005
+Selangor,Sepang,2025,265.025
+Selangor,Sepang,2026,249.475
+Selangor,Sepang,2027,250.575
+Selangor,Sepang,2028,250.415
+Selangor,Sepang,2029,250.25
+Selangor,Sepang,2030,250.25
+Terengganu,Besut,2025,1257.21
+Terengganu,Besut,2026,1271.375
+Terengganu,Besut,2027,1293.995
+Terengganu,Besut,2028,1312.045
+Terengganu,Besut,2029,1325.225
+Terengganu,Besut,2030,1339.57
+Terengganu,Dungun,2025,3037.12
+Terengganu,Dungun,2026,3043.385
+Terengganu,Dungun,2027,3057.13
+Terengganu,Dungun,2028,3060.555
+Terengganu,Dungun,2029,3067.97
+Terengganu,Dungun,2030,3099.87
+Terengganu,Hulu Terengganu,2025,2497.915
+Terengganu,Hulu Terengganu,2026,2483.235
+Terengganu,Hulu Terengganu,2027,2484.015
+Terengganu,Hulu Terengganu,2028,2484.015
+Terengganu,Hulu Terengganu,2029,2484.015
+Terengganu,Hulu Terengganu,2030,2484.015
+Terengganu,Kemaman,2025,3935.32
+Terengganu,Kemaman,2026,3887.615
+Terengganu,Kemaman,2027,3851.34
+Terengganu,Kemaman,2028,3751.85
+Terengganu,Kemaman,2029,3715.43
+Terengganu,Kemaman,2030,3682.485
+Terengganu,Kuala Terengganu,2025,1074.725
+Terengganu,Kuala Terengganu,2026,1070.885
+Terengganu,Kuala Terengganu,2027,1067.8
+Terengganu,Kuala Terengganu,2028,1068.99
+Terengganu,Kuala Terengganu,2029,1067.66
+Terengganu,Kuala Terengganu,2030,1068.99
+Terengganu,Marang,2025,1267.91
+Terengganu,Marang,2026,1285.57
+Terengganu,Marang,2027,1306.455
+Terengganu,Marang,2028,1317.21
+Terengganu,Marang,2029,1334.99
+Terengganu,Marang,2030,1345.195
+Terengganu,Setiu,2025,1666.95
+Terengganu,Setiu,2026,1685.395
+Terengganu,Setiu,2027,1696.17
+Terengganu,Setiu,2028,1703.93
+Terengganu,Setiu,2029,1714.735
+Terengganu,Setiu,2030,1713.765
