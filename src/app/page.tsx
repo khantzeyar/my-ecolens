@@ -1,6 +1,6 @@
 /** 
  * This is landing page for our website.
- * - Hero Section: website intro + 3 buttons (Camp, Page A, Page B)
+ * - Hero Section: website intro + 2 buttons (Camp, Why Campeco)
  * - Fun Section: activities + flora & fauna highlights
  * - Responsibility Section: quick links to Page A and Page B
 */
@@ -50,26 +50,14 @@ export default function Home() {
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full 
               font-semibold text-base transition-all shadow-2xl flex items-center justify-center"
             >
-              <i className="ri-tent-line mr-2"></i>
               Find Campsites
             </Link>
             <Link
-              href="/why"
-              className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3 rounded-full 
-              font-semibold text-base transition-all border-2 border-white/30 hover:border-white/50 
-              flex items-center justify-center"
+              href="/why-campeco"
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full 
+              font-semibold text-base transition-all shadow-2xl flex items-center justify-center"
             >
-              <i className="ri-line-chart-line mr-2"></i>
-              Why Responsible Camping Matters
-            </Link>
-            <Link
-              href="/guide"
-              className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3 rounded-full 
-              font-semibold text-base transition-all border-2 border-white/30 hover:border-white/50 
-              flex items-center justify-center"
-            >
-              <i className="ri-book-open-line mr-2"></i>
-              How to Camp Responsibly
+              Why Campeco Matters
             </Link>
           </div>
         </div>
@@ -156,10 +144,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link
-              href="/why"
+              href="/why-campeco"
               className="bg-white text-green-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-100"
             >
-              Why Responsible Camping Matters
+              Why Campeco Matters
             </Link>
             <Link
               href="/guide"
