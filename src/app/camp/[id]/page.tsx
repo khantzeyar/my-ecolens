@@ -27,6 +27,7 @@ interface CampSite {
   forestType?: string;
   tags?: string;
   imageUrl?: string;
+  activities?: string; // ✅ 新增 activities
   latitude?: number;
   longitude?: number;
 }
@@ -55,9 +56,6 @@ interface StatePrediction {
 }
 
 type TabType = "detail" | "insight";
-
-const fakeCrowdPrediction = ["Low", "Medium", "High"];
-const fakeEnvRisk = ["Low Risk ✅", "Medium Risk ⚠️", "High Risk ❌"];
 
 export default function CampDetail({ params }: CampDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>("detail");
@@ -200,16 +198,26 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <h1 className="text-4xl font-bold mb-2">{camp.name}</h1>
                   <p className="text-gray-600">{camp.type}</p>
                 </div>
-                {camp.tags && (
+                {(camp.tags || camp.activities) && (
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {camp.tags.split(",").map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
-                      >
-                        {tag.trim()}
-                      </span>
-                    ))}
+                    {camp.tags &&
+                      camp.tags.split(",").map((tag, idx) => (
+                        <span
+                          key={`tag-${idx}`}
+                          className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+                        >
+                          {tag.trim()}
+                        </span>
+                      ))}
+                    {camp.activities &&
+                      camp.activities.split(",").map((act, idx) => (
+                        <span
+                          key={`act-${idx}`}
+                          className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                        >
+                          {act.trim()}
+                        </span>
+                      ))}
                   </div>
                 )}
               </div>
@@ -231,12 +239,6 @@ export default function CampDetail({ params }: CampDetailProps) {
                     <h2 className="text-xl font-semibold mb-2">Location</h2>
                     <p className="font-medium">{camp.state}</p>
                     <p className="text-gray-500">{camp.address}</p>
-                    <p className="mt-3 text-sm">
-                      🌱 Environmental Sensitivity:{" "}
-                      <span className="font-medium text-red-600">
-                        {fakeEnvRisk[Math.floor(Math.random() * 3)]}
-                      </span>
-                    </p>
                   </div>
 
                   {/* Entry Fee */}
@@ -270,14 +272,6 @@ export default function CampDetail({ params }: CampDetailProps) {
                       placeholderText="Select a date"
                       className="border p-2 rounded-md w-full"
                     />
-                    {selectedDate && (
-                      <p className="text-sm">
-                        👥 Crowd Prediction:{" "}
-                        <span className="font-medium">
-                          {fakeCrowdPrediction[Math.floor(Math.random() * 3)]}
-                        </span>
-                      </p>
-                    )}
                     {weatherData.length > 0 ? (
                       <WeatherCard weather={weatherData} />
                     ) : (
@@ -351,7 +345,8 @@ export default function CampDetail({ params }: CampDetailProps) {
                   data={{
                     name: camp.state,
                     yearly_loss: mergedYearlyLoss,
-                    cumulative_loss_percent: forestData[camp.state]?.cumulative_loss_percent, // ✅ 传递
+                    cumulative_loss_percent:
+                      forestData[camp.state]?.cumulative_loss_percent,
                   }}
                 />
               </div>

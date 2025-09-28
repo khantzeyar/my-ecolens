@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 
 export default function WhyPage() {
@@ -19,48 +18,6 @@ export default function WhyPage() {
           and provide a safe haven for future generations. Camping responsibly ensures
           that we enjoy nature today without destroying it for tomorrow.
         </p>
-        <div className="mt-8">
-          <Link
-            href="/guide"
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition"
-          >
-            Go to Camping Guide →
-          </Link>
-        </div>
-      </section>
-
-      {/* Comparison Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-6 mb-28">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <Image
-            src="/images/forest-fallback.png"
-            alt="Healthy Forest"
-            width={800}
-            height={500}
-            className="w-full h-64 object-cover"
-          />
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-green-700 mb-2">Healthy Forest</h3>
-            <p className="text-gray-600">
-              Rich biodiversity, clean rivers, and safe habitats for wildlife.
-            </p>
-          </div>
-        </div>
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <Image
-            src="/images/camp.jpg"
-            alt="Deforested Area"
-            width={800}
-            height={500}
-            className="w-full h-64 object-cover"
-          />
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-red-600 mb-2">Deforested Area</h3>
-            <p className="text-gray-600">
-              Soil erosion, loss of wildlife, and increased carbon emissions.
-            </p>
-          </div>
-        </div>
       </section>
 
       {/* Wildlife Section */}
@@ -107,7 +64,7 @@ export default function WhyPage() {
       </section>
 
       {/* Key Facts Section */}
-      <section className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-xl max-w-4xl mx-auto px-8 py-10 mb-28">
+      <section className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-xl max-w-4xl mx-auto px-8 py-10 mb-16">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           The Impact of Irresponsible Camping
         </h2>
@@ -122,6 +79,40 @@ export default function WhyPage() {
         </ul>
       </section>
 
+      {/* Comparison Section - moved here */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-6 mb-28">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <Image
+            src="/images/forest-fallback.png"
+            alt="Healthy Forest"
+            width={800}
+            height={500}
+            className="w-full h-64 object-cover"
+          />
+          <div className="p-6">
+            <h3 className="text-xl font-bold text-green-700 mb-2">Healthy Forest</h3>
+            <p className="text-gray-600">
+              Rich biodiversity, clean rivers, and safe habitats for wildlife.
+            </p>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <Image
+            src="/images/deforested-land.jpg"
+            alt="Deforested Area"
+            width={800}
+            height={500}
+            className="w-full h-64 object-cover"
+          />
+          <div className="p-6">
+            <h3 className="text-xl font-bold text-red-600 mb-2">Deforested Area</h3>
+            <p className="text-gray-600">
+              Soil erosion, loss of wildlife, and increased carbon emissions.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Explore More Data */}
       <section className="text-center max-w-3xl mx-auto px-6 mb-28">
         <h2 className="text-3xl font-bold text-green-700 mb-4">
@@ -132,26 +123,19 @@ export default function WhyPage() {
           from 2001 until future projections in 2030.
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <Link
+          <a
             href="/insights"
             className="bg-white text-green-700 border border-green-600 px-6 py-3 rounded-lg font-semibold shadow hover:bg-green-50"
           >
             See More Data →
-          </Link>
-          <Link
+          </a>
+          <a
             href="/guide"
             className="text-green-700 underline hover:text-green-900 font-semibold"
           >
             How to Camp Responsibly →
-          </Link>
+          </a>
         </div>
-      </section>
-
-      {/* Back / Navigation */}
-      <section className="text-center mb-20">
-        <Link href="/" className="text-green-700 font-semibold hover:underline">
-          ← Back to Home
-        </Link>
       </section>
     </main>
   );

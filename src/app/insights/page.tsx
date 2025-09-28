@@ -103,29 +103,6 @@ function computeDistrictTrend(districtName: string): { year: number; loss: numbe
   return result;
 }
 
-// ✅ Compute cumulative loss (states + districts)
-function computeCumulativeLoss(startYear: number, endYear: number, states: string[], districts: string[]) {
-  const results: { name: string; type: string; totalLoss: number }[] = [];
-
-  states.forEach((s) => {
-    const trend = computeStateTrend(s);
-    const totalLoss = trend
-      .filter((d) => d.year >= startYear && d.year <= endYear)
-      .reduce((sum, d) => sum + d.loss, 0);
-    results.push({ name: s, type: "State", totalLoss });
-  });
-
-  districts.forEach((d) => {
-    const trend = computeDistrictTrend(d);
-    const totalLoss = trend
-      .filter((d) => d.year >= startYear && d.year <= endYear)
-      .reduce((sum, d) => sum + d.loss, 0);
-    results.push({ name: d, type: "District", totalLoss });
-  });
-
-  return results.sort((a, b) => b.totalLoss - a.totalLoss);
-}
-
 export default function ForestPage() {
   const [year, setYear] = useState(2001);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -133,9 +110,6 @@ export default function ForestPage() {
 
   const [selectedStates, setSelectedStates] = useState<string[]>(["Pahang"]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-
-  const [startYear, setStartYear] = useState(2001);
-  const [endYear, setEndYear] = useState(2030);
 
   // ✅ All states/districts
   const allStates = Array.from(new Set((forestData as ForestRecord[]).map((d) => d.subnational1).filter(Boolean))) as string[];
@@ -160,29 +134,6 @@ export default function ForestPage() {
   });
 
   const colors = ["#FF5722", "#2196F3", "#9C27B0", "#FFC107", "#009688", "#795548", "#E91E63", "#00BCD4"];
-
-  // ✅ cumulativeLoss（互斥逻辑）
-  const cumulativeLoss = (() => {
-    if (selectedStates.length > 0) {
-      return computeCumulativeLoss(startYear, endYear, selectedStates, []);
-    } else if (selectedDistricts.length > 0) {
-      return computeCumulativeLoss(startYear, endYear, [], selectedDistricts);
-    } else {
-      return computeCumulativeLoss(startYear, endYear, allStates, []);
-    }
-  })();
-
-  // ✅ Export CSV
-  const exportCSV = () => {
-    const header = "Name,Type,Total Loss (ha)\n";
-    const rows = cumulativeLoss.map((d) => `${d.name},${d.type},${d.totalLoss}`).join("\n");
-    const blob = new Blob([header + rows], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `forest_loss_${startYear}_${endYear}.csv`;
-    link.click();
-  };
 
   // Auto play
   useEffect(() => {
@@ -213,7 +164,7 @@ export default function ForestPage() {
       <section id="district" className="bg-white p-8 rounded-3xl shadow-xl border">
         <h2 className="text-3xl font-bold text-green-700 mb-4">Forest Loss Map</h2>
 
-        {/* ✅ Play + 播放速度 控制区（Story Mode 已删除） */}
+        {/* ✅ Play + 播放速度 控制区 */}
         <div className="flex flex-wrap items-center gap-4 bg-gray-50 px-6 py-4 rounded-2xl shadow border border-gray-200 mb-6">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
@@ -306,80 +257,10 @@ export default function ForestPage() {
         </ResponsiveContainer>
       </section>
 
-      {/* Rankings */}
-      <section id="ranking" className="bg-white p-8 rounded-3xl shadow-xl border">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-3xl font-bold text-green-700">Rankings (State & District)</h2>
-          <div className="flex gap-4 items-center">
-            <label>
-              Start:
-              <input type="number" value={startYear} min={2001} max={2030}
-                onChange={(e) => setStartYear(Number(e.target.value))}
-                className="ml-2 border px-2 py-1 rounded w-20"/>
-            </label>
-            <label>
-              End:
-              <input type="number" value={endYear} min={2001} max={2030}
-                onChange={(e) => setEndYear(Number(e.target.value))}
-                className="ml-2 border px-2 py-1 rounded w-20"/>
-            </label>
-            <button onClick={exportCSV} className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
-              Export CSV
-            </button>
-          </div>
-        </div>
-
-        {/* ✅ 筛选器 */}
-        <div className="flex gap-6 mb-6">
-          <div className="flex-1">
-            <label className="block mb-2 font-semibold">Filter States</label>
-            <Select
-              isMulti
-              options={stateOptions}
-              value={selectedStates.map((s) => ({ value: s, label: s }))}
-              onChange={(vals: MultiValue<OptionType>) => setSelectedStates(vals.map((v) => v.value))}
-              className="text-gray-700"
-              isDisabled={selectedDistricts.length > 0}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block mb-2 font-semibold">Filter Districts</label>
-            <Select
-              isMulti
-              options={districtOptions}
-              value={selectedDistricts.map((d) => ({ value: d, label: d }))}
-              onChange={(vals: MultiValue<OptionType>) => setSelectedDistricts(vals.map((v) => v.value))}
-              className="text-gray-700"
-              isDisabled={selectedStates.length > 0}
-            />
-          </div>
-        </div>
-
-        {/* 表格 */}
-        <table className="w-full border-collapse border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2">Rank</th>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Type</th>
-              <th className="border p-2">Total Loss (ha)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cumulativeLoss.map((d, idx) => (
-              <tr key={d.name} className="text-center">
-                <td className="border p-2">{idx + 1}</td>
-                <td className="border p-2">{d.name}</td>
-                <td className="border p-2">{d.type}</td>
-                <td className="border p-2">{d.totalLoss.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* ✅ Eco Tips */}
-        <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-          <h3 className="font-bold text-lg mb-2">Eco Tips</h3>
+      {/* ✅ Only Eco Tips */}
+      <section id="eco-tips" className="bg-white p-8 rounded-3xl shadow-xl border">
+        <h2 className="text-3xl font-bold text-green-700 mb-4">Eco Tips</h2>
+        <div className="p-4 bg-green-50 rounded-xl border border-green-200">
           <ul className="list-disc pl-6 text-gray-700 space-y-2">
             <li>Support reforestation projects 🌱</li>
             <li>Reduce paper and palm oil consumption 📝</li>

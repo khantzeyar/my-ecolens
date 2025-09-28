@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import jsPDF from "jspdf"; // PDF 导出库
 
@@ -92,6 +92,19 @@ export default function GuidePage() {
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
 
+  // ✅ 页面加载时恢复
+  useEffect(() => {
+    const saved = localStorage.getItem("customChecklist");
+    if (saved) {
+      setCustomChecklist(JSON.parse(saved));
+    }
+  }, []);
+
+  // ✅ 保存用户操作
+  useEffect(() => {
+    localStorage.setItem("customChecklist", JSON.stringify(customChecklist));
+  }, [customChecklist]);
+
   const category = categories.find((c) => c.id === activeCategory);
 
   const toggleCheck = (item: string) => {
@@ -105,7 +118,7 @@ export default function GuidePage() {
       setCustomChecklist((prev) =>
         prev.map((group) =>
           group.group === targetGroup
-            ? { ...group, items: [...group.items, newItem.trim()] }
+            ? { ...group, items: [...group.items, { name: newItem.trim(), custom: true }] }
             : group
         )
       );
@@ -117,7 +130,12 @@ export default function GuidePage() {
     setCustomChecklist((prev) =>
       prev.map((group) =>
         group.group === groupName
-          ? { ...group, items: group.items.filter((i) => i !== item) }
+          ? {
+              ...group,
+              items: group.items.filter((i) =>
+                typeof i === "string" ? true : i.name !== item
+              ),
+            }
           : group
       )
     );
@@ -140,8 +158,9 @@ export default function GuidePage() {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(12);
       group.items.forEach((item) => {
-        const checked = checkedItems.includes(item) ? "[x]" : "[ ]";
-        doc.text(`${checked} ${item}`, 20, y);
+        const itemName = typeof item === "string" ? item : item.name;
+        const checked = checkedItems.includes(itemName) ? "[x]" : "[ ]";
+        doc.text(`${checked} ${itemName}`, 20, y);
         y += 7;
         if (y > 270) {
           doc.addPage();
@@ -183,25 +202,31 @@ export default function GuidePage() {
                   <div key={group.group} className="bg-white/90 p-4 rounded-lg shadow hover:shadow-lg transition">
                     <h3 className="font-bold text-gray-800">{group.group}</h3>
                     <ul className="pl-5 mt-2 text-gray-700 space-y-2">
-                      {group.items.map((item) => (
-                        <li key={item} className="flex items-center justify-between group">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={checkedItems.includes(item)}
-                              onChange={() => toggleCheck(item)}
-                              className="mr-2"
-                            />
-                            {item}
-                          </label>
-                          <button
-                            onClick={() => deleteItem(group.group, item)}
-                            className="ml-2 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition"
-                          >
-                            <i className="ri-delete-bin-line text-lg"></i>
-                          </button>
-                        </li>
-                      ))}
+                      {group.items.map((item) => {
+                        const itemName = typeof item === "string" ? item : item.name;
+                        const isCustom = typeof item !== "string" && item.custom;
+                        return (
+                          <li key={itemName} className="flex items-center justify-between group">
+                            <label className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={checkedItems.includes(itemName)}
+                                onChange={() => toggleCheck(itemName)}
+                                className="mr-2"
+                              />
+                              {itemName}
+                            </label>
+                            {isCustom && (
+                              <button
+                                onClick={() => deleteItem(group.group, itemName)}
+                                className="ml-2 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition"
+                              >
+                                <i className="ri-delete-bin-line text-lg"></i>
+                              </button>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
