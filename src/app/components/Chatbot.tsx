@@ -17,12 +17,10 @@ function BotMessage({
   onSuggestionClick: (q: string) => void;
   isTyping: boolean;
 }) {
-  // Split text into parts so Markdown-style links like [Label](url) can be detected
   const parts = String(text).split(/(\[.*?\]\(.*?\))/g);
 
   return (
     <div>
-      {/* Render bot text with clickable links */}
       <p className="text-sm leading-relaxed whitespace-pre-line">
         {parts.map((part, i) => {
           const match = part.match(/\[(.*?)\]\((.*?)\)/);
@@ -42,7 +40,6 @@ function BotMessage({
         })}
       </p>
 
-      {/* Render suggestion buttons if available */}
       {(suggestions ?? []).length > 0 && (
         <div className="flex flex-wrap gap-2 mt-3">
           {(suggestions ?? []).map((q, i) => (
@@ -72,7 +69,7 @@ export default function Chatbot() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when new messages or typing indicator appear
+  // Auto scroll
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
@@ -80,7 +77,14 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  // Reset chat to initial greeting
+  // 🔥 监听首页按钮触发的事件 → 打开 Chatbot
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("openChatbot", handleOpen);
+    return () => window.removeEventListener("openChatbot", handleOpen);
+  }, []);
+
+  // Reset chat
   const handleReset = () => {
     setMessages([
       {
@@ -99,14 +103,13 @@ export default function Chatbot() {
     setIsTyping(false);
   };
 
-  // Send user message
+  // Send message
   const handleSend = async (text?: string) => {
     if (isTyping) return;
 
     const messageText = String(text || inputValue.trim());
     if (!messageText) return;
 
-    // Add user message
     const newMessage: Message = {
       id: Date.now().toString(),
       text: messageText,
@@ -135,7 +138,6 @@ export default function Chatbot() {
 
       const data = await res.json();
 
-      // Add bot reply
       const botReply: Message = {
         id: (Date.now() + 1).toString(),
         text:
@@ -169,7 +171,7 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating chat button */}
+      {/* Floating Button */}
       {!isOpen && (
         <div className="fixed bottom-5 right-6 z-50">
           <button
@@ -182,7 +184,7 @@ export default function Chatbot() {
         </div>
       )}
 
-      {/* Chat window */}
+      {/* Chat Window */}
       {isOpen && (
         <div className="fixed right-3 top-30 bottom-3 w-100 z-50 flex">
           <div className="bg-white shadow-2xl w-full flex flex-col animate-in slide-in-from-right duration-300 rounded-3xl overflow-hidden">
@@ -284,7 +286,6 @@ export default function Chatbot() {
                   </div>
                 </div>
               )}
-
               <div ref={messagesEndRef} />
             </div>
 
