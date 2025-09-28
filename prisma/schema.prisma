@@ -23,7 +23,7 @@ model CampSite {
   tags        String?
   contact     String?
   imageUrl    String?
-  activities  String?   // ✅ 新增字段
+  activities  String?   
 
   @@map("campsite")
 }
