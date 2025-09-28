@@ -1,3098 +1,3098 @@
 [
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2025,
-    "tc_loss_pred":2356.22
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2025",
+    "tc_loss_pred": "2356.22"
   },
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2026,
-    "tc_loss_pred":2277.52
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2026",
+    "tc_loss_pred": "2277.52"
   },
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2027,
-    "tc_loss_pred":2385.905
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2027",
+    "tc_loss_pred": "2385.905"
   },
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2028,
-    "tc_loss_pred":2162.76
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2028",
+    "tc_loss_pred": "2162.76"
   },
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2029,
-    "tc_loss_pred":2079.41
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2029",
+    "tc_loss_pred": "2079.41"
   },
   {
-    "state":"Johor",
-    "district":"Batu Pahat",
-    "year":2030,
-    "tc_loss_pred":2026.09
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "year": "2030",
+    "tc_loss_pred": "2026.09"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2025,
-    "tc_loss_pred":718.225
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2025",
+    "tc_loss_pred": "718.225"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2026,
-    "tc_loss_pred":1137.99
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2026",
+    "tc_loss_pred": "1137.99"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2027,
-    "tc_loss_pred":860.135
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2027",
+    "tc_loss_pred": "860.135"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2028,
-    "tc_loss_pred":1001.62
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2028",
+    "tc_loss_pred": "1001.62"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2029,
-    "tc_loss_pred":895.94
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2029",
+    "tc_loss_pred": "895.94"
   },
   {
-    "state":"Johor",
-    "district":"Johor Baharu",
-    "year":2030,
-    "tc_loss_pred":1039.98
+    "state": "Johor",
+    "district": "Johor Baharu",
+    "year": "2030",
+    "tc_loss_pred": "1039.98"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2025,
-    "tc_loss_pred":3472.155
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2025",
+    "tc_loss_pred": "3472.155"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2026,
-    "tc_loss_pred":3672.075
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2026",
+    "tc_loss_pred": "3672.075"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2027,
-    "tc_loss_pred":5222.06
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2027",
+    "tc_loss_pred": "5222.06"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2028,
-    "tc_loss_pred":3938.465
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2028",
+    "tc_loss_pred": "3938.465"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2029,
-    "tc_loss_pred":4032.625
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2029",
+    "tc_loss_pred": "4032.625"
   },
   {
-    "state":"Johor",
-    "district":"Keluang",
-    "year":2030,
-    "tc_loss_pred":3463.645
+    "state": "Johor",
+    "district": "Keluang",
+    "year": "2030",
+    "tc_loss_pred": "3463.645"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2025,
-    "tc_loss_pred":2596.77
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2025",
+    "tc_loss_pred": "2596.77"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2026,
-    "tc_loss_pred":3102.225
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2026",
+    "tc_loss_pred": "3102.225"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2027,
-    "tc_loss_pred":3201.04
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2027",
+    "tc_loss_pred": "3201.04"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2028,
-    "tc_loss_pred":2627.13
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2028",
+    "tc_loss_pred": "2627.13"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2029,
-    "tc_loss_pred":2953.365
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2029",
+    "tc_loss_pred": "2953.365"
   },
   {
-    "state":"Johor",
-    "district":"Kota Tinggi",
-    "year":2030,
-    "tc_loss_pred":2672.105
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "year": "2030",
+    "tc_loss_pred": "2672.105"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2025,
-    "tc_loss_pred":773.535
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2025",
+    "tc_loss_pred": "773.535"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2026,
-    "tc_loss_pred":1360.64
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2026",
+    "tc_loss_pred": "1360.64"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2027,
-    "tc_loss_pred":838.615
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2027",
+    "tc_loss_pred": "838.615"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2028,
-    "tc_loss_pred":1332.815
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2028",
+    "tc_loss_pred": "1332.815"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2029,
-    "tc_loss_pred":979.665
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2029",
+    "tc_loss_pred": "979.665"
   },
   {
-    "state":"Johor",
-    "district":"Kulaijaya",
-    "year":2030,
-    "tc_loss_pred":1329.58
+    "state": "Johor",
+    "district": "Kulaijaya",
+    "year": "2030",
+    "tc_loss_pred": "1329.58"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2025,
-    "tc_loss_pred":1478.295
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2025",
+    "tc_loss_pred": "1478.295"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2026,
-    "tc_loss_pred":1790.005
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2026",
+    "tc_loss_pred": "1790.005"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2027,
-    "tc_loss_pred":1772.265
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2027",
+    "tc_loss_pred": "1772.265"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2028,
-    "tc_loss_pred":1522.59
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2028",
+    "tc_loss_pred": "1522.59"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2029,
-    "tc_loss_pred":1495.115
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2029",
+    "tc_loss_pred": "1495.115"
   },
   {
-    "state":"Johor",
-    "district":"Ledang",
-    "year":2030,
-    "tc_loss_pred":1336.79
+    "state": "Johor",
+    "district": "Ledang",
+    "year": "2030",
+    "tc_loss_pred": "1336.79"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2025,
-    "tc_loss_pred":1781.97
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2025",
+    "tc_loss_pred": "1781.97"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2026,
-    "tc_loss_pred":1610.635
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2026",
+    "tc_loss_pred": "1610.635"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2027,
-    "tc_loss_pred":1430.775
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2027",
+    "tc_loss_pred": "1430.775"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2028,
-    "tc_loss_pred":1498.615
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2028",
+    "tc_loss_pred": "1498.615"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2029,
-    "tc_loss_pred":1486.695
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2029",
+    "tc_loss_pred": "1486.695"
   },
   {
-    "state":"Johor",
-    "district":"Mersing",
-    "year":2030,
-    "tc_loss_pred":1533.595
+    "state": "Johor",
+    "district": "Mersing",
+    "year": "2030",
+    "tc_loss_pred": "1533.595"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2025,
-    "tc_loss_pred":1472.425
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2025",
+    "tc_loss_pred": "1472.425"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2026,
-    "tc_loss_pred":1567.975
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2026",
+    "tc_loss_pred": "1567.975"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2027,
-    "tc_loss_pred":1688.875
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2027",
+    "tc_loss_pred": "1688.875"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2028,
-    "tc_loss_pred":1560.225
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2028",
+    "tc_loss_pred": "1560.225"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2029,
-    "tc_loss_pred":1476.19
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2029",
+    "tc_loss_pred": "1476.19"
   },
   {
-    "state":"Johor",
-    "district":"Muar",
-    "year":2030,
-    "tc_loss_pred":1409.185
+    "state": "Johor",
+    "district": "Muar",
+    "year": "2030",
+    "tc_loss_pred": "1409.185"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2025,
-    "tc_loss_pred":846.025
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2025",
+    "tc_loss_pred": "846.025"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2026,
-    "tc_loss_pred":1403.645
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2026",
+    "tc_loss_pred": "1403.645"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2027,
-    "tc_loss_pred":972.57
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2027",
+    "tc_loss_pred": "972.57"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2028,
-    "tc_loss_pred":1205.795
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2028",
+    "tc_loss_pred": "1205.795"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2029,
-    "tc_loss_pred":1066.995
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2029",
+    "tc_loss_pred": "1066.995"
   },
   {
-    "state":"Johor",
-    "district":"Pontian",
-    "year":2030,
-    "tc_loss_pred":1260.915
+    "state": "Johor",
+    "district": "Pontian",
+    "year": "2030",
+    "tc_loss_pred": "1260.915"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2025,
-    "tc_loss_pred":3708.545
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2025",
+    "tc_loss_pred": "3708.545"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2026,
-    "tc_loss_pred":4363.315
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2026",
+    "tc_loss_pred": "4363.315"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2027,
-    "tc_loss_pred":3937.92
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2027",
+    "tc_loss_pred": "3937.92"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2028,
-    "tc_loss_pred":3900.845
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2028",
+    "tc_loss_pred": "3900.845"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2029,
-    "tc_loss_pred":3298.64
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2029",
+    "tc_loss_pred": "3298.64"
   },
   {
-    "state":"Johor",
-    "district":"Segamat",
-    "year":2030,
-    "tc_loss_pred":3291.755
+    "state": "Johor",
+    "district": "Segamat",
+    "year": "2030",
+    "tc_loss_pred": "3291.755"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2025,
-    "tc_loss_pred":1441.57
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2025",
+    "tc_loss_pred": "1441.57"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2026,
-    "tc_loss_pred":1841.09
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2026",
+    "tc_loss_pred": "1841.09"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2027,
-    "tc_loss_pred":1847.415
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2027",
+    "tc_loss_pred": "1847.415"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2028,
-    "tc_loss_pred":1701.665
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2028",
+    "tc_loss_pred": "1701.665"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2029,
-    "tc_loss_pred":1612.715
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2029",
+    "tc_loss_pred": "1612.715"
   },
   {
-    "state":"Kedah",
-    "district":"Baling",
-    "year":2030,
-    "tc_loss_pred":1353.11
+    "state": "Kedah",
+    "district": "Baling",
+    "year": "2030",
+    "tc_loss_pred": "1353.11"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2025,
-    "tc_loss_pred":479.91
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2025",
+    "tc_loss_pred": "479.91"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2026,
-    "tc_loss_pred":534.715
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2026",
+    "tc_loss_pred": "534.715"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2027,
-    "tc_loss_pred":585.64
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2027",
+    "tc_loss_pred": "585.64"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2028,
-    "tc_loss_pred":723.735
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2028",
+    "tc_loss_pred": "723.735"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2029,
-    "tc_loss_pred":552.32
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2029",
+    "tc_loss_pred": "552.32"
   },
   {
-    "state":"Kedah",
-    "district":"Bandar Baharu",
-    "year":2030,
-    "tc_loss_pred":611.825
+    "state": "Kedah",
+    "district": "Bandar Baharu",
+    "year": "2030",
+    "tc_loss_pred": "611.825"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2025,
-    "tc_loss_pred":5.975
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2025",
+    "tc_loss_pred": "5.975"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2026,
-    "tc_loss_pred":7.585
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2026",
+    "tc_loss_pred": "7.585"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2027,
-    "tc_loss_pred":13.6
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2027",
+    "tc_loss_pred": "13.6"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2028,
-    "tc_loss_pred":12.875
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2028",
+    "tc_loss_pred": "12.875"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2029,
-    "tc_loss_pred":23.815
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2029",
+    "tc_loss_pred": "23.815"
   },
   {
-    "state":"Kedah",
-    "district":"Kota Setar",
-    "year":2030,
-    "tc_loss_pred":29.0
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "year": "2030",
+    "tc_loss_pred": "29.0"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2025,
-    "tc_loss_pred":941.245
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2025",
+    "tc_loss_pred": "941.245"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2026,
-    "tc_loss_pred":1128.395
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2026",
+    "tc_loss_pred": "1128.395"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2027,
-    "tc_loss_pred":1124.65
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2027",
+    "tc_loss_pred": "1124.65"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2028,
-    "tc_loss_pred":1085.82
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2028",
+    "tc_loss_pred": "1085.82"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2029,
-    "tc_loss_pred":1150.82
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2029",
+    "tc_loss_pred": "1150.82"
   },
   {
-    "state":"Kedah",
-    "district":"Kuala Muda",
-    "year":2030,
-    "tc_loss_pred":1071.505
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "year": "2030",
+    "tc_loss_pred": "1071.505"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2025,
-    "tc_loss_pred":725.9
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2025",
+    "tc_loss_pred": "725.9"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2026,
-    "tc_loss_pred":664.57
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2026",
+    "tc_loss_pred": "664.57"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2027,
-    "tc_loss_pred":780.67
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2027",
+    "tc_loss_pred": "780.67"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2028,
-    "tc_loss_pred":741.995
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2028",
+    "tc_loss_pred": "741.995"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2029,
-    "tc_loss_pred":769.065
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2029",
+    "tc_loss_pred": "769.065"
   },
   {
-    "state":"Kedah",
-    "district":"Kubang Pasu",
-    "year":2030,
-    "tc_loss_pred":787.98
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "year": "2030",
+    "tc_loss_pred": "787.98"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2025,
-    "tc_loss_pred":1111.68
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2025",
+    "tc_loss_pred": "1111.68"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2026,
-    "tc_loss_pred":1199.275
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2026",
+    "tc_loss_pred": "1199.275"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2027,
-    "tc_loss_pred":1197.165
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2027",
+    "tc_loss_pred": "1197.165"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2028,
-    "tc_loss_pred":1304.86
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2028",
+    "tc_loss_pred": "1304.86"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2029,
-    "tc_loss_pred":1552.42
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2029",
+    "tc_loss_pred": "1552.42"
   },
   {
-    "state":"Kedah",
-    "district":"Kulim",
-    "year":2030,
-    "tc_loss_pred":1330.365
+    "state": "Kedah",
+    "district": "Kulim",
+    "year": "2030",
+    "tc_loss_pred": "1330.365"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2025,
-    "tc_loss_pred":147.7
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2025",
+    "tc_loss_pred": "147.7"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2026,
-    "tc_loss_pred":141.06
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2026",
+    "tc_loss_pred": "141.06"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2027,
-    "tc_loss_pred":129.22
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2027",
+    "tc_loss_pred": "129.22"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2028,
-    "tc_loss_pred":159.55
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2028",
+    "tc_loss_pred": "159.55"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2029,
-    "tc_loss_pred":206.36
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2029",
+    "tc_loss_pred": "206.36"
   },
   {
-    "state":"Kedah",
-    "district":"Langkawi",
-    "year":2030,
-    "tc_loss_pred":222.16
+    "state": "Kedah",
+    "district": "Langkawi",
+    "year": "2030",
+    "tc_loss_pred": "222.16"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2025,
-    "tc_loss_pred":966.09
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2025",
+    "tc_loss_pred": "966.09"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2026,
-    "tc_loss_pred":887.69
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2026",
+    "tc_loss_pred": "887.69"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2027,
-    "tc_loss_pred":1173.855
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2027",
+    "tc_loss_pred": "1173.855"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2028,
-    "tc_loss_pred":868.59
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2028",
+    "tc_loss_pred": "868.59"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2029,
-    "tc_loss_pred":1236.81
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2029",
+    "tc_loss_pred": "1236.81"
   },
   {
-    "state":"Kedah",
-    "district":"Padang Terap",
-    "year":2030,
-    "tc_loss_pred":932.84
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "year": "2030",
+    "tc_loss_pred": "932.84"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2025,
-    "tc_loss_pred":630.925
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2025",
+    "tc_loss_pred": "630.925"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2026,
-    "tc_loss_pred":863.185
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2026",
+    "tc_loss_pred": "863.185"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2027,
-    "tc_loss_pred":791.235
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2027",
+    "tc_loss_pred": "791.235"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2028,
-    "tc_loss_pred":856.095
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2028",
+    "tc_loss_pred": "856.095"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2029,
-    "tc_loss_pred":755.3
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2029",
+    "tc_loss_pred": "755.3"
   },
   {
-    "state":"Kedah",
-    "district":"Pendang",
-    "year":2030,
-    "tc_loss_pred":894.065
+    "state": "Kedah",
+    "district": "Pendang",
+    "year": "2030",
+    "tc_loss_pred": "894.065"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2025,
-    "tc_loss_pred":384.94
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2025",
+    "tc_loss_pred": "384.94"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2026,
-    "tc_loss_pred":456.925
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2026",
+    "tc_loss_pred": "456.925"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2027,
-    "tc_loss_pred":500.7
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2027",
+    "tc_loss_pred": "500.7"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2028,
-    "tc_loss_pred":564.765
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2028",
+    "tc_loss_pred": "564.765"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2029,
-    "tc_loss_pred":564.745
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2029",
+    "tc_loss_pred": "564.745"
   },
   {
-    "state":"Kedah",
-    "district":"Pokok Sena",
-    "year":2030,
-    "tc_loss_pred":536.165
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "year": "2030",
+    "tc_loss_pred": "536.165"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2025,
-    "tc_loss_pred":745.85
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2025",
+    "tc_loss_pred": "745.85"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2026,
-    "tc_loss_pred":955.505
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2026",
+    "tc_loss_pred": "955.505"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2027,
-    "tc_loss_pred":789.945
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2027",
+    "tc_loss_pred": "789.945"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2028,
-    "tc_loss_pred":1074.855
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2028",
+    "tc_loss_pred": "1074.855"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2029,
-    "tc_loss_pred":764.06
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2029",
+    "tc_loss_pred": "764.06"
   },
   {
-    "state":"Kedah",
-    "district":"Sik",
-    "year":2030,
-    "tc_loss_pred":1103.71
+    "state": "Kedah",
+    "district": "Sik",
+    "year": "2030",
+    "tc_loss_pred": "1103.71"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2025,
-    "tc_loss_pred":47.945
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2025",
+    "tc_loss_pred": "47.945"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2026,
-    "tc_loss_pred":52.9
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2026",
+    "tc_loss_pred": "52.9"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2027,
-    "tc_loss_pred":91.41
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2027",
+    "tc_loss_pred": "91.41"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2028,
-    "tc_loss_pred":123.49
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2028",
+    "tc_loss_pred": "123.49"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2029,
-    "tc_loss_pred":76.36
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2029",
+    "tc_loss_pred": "76.36"
   },
   {
-    "state":"Kedah",
-    "district":"Yan",
-    "year":2030,
-    "tc_loss_pred":80.47
+    "state": "Kedah",
+    "district": "Yan",
+    "year": "2030",
+    "tc_loss_pred": "80.47"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2025,
-    "tc_loss_pred":143.875
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2025",
+    "tc_loss_pred": "143.875"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2026,
-    "tc_loss_pred":126.105
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2026",
+    "tc_loss_pred": "126.105"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2027,
-    "tc_loss_pred":128.525
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2027",
+    "tc_loss_pred": "128.525"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2028,
-    "tc_loss_pred":163.44
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2028",
+    "tc_loss_pred": "163.44"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2029,
-    "tc_loss_pred":214.43
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2029",
+    "tc_loss_pred": "214.43"
   },
   {
-    "state":"Kelantan",
-    "district":"Bachok",
-    "year":2030,
-    "tc_loss_pred":192.13
+    "state": "Kelantan",
+    "district": "Bachok",
+    "year": "2030",
+    "tc_loss_pred": "192.13"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2025,
-    "tc_loss_pred":13427.925
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2025",
+    "tc_loss_pred": "13427.925"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2026,
-    "tc_loss_pred":12845.835
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2026",
+    "tc_loss_pred": "12845.835"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2027,
-    "tc_loss_pred":12365.465
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2027",
+    "tc_loss_pred": "12365.465"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2028,
-    "tc_loss_pred":13807.605
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2028",
+    "tc_loss_pred": "13807.605"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2029,
-    "tc_loss_pred":14582.915
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2029",
+    "tc_loss_pred": "14582.915"
   },
   {
-    "state":"Kelantan",
-    "district":"Gua Musang",
-    "year":2030,
-    "tc_loss_pred":13949.96
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "year": "2030",
+    "tc_loss_pred": "13949.96"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2025,
-    "tc_loss_pred":882.17
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2025",
+    "tc_loss_pred": "882.17"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2026,
-    "tc_loss_pred":949.885
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2026",
+    "tc_loss_pred": "949.885"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2027,
-    "tc_loss_pred":915.8
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2027",
+    "tc_loss_pred": "915.8"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2028,
-    "tc_loss_pred":1085.43
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2028",
+    "tc_loss_pred": "1085.43"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2029,
-    "tc_loss_pred":1059.945
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2029",
+    "tc_loss_pred": "1059.945"
   },
   {
-    "state":"Kelantan",
-    "district":"Jeli",
-    "year":2030,
-    "tc_loss_pred":1132.03
+    "state": "Kelantan",
+    "district": "Jeli",
+    "year": "2030",
+    "tc_loss_pred": "1132.03"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2025,
-    "tc_loss_pred":155.525
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2025",
+    "tc_loss_pred": "155.525"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2026,
-    "tc_loss_pred":192.44
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2026",
+    "tc_loss_pred": "192.44"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2027,
-    "tc_loss_pred":159.155
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2027",
+    "tc_loss_pred": "159.155"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2028,
-    "tc_loss_pred":208.075
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2028",
+    "tc_loss_pred": "208.075"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2029,
-    "tc_loss_pred":191.11
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2029",
+    "tc_loss_pred": "191.11"
   },
   {
-    "state":"Kelantan",
-    "district":"Kota Bharu",
-    "year":2030,
-    "tc_loss_pred":190.105
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "year": "2030",
+    "tc_loss_pred": "190.105"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2025,
-    "tc_loss_pred":3781.27
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2025",
+    "tc_loss_pred": "3781.27"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2026,
-    "tc_loss_pred":3386.945
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2026",
+    "tc_loss_pred": "3386.945"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2027,
-    "tc_loss_pred":3708.83
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2027",
+    "tc_loss_pred": "3708.83"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2028,
-    "tc_loss_pred":5221.11
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2028",
+    "tc_loss_pred": "5221.11"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2029,
-    "tc_loss_pred":3776.395
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2029",
+    "tc_loss_pred": "3776.395"
   },
   {
-    "state":"Kelantan",
-    "district":"Kuala Krai",
-    "year":2030,
-    "tc_loss_pred":3909.625
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "year": "2030",
+    "tc_loss_pred": "3909.625"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2025,
-    "tc_loss_pred":685.19
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2025",
+    "tc_loss_pred": "685.19"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2026,
-    "tc_loss_pred":752.365
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2026",
+    "tc_loss_pred": "752.365"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2027,
-    "tc_loss_pred":779.345
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2027",
+    "tc_loss_pred": "779.345"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2028,
-    "tc_loss_pred":735.35
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2028",
+    "tc_loss_pred": "735.35"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2029,
-    "tc_loss_pred":733.775
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2029",
+    "tc_loss_pred": "733.775"
   },
   {
-    "state":"Kelantan",
-    "district":"Machang",
-    "year":2030,
-    "tc_loss_pred":688.755
+    "state": "Kelantan",
+    "district": "Machang",
+    "year": "2030",
+    "tc_loss_pred": "688.755"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2025,
-    "tc_loss_pred":733.455
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2025",
+    "tc_loss_pred": "733.455"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2026,
-    "tc_loss_pred":1009.11
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2026",
+    "tc_loss_pred": "1009.11"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2027,
-    "tc_loss_pred":746.0
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2027",
+    "tc_loss_pred": "746.0"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2028,
-    "tc_loss_pred":992.79
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2028",
+    "tc_loss_pred": "992.79"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2029,
-    "tc_loss_pred":770.56
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2029",
+    "tc_loss_pred": "770.56"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Mas",
-    "year":2030,
-    "tc_loss_pred":1096.05
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "year": "2030",
+    "tc_loss_pred": "1096.05"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2025,
-    "tc_loss_pred":543.36
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2025",
+    "tc_loss_pred": "543.36"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2026,
-    "tc_loss_pred":598.105
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2026",
+    "tc_loss_pred": "598.105"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2027,
-    "tc_loss_pred":787.435
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2027",
+    "tc_loss_pred": "787.435"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2028,
-    "tc_loss_pred":701.83
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2028",
+    "tc_loss_pred": "701.83"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2029,
-    "tc_loss_pred":754.125
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2029",
+    "tc_loss_pred": "754.125"
   },
   {
-    "state":"Kelantan",
-    "district":"Pasir Putih",
-    "year":2030,
-    "tc_loss_pred":683.965
+    "state": "Kelantan",
+    "district": "Pasir Putih",
+    "year": "2030",
+    "tc_loss_pred": "683.965"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2025,
-    "tc_loss_pred":1719.255
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2025",
+    "tc_loss_pred": "1719.255"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2026,
-    "tc_loss_pred":1315.19
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2026",
+    "tc_loss_pred": "1315.19"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2027,
-    "tc_loss_pred":1379.83
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2027",
+    "tc_loss_pred": "1379.83"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2028,
-    "tc_loss_pred":1380.125
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2028",
+    "tc_loss_pred": "1380.125"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2029,
-    "tc_loss_pred":1281.48
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2029",
+    "tc_loss_pred": "1281.48"
   },
   {
-    "state":"Kelantan",
-    "district":"Tanah Merah",
-    "year":2030,
-    "tc_loss_pred":1346.6
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "year": "2030",
+    "tc_loss_pred": "1346.6"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2025,
-    "tc_loss_pred":18.475
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2025",
+    "tc_loss_pred": "18.475"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2026,
-    "tc_loss_pred":24.695
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2026",
+    "tc_loss_pred": "24.695"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2027,
-    "tc_loss_pred":20.685
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2027",
+    "tc_loss_pred": "20.685"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2028,
-    "tc_loss_pred":17.82
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2028",
+    "tc_loss_pred": "17.82"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2029,
-    "tc_loss_pred":18.405
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2029",
+    "tc_loss_pred": "18.405"
   },
   {
-    "state":"Kelantan",
-    "district":"Tumpat",
-    "year":2030,
-    "tc_loss_pred":16.585
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "year": "2030",
+    "tc_loss_pred": "16.585"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2025,
-    "tc_loss_pred":12.325
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2025",
+    "tc_loss_pred": "12.325"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2026,
-    "tc_loss_pred":24.045
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2026",
+    "tc_loss_pred": "24.045"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2027,
-    "tc_loss_pred":26.955
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2027",
+    "tc_loss_pred": "26.955"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2028,
-    "tc_loss_pred":32.305
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2028",
+    "tc_loss_pred": "32.305"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2029,
-    "tc_loss_pred":27.32
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2029",
+    "tc_loss_pred": "27.32"
   },
   {
-    "state":"Kuala Lumpur",
-    "district":"Kuala Lumpur",
-    "year":2030,
-    "tc_loss_pred":21.795
+    "state": "Kuala Lumpur",
+    "district": "Kuala Lumpur",
+    "year": "2030",
+    "tc_loss_pred": "21.795"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2025,
-    "tc_loss_pred":1008.875
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2025",
+    "tc_loss_pred": "1008.875"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2026,
-    "tc_loss_pred":1082.66
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2026",
+    "tc_loss_pred": "1082.66"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2027,
-    "tc_loss_pred":1143.305
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2027",
+    "tc_loss_pred": "1143.305"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2028,
-    "tc_loss_pred":1082.775
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2028",
+    "tc_loss_pred": "1082.775"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2029,
-    "tc_loss_pred":1343.235
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2029",
+    "tc_loss_pred": "1343.235"
   },
   {
-    "state":"Melaka",
-    "district":"Alor Gajah",
-    "year":2030,
-    "tc_loss_pred":1109.285
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "year": "2030",
+    "tc_loss_pred": "1109.285"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2025,
-    "tc_loss_pred":959.05
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2025",
+    "tc_loss_pred": "959.05"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2026,
-    "tc_loss_pred":1116.86
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2026",
+    "tc_loss_pred": "1116.86"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2027,
-    "tc_loss_pred":1134.685
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2027",
+    "tc_loss_pred": "1134.685"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2028,
-    "tc_loss_pred":1223.34
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2028",
+    "tc_loss_pred": "1223.34"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2029,
-    "tc_loss_pred":1188.345
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2029",
+    "tc_loss_pred": "1188.345"
   },
   {
-    "state":"Melaka",
-    "district":"Jasin",
-    "year":2030,
-    "tc_loss_pred":1256.37
+    "state": "Melaka",
+    "district": "Jasin",
+    "year": "2030",
+    "tc_loss_pred": "1256.37"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2025,
-    "tc_loss_pred":202.145
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2025",
+    "tc_loss_pred": "202.145"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2026,
-    "tc_loss_pred":199.75
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2026",
+    "tc_loss_pred": "199.75"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2027,
-    "tc_loss_pred":179.675
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2027",
+    "tc_loss_pred": "179.675"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2028,
-    "tc_loss_pred":185.38
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2028",
+    "tc_loss_pred": "185.38"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2029,
-    "tc_loss_pred":181.25
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2029",
+    "tc_loss_pred": "181.25"
   },
   {
-    "state":"Melaka",
-    "district":"Melaka Tengah",
-    "year":2030,
-    "tc_loss_pred":229.085
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "year": "2030",
+    "tc_loss_pred": "229.085"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2025,
-    "tc_loss_pred":1121.025
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2025",
+    "tc_loss_pred": "1121.025"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2026,
-    "tc_loss_pred":1038.605
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2026",
+    "tc_loss_pred": "1038.605"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2027,
-    "tc_loss_pred":1181.265
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2027",
+    "tc_loss_pred": "1181.265"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2028,
-    "tc_loss_pred":1122.205
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2028",
+    "tc_loss_pred": "1122.205"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2029,
-    "tc_loss_pred":1328.885
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2029",
+    "tc_loss_pred": "1328.885"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jelebu",
-    "year":2030,
-    "tc_loss_pred":1282.92
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "year": "2030",
+    "tc_loss_pred": "1282.92"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2025,
-    "tc_loss_pred":1148.725
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2025",
+    "tc_loss_pred": "1148.725"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2026,
-    "tc_loss_pred":1390.855
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2026",
+    "tc_loss_pred": "1390.855"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2027,
-    "tc_loss_pred":1541.47
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2027",
+    "tc_loss_pred": "1541.47"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2028,
-    "tc_loss_pred":1298.165
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2028",
+    "tc_loss_pred": "1298.165"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2029,
-    "tc_loss_pred":1756.105
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2029",
+    "tc_loss_pred": "1756.105"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Jempol",
-    "year":2030,
-    "tc_loss_pred":1301.915
+    "state": "Negeri Sembilan",
+    "district": "Jempol",
+    "year": "2030",
+    "tc_loss_pred": "1301.915"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2025,
-    "tc_loss_pred":871.75
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2025",
+    "tc_loss_pred": "871.75"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2026,
-    "tc_loss_pred":1009.065
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2026",
+    "tc_loss_pred": "1009.065"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2027,
-    "tc_loss_pred":989.635
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2027",
+    "tc_loss_pred": "989.635"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2028,
-    "tc_loss_pred":1134.46
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2028",
+    "tc_loss_pred": "1134.46"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2029,
-    "tc_loss_pred":1159.16
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2029",
+    "tc_loss_pred": "1159.16"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Kuala Pilah",
-    "year":2030,
-    "tc_loss_pred":1280.845
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "year": "2030",
+    "tc_loss_pred": "1280.845"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2025,
-    "tc_loss_pred":831.78
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2025",
+    "tc_loss_pred": "831.78"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2026,
-    "tc_loss_pred":900.765
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2026",
+    "tc_loss_pred": "900.765"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2027,
-    "tc_loss_pred":995.955
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2027",
+    "tc_loss_pred": "995.955"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2028,
-    "tc_loss_pred":931.7
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2028",
+    "tc_loss_pred": "931.7"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2029,
-    "tc_loss_pred":1112.84
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2029",
+    "tc_loss_pred": "1112.84"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Port Dickson",
-    "year":2030,
-    "tc_loss_pred":1172.01
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "year": "2030",
+    "tc_loss_pred": "1172.01"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2025,
-    "tc_loss_pred":440.72
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2025",
+    "tc_loss_pred": "440.72"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2026,
-    "tc_loss_pred":484.165
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2026",
+    "tc_loss_pred": "484.165"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2027,
-    "tc_loss_pred":570.305
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2027",
+    "tc_loss_pred": "570.305"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2028,
-    "tc_loss_pred":624.935
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2028",
+    "tc_loss_pred": "624.935"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2029,
-    "tc_loss_pred":582.155
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2029",
+    "tc_loss_pred": "582.155"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Rembau",
-    "year":2030,
-    "tc_loss_pred":650.455
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "year": "2030",
+    "tc_loss_pred": "650.455"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2025,
-    "tc_loss_pred":952.395
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2025",
+    "tc_loss_pred": "952.395"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2026,
-    "tc_loss_pred":1081.585
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2026",
+    "tc_loss_pred": "1081.585"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2027,
-    "tc_loss_pred":1174.065
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2027",
+    "tc_loss_pred": "1174.065"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2028,
-    "tc_loss_pred":1054.705
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2028",
+    "tc_loss_pred": "1054.705"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2029,
-    "tc_loss_pred":1363.715
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2029",
+    "tc_loss_pred": "1363.715"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Seremban",
-    "year":2030,
-    "tc_loss_pred":1098.57
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "year": "2030",
+    "tc_loss_pred": "1098.57"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2025,
-    "tc_loss_pred":749.47
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2025",
+    "tc_loss_pred": "749.47"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2026,
-    "tc_loss_pred":1035.54
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2026",
+    "tc_loss_pred": "1035.54"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2027,
-    "tc_loss_pred":764.615
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2027",
+    "tc_loss_pred": "764.615"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2028,
-    "tc_loss_pred":1062.395
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2028",
+    "tc_loss_pred": "1062.395"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2029,
-    "tc_loss_pred":780.27
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2029",
+    "tc_loss_pred": "780.27"
   },
   {
-    "state":"Negeri Sembilan",
-    "district":"Tampin",
-    "year":2030,
-    "tc_loss_pred":1155.295
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "year": "2030",
+    "tc_loss_pred": "1155.295"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2025,
-    "tc_loss_pred":1556.985
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2025",
+    "tc_loss_pred": "1556.985"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2026,
-    "tc_loss_pred":1495.995
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2026",
+    "tc_loss_pred": "1495.995"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2027,
-    "tc_loss_pred":1369.17
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2027",
+    "tc_loss_pred": "1369.17"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2028,
-    "tc_loss_pred":1823.315
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2028",
+    "tc_loss_pred": "1823.315"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2029,
-    "tc_loss_pred":1496.005
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2029",
+    "tc_loss_pred": "1496.005"
   },
   {
-    "state":"Pahang",
-    "district":"Bentong",
-    "year":2030,
-    "tc_loss_pred":1697.9
+    "state": "Pahang",
+    "district": "Bentong",
+    "year": "2030",
+    "tc_loss_pred": "1697.9"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2025,
-    "tc_loss_pred":3934.67
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2025",
+    "tc_loss_pred": "3934.67"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2026,
-    "tc_loss_pred":4694.685
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2026",
+    "tc_loss_pred": "4694.685"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2027,
-    "tc_loss_pred":3782.33
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2027",
+    "tc_loss_pred": "3782.33"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2028,
-    "tc_loss_pred":3656.92
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2028",
+    "tc_loss_pred": "3656.92"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2029,
-    "tc_loss_pred":3346.71
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2029",
+    "tc_loss_pred": "3346.71"
   },
   {
-    "state":"Pahang",
-    "district":"Bera",
-    "year":2030,
-    "tc_loss_pred":3441.595
+    "state": "Pahang",
+    "district": "Bera",
+    "year": "2030",
+    "tc_loss_pred": "3441.595"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2025,
-    "tc_loss_pred":114.165
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2025",
+    "tc_loss_pred": "114.165"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2026,
-    "tc_loss_pred":120.625
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2026",
+    "tc_loss_pred": "120.625"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2027,
-    "tc_loss_pred":160.465
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2027",
+    "tc_loss_pred": "160.465"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2028,
-    "tc_loss_pred":199.79
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2028",
+    "tc_loss_pred": "199.79"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2029,
-    "tc_loss_pred":157.04
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2029",
+    "tc_loss_pred": "157.04"
   },
   {
-    "state":"Pahang",
-    "district":"Cameron Highlands",
-    "year":2030,
-    "tc_loss_pred":189.145
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "year": "2030",
+    "tc_loss_pred": "189.145"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2025,
-    "tc_loss_pred":3488.765
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2025",
+    "tc_loss_pred": "3488.765"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2026,
-    "tc_loss_pred":4808.965
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2026",
+    "tc_loss_pred": "4808.965"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2027,
-    "tc_loss_pred":4919.72
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2027",
+    "tc_loss_pred": "4919.72"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2028,
-    "tc_loss_pred":3738.49
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2028",
+    "tc_loss_pred": "3738.49"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2029,
-    "tc_loss_pred":3693.82
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2029",
+    "tc_loss_pred": "3693.82"
   },
   {
-    "state":"Pahang",
-    "district":"Jerantut",
-    "year":2030,
-    "tc_loss_pred":3437.245
+    "state": "Pahang",
+    "district": "Jerantut",
+    "year": "2030",
+    "tc_loss_pred": "3437.245"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2025,
-    "tc_loss_pred":3606.125
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2025",
+    "tc_loss_pred": "3606.125"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2026,
-    "tc_loss_pred":3422.42
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2026",
+    "tc_loss_pred": "3422.42"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2027,
-    "tc_loss_pred":3939.835
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2027",
+    "tc_loss_pred": "3939.835"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2028,
-    "tc_loss_pred":6018.89
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2028",
+    "tc_loss_pred": "6018.89"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2029,
-    "tc_loss_pred":4087.02
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2029",
+    "tc_loss_pred": "4087.02"
   },
   {
-    "state":"Pahang",
-    "district":"Kuantan",
-    "year":2030,
-    "tc_loss_pred":4748.08
+    "state": "Pahang",
+    "district": "Kuantan",
+    "year": "2030",
+    "tc_loss_pred": "4748.08"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2025,
-    "tc_loss_pred":4700.74
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2025",
+    "tc_loss_pred": "4700.74"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2026,
-    "tc_loss_pred":4788.125
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2026",
+    "tc_loss_pred": "4788.125"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2027,
-    "tc_loss_pred":4139.765
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2027",
+    "tc_loss_pred": "4139.765"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2028,
-    "tc_loss_pred":3822.705
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2028",
+    "tc_loss_pred": "3822.705"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2029,
-    "tc_loss_pred":3419.685
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2029",
+    "tc_loss_pred": "3419.685"
   },
   {
-    "state":"Pahang",
-    "district":"Lipis",
-    "year":2030,
-    "tc_loss_pred":3261.075
+    "state": "Pahang",
+    "district": "Lipis",
+    "year": "2030",
+    "tc_loss_pred": "3261.075"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2025,
-    "tc_loss_pred":2229.245
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2025",
+    "tc_loss_pred": "2229.245"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2026,
-    "tc_loss_pred":2404.96
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2026",
+    "tc_loss_pred": "2404.96"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2027,
-    "tc_loss_pred":2476.32
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2027",
+    "tc_loss_pred": "2476.32"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2028,
-    "tc_loss_pred":2169.715
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2028",
+    "tc_loss_pred": "2169.715"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2029,
-    "tc_loss_pred":2153.025
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2029",
+    "tc_loss_pred": "2153.025"
   },
   {
-    "state":"Pahang",
-    "district":"Maran",
-    "year":2030,
-    "tc_loss_pred":1959.85
+    "state": "Pahang",
+    "district": "Maran",
+    "year": "2030",
+    "tc_loss_pred": "1959.85"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2025,
-    "tc_loss_pred":3704.355
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2025",
+    "tc_loss_pred": "3704.355"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2026,
-    "tc_loss_pred":3558.68
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2026",
+    "tc_loss_pred": "3558.68"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2027,
-    "tc_loss_pred":3337.16
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2027",
+    "tc_loss_pred": "3337.16"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2028,
-    "tc_loss_pred":3669.75
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2028",
+    "tc_loss_pred": "3669.75"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2029,
-    "tc_loss_pred":4161.205
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2029",
+    "tc_loss_pred": "4161.205"
   },
   {
-    "state":"Pahang",
-    "district":"Pekan",
-    "year":2030,
-    "tc_loss_pred":3799.53
+    "state": "Pahang",
+    "district": "Pekan",
+    "year": "2030",
+    "tc_loss_pred": "3799.53"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2025,
-    "tc_loss_pred":2624.645
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2025",
+    "tc_loss_pred": "2624.645"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2026,
-    "tc_loss_pred":2606.69
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2026",
+    "tc_loss_pred": "2606.69"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2027,
-    "tc_loss_pred":2569.845
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2027",
+    "tc_loss_pred": "2569.845"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2028,
-    "tc_loss_pred":2220.645
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2028",
+    "tc_loss_pred": "2220.645"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2029,
-    "tc_loss_pred":2322.335
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2029",
+    "tc_loss_pred": "2322.335"
   },
   {
-    "state":"Pahang",
-    "district":"Raub",
-    "year":2030,
-    "tc_loss_pred":2215.665
+    "state": "Pahang",
+    "district": "Raub",
+    "year": "2030",
+    "tc_loss_pred": "2215.665"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2025,
-    "tc_loss_pred":6306.045
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2025",
+    "tc_loss_pred": "6306.045"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2026,
-    "tc_loss_pred":6479.095
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2026",
+    "tc_loss_pred": "6479.095"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2027,
-    "tc_loss_pred":6399.08
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2027",
+    "tc_loss_pred": "6399.08"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2028,
-    "tc_loss_pred":6817.575
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2028",
+    "tc_loss_pred": "6817.575"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2029,
-    "tc_loss_pred":7051.175
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2029",
+    "tc_loss_pred": "7051.175"
   },
   {
-    "state":"Pahang",
-    "district":"Rompin",
-    "year":2030,
-    "tc_loss_pred":6209.86
+    "state": "Pahang",
+    "district": "Rompin",
+    "year": "2030",
+    "tc_loss_pred": "6209.86"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2025,
-    "tc_loss_pred":2486.145
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2025",
+    "tc_loss_pred": "2486.145"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2026,
-    "tc_loss_pred":2768.995
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2026",
+    "tc_loss_pred": "2768.995"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2027,
-    "tc_loss_pred":2564.915
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2027",
+    "tc_loss_pred": "2564.915"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2028,
-    "tc_loss_pred":2371.45
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2028",
+    "tc_loss_pred": "2371.45"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2029,
-    "tc_loss_pred":2443.68
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2029",
+    "tc_loss_pred": "2443.68"
   },
   {
-    "state":"Pahang",
-    "district":"Temerloh",
-    "year":2030,
-    "tc_loss_pred":2181.92
+    "state": "Pahang",
+    "district": "Temerloh",
+    "year": "2030",
+    "tc_loss_pred": "2181.92"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2025,
-    "tc_loss_pred":2803.155
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2025",
+    "tc_loss_pred": "2803.155"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2026,
-    "tc_loss_pred":2178.65
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2026",
+    "tc_loss_pred": "2178.65"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2027,
-    "tc_loss_pred":2553.5
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2027",
+    "tc_loss_pred": "2553.5"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2028,
-    "tc_loss_pred":2028.54
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2028",
+    "tc_loss_pred": "2028.54"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2029,
-    "tc_loss_pred":1816.135
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2029",
+    "tc_loss_pred": "1816.135"
   },
   {
-    "state":"Perak",
-    "district":"Batang Padang",
-    "year":2030,
-    "tc_loss_pred":1732.095
+    "state": "Perak",
+    "district": "Batang Padang",
+    "year": "2030",
+    "tc_loss_pred": "1732.095"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2025,
-    "tc_loss_pred":2400.07
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2025",
+    "tc_loss_pred": "2400.07"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2026,
-    "tc_loss_pred":2982.205
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2026",
+    "tc_loss_pred": "2982.205"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2027,
-    "tc_loss_pred":3064.495
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2027",
+    "tc_loss_pred": "3064.495"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2028,
-    "tc_loss_pred":2614.63
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2028",
+    "tc_loss_pred": "2614.63"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2029,
-    "tc_loss_pred":2503.43
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2029",
+    "tc_loss_pred": "2503.43"
   },
   {
-    "state":"Perak",
-    "district":"Hilir Perak",
-    "year":2030,
-    "tc_loss_pred":2247.705
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "year": "2030",
+    "tc_loss_pred": "2247.705"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2025,
-    "tc_loss_pred":2616.335
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2025",
+    "tc_loss_pred": "2616.335"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2026,
-    "tc_loss_pred":2464.145
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2026",
+    "tc_loss_pred": "2464.145"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2027,
-    "tc_loss_pred":2619.93
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2027",
+    "tc_loss_pred": "2619.93"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2028,
-    "tc_loss_pred":2350.695
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2028",
+    "tc_loss_pred": "2350.695"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2029,
-    "tc_loss_pred":2319.265
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2029",
+    "tc_loss_pred": "2319.265"
   },
   {
-    "state":"Perak",
-    "district":"Hulu Perak",
-    "year":2030,
-    "tc_loss_pred":2151.585
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "year": "2030",
+    "tc_loss_pred": "2151.585"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2025,
-    "tc_loss_pred":673.975
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2025",
+    "tc_loss_pred": "673.975"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2026,
-    "tc_loss_pred":693.15
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2026",
+    "tc_loss_pred": "693.15"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2027,
-    "tc_loss_pred":680.29
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2027",
+    "tc_loss_pred": "680.29"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2028,
-    "tc_loss_pred":745.215
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2028",
+    "tc_loss_pred": "745.215"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2029,
-    "tc_loss_pred":790.97
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2029",
+    "tc_loss_pred": "790.97"
   },
   {
-    "state":"Perak",
-    "district":"Kampar",
-    "year":2030,
-    "tc_loss_pred":767.11
+    "state": "Perak",
+    "district": "Kampar",
+    "year": "2030",
+    "tc_loss_pred": "767.11"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2025,
-    "tc_loss_pred":808.195
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2025",
+    "tc_loss_pred": "808.195"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2026,
-    "tc_loss_pred":1081.41
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2026",
+    "tc_loss_pred": "1081.41"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2027,
-    "tc_loss_pred":783.435
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2027",
+    "tc_loss_pred": "783.435"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2028,
-    "tc_loss_pred":1145.585
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2028",
+    "tc_loss_pred": "1145.585"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2029,
-    "tc_loss_pred":780.385
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2029",
+    "tc_loss_pred": "780.385"
   },
   {
-    "state":"Perak",
-    "district":"Kerian",
-    "year":2030,
-    "tc_loss_pred":1345.27
+    "state": "Perak",
+    "district": "Kerian",
+    "year": "2030",
+    "tc_loss_pred": "1345.27"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2025,
-    "tc_loss_pred":887.485
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2025",
+    "tc_loss_pred": "887.485"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2026,
-    "tc_loss_pred":1424.725
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2026",
+    "tc_loss_pred": "1424.725"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2027,
-    "tc_loss_pred":958.11
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2027",
+    "tc_loss_pred": "958.11"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2028,
-    "tc_loss_pred":1600.06
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2028",
+    "tc_loss_pred": "1600.06"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2029,
-    "tc_loss_pred":1153.865
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2029",
+    "tc_loss_pred": "1153.865"
   },
   {
-    "state":"Perak",
-    "district":"Kinta",
-    "year":2030,
-    "tc_loss_pred":1712.08
+    "state": "Perak",
+    "district": "Kinta",
+    "year": "2030",
+    "tc_loss_pred": "1712.08"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2025,
-    "tc_loss_pred":2159.375
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2025",
+    "tc_loss_pred": "2159.375"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2026,
-    "tc_loss_pred":2134.52
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2026",
+    "tc_loss_pred": "2134.52"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2027,
-    "tc_loss_pred":2240.65
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2027",
+    "tc_loss_pred": "2240.65"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2028,
-    "tc_loss_pred":2942.82
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2028",
+    "tc_loss_pred": "2942.82"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2029,
-    "tc_loss_pred":2661.395
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2029",
+    "tc_loss_pred": "2661.395"
   },
   {
-    "state":"Perak",
-    "district":"Kuala Kangsar",
-    "year":2030,
-    "tc_loss_pred":2770.01
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "year": "2030",
+    "tc_loss_pred": "2770.01"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2025,
-    "tc_loss_pred":1253.82
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2025",
+    "tc_loss_pred": "1253.82"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2026,
-    "tc_loss_pred":1803.205
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2026",
+    "tc_loss_pred": "1803.205"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2027,
-    "tc_loss_pred":1636.345
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2027",
+    "tc_loss_pred": "1636.345"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2028,
-    "tc_loss_pred":1678.235
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2028",
+    "tc_loss_pred": "1678.235"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2029,
-    "tc_loss_pred":1543.355
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2029",
+    "tc_loss_pred": "1543.355"
   },
   {
-    "state":"Perak",
-    "district":"Larut and Matang",
-    "year":2030,
-    "tc_loss_pred":1348.395
+    "state": "Perak",
+    "district": "Larut and Matang",
+    "year": "2030",
+    "tc_loss_pred": "1348.395"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2025,
-    "tc_loss_pred":799.625
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2025",
+    "tc_loss_pred": "799.625"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2026,
-    "tc_loss_pred":1474.03
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2026",
+    "tc_loss_pred": "1474.03"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2027,
-    "tc_loss_pred":980.16
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2027",
+    "tc_loss_pred": "980.16"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2028,
-    "tc_loss_pred":1778.16
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2028",
+    "tc_loss_pred": "1778.16"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2029,
-    "tc_loss_pred":1217.565
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2029",
+    "tc_loss_pred": "1217.565"
   },
   {
-    "state":"Perak",
-    "district":"Manjung",
-    "year":2030,
-    "tc_loss_pred":1356.455
+    "state": "Perak",
+    "district": "Manjung",
+    "year": "2030",
+    "tc_loss_pred": "1356.455"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2025,
-    "tc_loss_pred":1167.81
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2025",
+    "tc_loss_pred": "1167.81"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2026,
-    "tc_loss_pred":1400.155
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2026",
+    "tc_loss_pred": "1400.155"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2027,
-    "tc_loss_pred":1613.19
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2027",
+    "tc_loss_pred": "1613.19"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2028,
-    "tc_loss_pred":1383.59
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2028",
+    "tc_loss_pred": "1383.59"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2029,
-    "tc_loss_pred":1546.45
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2029",
+    "tc_loss_pred": "1546.45"
   },
   {
-    "state":"Perak",
-    "district":"Perak Tengah",
-    "year":2030,
-    "tc_loss_pred":1198.835
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "year": "2030",
+    "tc_loss_pred": "1198.835"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2025,
-    "tc_loss_pred":377.43
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2025",
+    "tc_loss_pred": "377.43"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2026,
-    "tc_loss_pred":419.135
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2026",
+    "tc_loss_pred": "419.135"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2027,
-    "tc_loss_pred":331.94
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2027",
+    "tc_loss_pred": "331.94"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2028,
-    "tc_loss_pred":389.905
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2028",
+    "tc_loss_pred": "389.905"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2029,
-    "tc_loss_pred":341.04
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2029",
+    "tc_loss_pred": "341.04"
   },
   {
-    "state":"Perlis",
-    "district":"Perlis",
-    "year":2030,
-    "tc_loss_pred":452.98
+    "state": "Perlis",
+    "district": "Perlis",
+    "year": "2030",
+    "tc_loss_pred": "452.98"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2025,
-    "tc_loss_pred":72.165
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2025",
+    "tc_loss_pred": "72.165"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2026,
-    "tc_loss_pred":72.33
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2026",
+    "tc_loss_pred": "72.33"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2027,
-    "tc_loss_pred":67.29
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2027",
+    "tc_loss_pred": "67.29"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2028,
-    "tc_loss_pred":59.545
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2028",
+    "tc_loss_pred": "59.545"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2029,
-    "tc_loss_pred":65.49
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2029",
+    "tc_loss_pred": "65.49"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Barat Daya",
-    "year":2030,
-    "tc_loss_pred":76.675
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "year": "2030",
+    "tc_loss_pred": "76.675"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2025,
-    "tc_loss_pred":200.085
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2025",
+    "tc_loss_pred": "200.085"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2026,
-    "tc_loss_pred":261.815
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2026",
+    "tc_loss_pred": "261.815"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2027,
-    "tc_loss_pred":181.61
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2027",
+    "tc_loss_pred": "181.61"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2028,
-    "tc_loss_pred":285.835
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2028",
+    "tc_loss_pred": "285.835"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2029,
-    "tc_loss_pred":271.545
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2029",
+    "tc_loss_pred": "271.545"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Selatan",
-    "year":2030,
-    "tc_loss_pred":233.865
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "year": "2030",
+    "tc_loss_pred": "233.865"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2025,
-    "tc_loss_pred":135.57
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2025",
+    "tc_loss_pred": "135.57"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2026,
-    "tc_loss_pred":117.955
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2026",
+    "tc_loss_pred": "117.955"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2027,
-    "tc_loss_pred":116.83
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2027",
+    "tc_loss_pred": "116.83"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2028,
-    "tc_loss_pred":155.145
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2028",
+    "tc_loss_pred": "155.145"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2029,
-    "tc_loss_pred":214.135
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2029",
+    "tc_loss_pred": "214.135"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Tengah",
-    "year":2030,
-    "tc_loss_pred":171.935
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "year": "2030",
+    "tc_loss_pred": "171.935"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2025,
-    "tc_loss_pred":232.205
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2025",
+    "tc_loss_pred": "232.205"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2026,
-    "tc_loss_pred":263.215
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2026",
+    "tc_loss_pred": "263.215"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2027,
-    "tc_loss_pred":239.95
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2027",
+    "tc_loss_pred": "239.95"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2028,
-    "tc_loss_pred":255.135
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2028",
+    "tc_loss_pred": "255.135"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2029,
-    "tc_loss_pred":333.84
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2029",
+    "tc_loss_pred": "333.84"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Seberang Perai Utara",
-    "year":2030,
-    "tc_loss_pred":280.05
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "year": "2030",
+    "tc_loss_pred": "280.05"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2025,
-    "tc_loss_pred":19.08
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2025",
+    "tc_loss_pred": "19.08"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2026,
-    "tc_loss_pred":26.305
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2026",
+    "tc_loss_pred": "26.305"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2027,
-    "tc_loss_pred":22.925
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2027",
+    "tc_loss_pred": "22.925"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2028,
-    "tc_loss_pred":21.255
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2028",
+    "tc_loss_pred": "21.255"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2029,
-    "tc_loss_pred":19.705
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2029",
+    "tc_loss_pred": "19.705"
   },
   {
-    "state":"Pulau Pinang",
-    "district":"Timur Laut",
-    "year":2030,
-    "tc_loss_pred":17.8
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "year": "2030",
+    "tc_loss_pred": "17.8"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2025,
-    "tc_loss_pred":238.23
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2025",
+    "tc_loss_pred": "238.23"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2026,
-    "tc_loss_pred":191.815
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2026",
+    "tc_loss_pred": "191.815"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2027,
-    "tc_loss_pred":278.915
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2027",
+    "tc_loss_pred": "278.915"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2028,
-    "tc_loss_pred":200.36
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2028",
+    "tc_loss_pred": "200.36"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2029,
-    "tc_loss_pred":248.92
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2029",
+    "tc_loss_pred": "248.92"
   },
   {
-    "state":"Selangor",
-    "district":"Gombak",
-    "year":2030,
-    "tc_loss_pred":175.945
+    "state": "Selangor",
+    "district": "Gombak",
+    "year": "2030",
+    "tc_loss_pred": "175.945"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2025,
-    "tc_loss_pred":547.1
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2025",
+    "tc_loss_pred": "547.1"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2026,
-    "tc_loss_pred":586.135
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2026",
+    "tc_loss_pred": "586.135"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2027,
-    "tc_loss_pred":885.06
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2027",
+    "tc_loss_pred": "885.06"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2028,
-    "tc_loss_pred":693.95
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2028",
+    "tc_loss_pred": "693.95"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2029,
-    "tc_loss_pred":823.835
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2029",
+    "tc_loss_pred": "823.835"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Langat",
-    "year":2030,
-    "tc_loss_pred":698.96
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "year": "2030",
+    "tc_loss_pred": "698.96"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2025,
-    "tc_loss_pred":1367.66
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2025",
+    "tc_loss_pred": "1367.66"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2026,
-    "tc_loss_pred":2046.475
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2026",
+    "tc_loss_pred": "2046.475"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2027,
-    "tc_loss_pred":1924.715
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2027",
+    "tc_loss_pred": "1924.715"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2028,
-    "tc_loss_pred":1550.08
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2028",
+    "tc_loss_pred": "1550.08"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2029,
-    "tc_loss_pred":1385.225
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2029",
+    "tc_loss_pred": "1385.225"
   },
   {
-    "state":"Selangor",
-    "district":"Hulu Selangor",
-    "year":2030,
-    "tc_loss_pred":1745.49
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "year": "2030",
+    "tc_loss_pred": "1745.49"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2025,
-    "tc_loss_pred":256.45
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2025",
+    "tc_loss_pred": "256.45"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2026,
-    "tc_loss_pred":346.43
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2026",
+    "tc_loss_pred": "346.43"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2027,
-    "tc_loss_pred":398.57
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2027",
+    "tc_loss_pred": "398.57"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2028,
-    "tc_loss_pred":281.195
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2028",
+    "tc_loss_pred": "281.195"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2029,
-    "tc_loss_pred":516.245
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2029",
+    "tc_loss_pred": "516.245"
   },
   {
-    "state":"Selangor",
-    "district":"Klang",
-    "year":2030,
-    "tc_loss_pred":382.15
+    "state": "Selangor",
+    "district": "Klang",
+    "year": "2030",
+    "tc_loss_pred": "382.15"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2025,
-    "tc_loss_pred":779.605
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2025",
+    "tc_loss_pred": "779.605"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2026,
-    "tc_loss_pred":1085.07
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2026",
+    "tc_loss_pred": "1085.07"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2027,
-    "tc_loss_pred":782.49
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2027",
+    "tc_loss_pred": "782.49"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2028,
-    "tc_loss_pred":1138.9
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2028",
+    "tc_loss_pred": "1138.9"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2029,
-    "tc_loss_pred":796.59
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2029",
+    "tc_loss_pred": "796.59"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Langat",
-    "year":2030,
-    "tc_loss_pred":1248.975
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "year": "2030",
+    "tc_loss_pred": "1248.975"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2025,
-    "tc_loss_pred":968.095
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2025",
+    "tc_loss_pred": "968.095"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2026,
-    "tc_loss_pred":1169.96
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2026",
+    "tc_loss_pred": "1169.96"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2027,
-    "tc_loss_pred":1132.16
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2027",
+    "tc_loss_pred": "1132.16"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2028,
-    "tc_loss_pred":1301.35
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2028",
+    "tc_loss_pred": "1301.35"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2029,
-    "tc_loss_pred":1179.115
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2029",
+    "tc_loss_pred": "1179.115"
   },
   {
-    "state":"Selangor",
-    "district":"Kuala Selangor",
-    "year":2030,
-    "tc_loss_pred":1239.01
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "year": "2030",
+    "tc_loss_pred": "1239.01"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2025,
-    "tc_loss_pred":122.42
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2025",
+    "tc_loss_pred": "122.42"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2026,
-    "tc_loss_pred":93.63
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2026",
+    "tc_loss_pred": "93.63"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2027,
-    "tc_loss_pred":154.595
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2027",
+    "tc_loss_pred": "154.595"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2028,
-    "tc_loss_pred":190.465
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2028",
+    "tc_loss_pred": "190.465"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2029,
-    "tc_loss_pred":150.58
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2029",
+    "tc_loss_pred": "150.58"
   },
   {
-    "state":"Selangor",
-    "district":"Petaling",
-    "year":2030,
-    "tc_loss_pred":177.78
+    "state": "Selangor",
+    "district": "Petaling",
+    "year": "2030",
+    "tc_loss_pred": "177.78"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2025,
-    "tc_loss_pred":603.18
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2025",
+    "tc_loss_pred": "603.18"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2026,
-    "tc_loss_pred":748.375
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2026",
+    "tc_loss_pred": "748.375"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2027,
-    "tc_loss_pred":734.935
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2027",
+    "tc_loss_pred": "734.935"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2028,
-    "tc_loss_pred":693.27
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2028",
+    "tc_loss_pred": "693.27"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2029,
-    "tc_loss_pred":690.465
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2029",
+    "tc_loss_pred": "690.465"
   },
   {
-    "state":"Selangor",
-    "district":"Sabak Bernam",
-    "year":2030,
-    "tc_loss_pred":663.545
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "year": "2030",
+    "tc_loss_pred": "663.545"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2025,
-    "tc_loss_pred":599.72
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2025",
+    "tc_loss_pred": "599.72"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2026,
-    "tc_loss_pred":576.48
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2026",
+    "tc_loss_pred": "576.48"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2027,
-    "tc_loss_pred":825.25
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2027",
+    "tc_loss_pred": "825.25"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2028,
-    "tc_loss_pred":696.15
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2028",
+    "tc_loss_pred": "696.15"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2029,
-    "tc_loss_pred":785.595
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2029",
+    "tc_loss_pred": "785.595"
   },
   {
-    "state":"Selangor",
-    "district":"Sepang",
-    "year":2030,
-    "tc_loss_pred":655.77
+    "state": "Selangor",
+    "district": "Sepang",
+    "year": "2030",
+    "tc_loss_pred": "655.77"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2025,
-    "tc_loss_pred":1314.11
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2025",
+    "tc_loss_pred": "1314.11"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2026,
-    "tc_loss_pred":1332.93
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2026",
+    "tc_loss_pred": "1332.93"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2027,
-    "tc_loss_pred":1222.44
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2027",
+    "tc_loss_pred": "1222.44"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2028,
-    "tc_loss_pred":1276.605
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2028",
+    "tc_loss_pred": "1276.605"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2029,
-    "tc_loss_pred":1291.32
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2029",
+    "tc_loss_pred": "1291.32"
   },
   {
-    "state":"Trengganu",
-    "district":"Besut",
-    "year":2030,
-    "tc_loss_pred":1263.86
+    "state": "Trengganu",
+    "district": "Besut",
+    "year": "2030",
+    "tc_loss_pred": "1263.86"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2025,
-    "tc_loss_pred":1784.025
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2025",
+    "tc_loss_pred": "1784.025"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2026,
-    "tc_loss_pred":2013.685
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2026",
+    "tc_loss_pred": "2013.685"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2027,
-    "tc_loss_pred":1722.92
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2027",
+    "tc_loss_pred": "1722.92"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2028,
-    "tc_loss_pred":1772.83
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2028",
+    "tc_loss_pred": "1772.83"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2029,
-    "tc_loss_pred":1421.215
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2029",
+    "tc_loss_pred": "1421.215"
   },
   {
-    "state":"Trengganu",
-    "district":"Dungun",
-    "year":2030,
-    "tc_loss_pred":1660.755
+    "state": "Trengganu",
+    "district": "Dungun",
+    "year": "2030",
+    "tc_loss_pred": "1660.755"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2025,
-    "tc_loss_pred":2159.515
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2025",
+    "tc_loss_pred": "2159.515"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2026,
-    "tc_loss_pred":1877.395
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2026",
+    "tc_loss_pred": "1877.395"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2027,
-    "tc_loss_pred":2059.64
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2027",
+    "tc_loss_pred": "2059.64"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2028,
-    "tc_loss_pred":1667.48
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2028",
+    "tc_loss_pred": "1667.48"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2029,
-    "tc_loss_pred":1868.445
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2029",
+    "tc_loss_pred": "1868.445"
   },
   {
-    "state":"Trengganu",
-    "district":"Hulu Terengganu",
-    "year":2030,
-    "tc_loss_pred":1556.46
+    "state": "Trengganu",
+    "district": "Hulu Terengganu",
+    "year": "2030",
+    "tc_loss_pred": "1556.46"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2025,
-    "tc_loss_pred":2276.13
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2025",
+    "tc_loss_pred": "2276.13"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2026,
-    "tc_loss_pred":2123.055
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2026",
+    "tc_loss_pred": "2123.055"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2027,
-    "tc_loss_pred":2138.6
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2027",
+    "tc_loss_pred": "2138.6"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2028,
-    "tc_loss_pred":1951.61
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2028",
+    "tc_loss_pred": "1951.61"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2029,
-    "tc_loss_pred":2015.56
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2029",
+    "tc_loss_pred": "2015.56"
   },
   {
-    "state":"Trengganu",
-    "district":"Kemaman",
-    "year":2030,
-    "tc_loss_pred":1807.77
+    "state": "Trengganu",
+    "district": "Kemaman",
+    "year": "2030",
+    "tc_loss_pred": "1807.77"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2025,
-    "tc_loss_pred":827.28
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2025",
+    "tc_loss_pred": "827.28"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2026,
-    "tc_loss_pred":848.975
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2026",
+    "tc_loss_pred": "848.975"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2027,
-    "tc_loss_pred":1190.27
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2027",
+    "tc_loss_pred": "1190.27"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2028,
-    "tc_loss_pred":925.94
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2028",
+    "tc_loss_pred": "925.94"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2029,
-    "tc_loss_pred":1262.56
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2029",
+    "tc_loss_pred": "1262.56"
   },
   {
-    "state":"Trengganu",
-    "district":"Kuala Terengganu",
-    "year":2030,
-    "tc_loss_pred":1113.365
+    "state": "Trengganu",
+    "district": "Kuala Terengganu",
+    "year": "2030",
+    "tc_loss_pred": "1113.365"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2025,
-    "tc_loss_pred":1595.535
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2025",
+    "tc_loss_pred": "1595.535"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2026,
-    "tc_loss_pred":1088.27
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2026",
+    "tc_loss_pred": "1088.27"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2027,
-    "tc_loss_pred":1759.465
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2027",
+    "tc_loss_pred": "1759.465"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2028,
-    "tc_loss_pred":1182.555
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2028",
+    "tc_loss_pred": "1182.555"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2029,
-    "tc_loss_pred":1410.665
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2029",
+    "tc_loss_pred": "1410.665"
   },
   {
-    "state":"Trengganu",
-    "district":"Marang",
-    "year":2030,
-    "tc_loss_pred":1655.89
+    "state": "Trengganu",
+    "district": "Marang",
+    "year": "2030",
+    "tc_loss_pred": "1655.89"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2025,
-    "tc_loss_pred":1386.43
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2025",
+    "tc_loss_pred": "1386.43"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2026,
-    "tc_loss_pred":1314.175
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2026",
+    "tc_loss_pred": "1314.175"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2027,
-    "tc_loss_pred":1110.44
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2027",
+    "tc_loss_pred": "1110.44"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2028,
-    "tc_loss_pred":1324.31
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2028",
+    "tc_loss_pred": "1324.31"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2029,
-    "tc_loss_pred":1223.81
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2029",
+    "tc_loss_pred": "1223.81"
   },
   {
-    "state":"Trengganu",
-    "district":"Setiu",
-    "year":2030,
-    "tc_loss_pred":1385.63
+    "state": "Trengganu",
+    "district": "Setiu",
+    "year": "2030",
+    "tc_loss_pred": "1385.63"
   }
 ]

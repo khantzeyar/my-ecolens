@@ -2,7 +2,22 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import jsPDF from "jspdf"; // PDF 导出库
+import Image from "next/image";
+import jsPDF from "jspdf"; // PDF export library
+
+interface GuideCardProps {
+  title: string;
+  icon: string;
+  color: string;
+  description: string;
+  itemCount?: string | number;
+  onClick?: () => void;
+}
+
+interface ChecklistGroup {
+  group: string;
+  items: (string | { name: string; custom?: boolean })[];
+}
 
 const categories = [
   {
@@ -21,7 +36,7 @@ const categories = [
       { group: "Clothing & Footwear", items: ["Hiking Shoes / Boots","Extra Socks","Lightweight Raincoat","Quick-dry Pants","Long-sleeve Shirt (UV protection)","Hat / Cap","Mosquito Net Clothing"] },
       { group: "Malaysia Essentials", items: ["Mosquito Coils","Cooling Powder","Waterproof Document Pouch","Emergency Whistle","Local Emergency Numbers Card","Portable Fan"] },
       { group: "Others", items: ["Backpack","Map / Compass / GPS","Camping Chair","Trash Bags","Multi-tool / Swiss Knife","Rope / Paracord","Towel","Toiletries"] },
-    ],
+    ] as ChecklistGroup[],
   },
   {
     id: "safety",
@@ -59,7 +74,7 @@ const categories = [
   },
 ];
 
-const GuideCard = ({ title, icon, color, description, itemCount, onClick }) => (
+const GuideCard: React.FC<GuideCardProps> = ({ title, icon, color, description, itemCount, onClick }) => (
   <div
     className="relative group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl"
     onClick={onClick}
@@ -84,15 +99,15 @@ const GuideCard = ({ title, icon, color, description, itemCount, onClick }) => (
 );
 
 export default function GuidePage() {
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
-  const [customChecklist, setCustomChecklist] = useState(categories[0].checklist);
+  const [customChecklist, setCustomChecklist] = useState<ChecklistGroup[]>(categories[0]?.checklist ?? []);
   const [newItem, setNewItem] = useState("");
-  const [targetGroup, setTargetGroup] = useState(categories[0].checklist[0].group);
+  const [targetGroup, setTargetGroup] = useState(categories[0]?.checklist?.[0]?.group ?? "");
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
 
-  // ✅ 页面加载时恢复
+  // Restore checklist
   useEffect(() => {
     const saved = localStorage.getItem("customChecklist");
     if (saved) {
@@ -100,7 +115,7 @@ export default function GuidePage() {
     }
   }, []);
 
-  // ✅ 保存用户操作
+  // Save checklist
   useEffect(() => {
     localStorage.setItem("customChecklist", JSON.stringify(customChecklist));
   }, [customChecklist]);
@@ -142,7 +157,7 @@ export default function GuidePage() {
     setCheckedItems((prev) => prev.filter((i) => i !== item));
   };
 
-  // PDF 导出功能
+  // PDF export
   const downloadChecklistPdf = () => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "bold");
@@ -187,7 +202,7 @@ export default function GuidePage() {
     );
   };
 
-  // 子页面
+  // Subpage view
   if (activeCategory && category) {
     return (
       <main className="pt-24 px-6 pb-20 min-h-screen bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
@@ -232,7 +247,7 @@ export default function GuidePage() {
                 ))}
               </div>
 
-              {/* 添加自定义物品 */}
+              {/* Add custom item */}
               <div className="mt-8 bg-white/90 p-4 rounded-lg shadow">
                 <h3 className="font-bold text-gray-800 mb-3">Add Your Own Items</h3>
                 <div className="flex flex-col md:flex-row gap-3 mb-4">
@@ -263,7 +278,7 @@ export default function GuidePage() {
                 </div>
               </div>
 
-              {/* PDF 下载按钮 */}
+              {/* PDF Download */}
               <div className="mt-6 text-center">
                 <button
                   onClick={downloadChecklistPdf}
@@ -275,7 +290,7 @@ export default function GuidePage() {
             </div>
           )}
 
-          {"tips" in category && (
+          {"tips" in category && Array.isArray(category.tips) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {category.tips.map((tip) => (
                 <div key={tip.title} className="bg-white/90 p-6 rounded-lg shadow hover:shadow-lg transition">
@@ -290,7 +305,7 @@ export default function GuidePage() {
     );
   }
 
-  // 默认主页面
+  // Main page
   return (
     <main className="pt-24 px-6 pb-20 min-h-screen bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
       <div className="max-w-7xl mx-auto">
@@ -327,20 +342,20 @@ export default function GuidePage() {
             </div>
           </div>
 
-          {/* 图文步骤 - 差异化 */}
+          {/* Illustrated steps */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center">
-              <img src="/images/cleanup.jpg" alt="Pack Trash Correctly" className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
+              <Image src="/images/cleanup.jpg" alt="Pack Trash Correctly" width={160} height={160} className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Pack Trash Correctly</h3>
               <p className="text-gray-600 mt-2">Use trash bags and seal them tightly. Carry all waste back instead of burying it.</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <img src="/images/fire-safety.jpg" alt="Extinguish Fires Properly" className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
+              <Image src="/images/fire-safety.jpg" alt="Extinguish Fires Properly" width={160} height={160} className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Extinguish Fires Properly</h3>
               <p className="text-gray-600 mt-2">Pour water and stir ashes until cold. Never leave smoldering embers behind.</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <img src="/images/resources.jpg" alt="Eco-friendly Habits" className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
+              <Image src="/images/resources.jpg" alt="Eco-friendly Habits" width={160} height={160} className="w-40 h-40 object-cover rounded-lg mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Eco-friendly Habits</h3>
               <p className="text-gray-600 mt-2">Use biodegradable soap, reusable bottles, and minimize plastic waste.</p>
             </div>

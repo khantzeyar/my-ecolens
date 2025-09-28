@@ -8,8 +8,6 @@ import InsightsPanel from "@/app/components/InsightsPanel";
 import dynamic from "next/dynamic";
 import { transformForestDataByState } from "@/app/utils/transformForestData";
 import statePredictions from "@/app/data/state_tree_loss_predictions.json";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 const forestData = transformForestDataByState();
 const Map = dynamic(() => import("@/app/components/Map"), { ssr: false });
@@ -27,7 +25,7 @@ interface CampSite {
   forestType?: string;
   tags?: string;
   imageUrl?: string;
-  activities?: string; // ✅ 新增 activities
+  activities?: string;
   latitude?: number;
   longitude?: number;
 }
@@ -49,12 +47,6 @@ interface WeatherApiItem {
   weather: { description: string; icon: string }[];
 }
 
-interface StatePrediction {
-  state: string;
-  year: number;
-  tc_loss_pred: number;
-}
-
 type TabType = "detail" | "insight";
 
 export default function CampDetail({ params }: CampDetailProps) {
@@ -62,7 +54,6 @@ export default function CampDetail({ params }: CampDetailProps) {
   const [camp, setCamp] = useState<CampSite | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,13 +128,13 @@ export default function CampDetail({ params }: CampDetailProps) {
     );
   }
 
-  // 合并历史和预测数据
+  // ✅ Merge historical and prediction data with type-safe conversion
   const mergedYearlyLoss: Record<number, number> = {
     ...(forestData[camp.state]?.yearly_loss || {}),
     ...Object.fromEntries(
-      (statePredictions as StatePrediction[])
+      (statePredictions as { state: string; year: string | number; tc_loss_pred: string | number }[])
         .filter((p) => p.state === camp.state)
-        .map((p) => [p.year, p.tc_loss_pred])
+        .map((p) => [Number(p.year), Number(p.tc_loss_pred)])
     ),
   };
 
@@ -190,9 +181,9 @@ export default function CampDetail({ params }: CampDetailProps) {
         {/* Content */}
         <div className="bg-white/95 rounded-2xl p-8 shadow-xl">
           {activeTab === "detail" ? (
-            // ✅ 详情页
+            // ✅ Detail Page
             <div className="space-y-8">
-              {/* 标题 */}
+              {/* Title */}
               <div className="flex flex-col lg:flex-row justify-between">
                 <div>
                   <h1 className="text-4xl font-bold mb-2">{camp.name}</h1>
@@ -262,16 +253,8 @@ export default function CampDetail({ params }: CampDetailProps) {
 
                 {/* Right */}
                 <div className="space-y-8">
-                  {/* Plan your visit */}
+                  {/* ✅ Weather only */}
                   <div className="p-6 bg-white border rounded-xl shadow-sm space-y-4">
-                    <h3 className="text-xl font-semibold">Plan Your Visit</h3>
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => setSelectedDate(date)}
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="Select a date"
-                      className="border p-2 rounded-md w-full"
-                    />
                     {weatherData.length > 0 ? (
                       <WeatherCard weather={weatherData} />
                     ) : (
@@ -313,7 +296,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   )}
                 </div>
 
-                {/* ✅ 推荐按钮 */}
+                {/* ✅ Recommendation Button */}
                 <div className="mt-6 text-center">
                   <Link
                     href="/recommend"
@@ -325,7 +308,7 @@ export default function CampDetail({ params }: CampDetailProps) {
               </div>
             </div>
           ) : (
-            // ✅ 精简版 Forest Insight
+            // ✅ Forest Insight
             <div className="space-y-6 text-center">
               <h2 className="text-2xl font-bold text-gray-800">
                 Forest Insight – {camp.state}
@@ -338,7 +321,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 of its total forest area.
               </p>
 
-              {/* 微型趋势图 */}
+              {/* Mini chart */}
               <div className="max-w-lg mx-auto">
                 <InsightsPanel
                   mode="mini"
@@ -351,7 +334,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 />
               </div>
 
-              {/* CTA 按钮 */}
+              {/* CTA */}
               <div className="mt-6 text-center">
                 <Link
                   href="/insights"

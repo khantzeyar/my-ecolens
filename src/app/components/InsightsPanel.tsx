@@ -12,19 +12,19 @@ import {
   ResponsiveContainer,
   RectangleProps,
 } from 'recharts';
-import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
+import { ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface InsightsPanelProps {
   isOpen?: boolean;
   data: {
     name: string;
-    yearly_loss?: Record<string, number>;
+    yearly_loss?: Record<number, number>; // ✅ 改成 number key
     cumulative_loss_percent?: number;
     rank?: number;
     totalRegions?: number;
   } | null;
   onClose?: () => void;
-  mode?: 'modal' | 'embed' | 'mini';  // ✅ 新增 mini 模式
+  mode?: 'modal' | 'embed' | 'mini';
 }
 
 interface BarShapeProps {
@@ -33,7 +33,7 @@ interface BarShapeProps {
   width?: number;
   height?: number;
   value?: number;
-  year?: string;
+  year?: number; // ✅ 改成 number
   maxLoss: number;
 }
 
@@ -46,7 +46,7 @@ const CustomBarShape: React.FC<BarShapeProps> = ({
   year,
   maxLoss,
 }) => {
-  const isPrediction = year && Number(year) >= 2025;
+  const isPrediction = year !== undefined && year >= 2025;
   let color = value === maxLoss ? '#e74c3c' : '#82ca9d';
   if (isPrediction) {
     color = '#999999';
@@ -66,9 +66,33 @@ const CustomBarShape: React.FC<BarShapeProps> = ({
   );
 };
 
+// ✅ shape props 统一类型
 type CustomShapeProps = RectangleProps & {
-  payload: { year?: string; loss?: number };
+  payload?: { year?: number; loss?: number };
 };
+
+// ✅ Generate eco tips dynamically
+function generateEcoTips(percent: number, rank?: number) {
+  const tips: string[] = [];
+
+  if (percent > 30) {
+    tips.push("Support local reforestation projects to restore degraded areas.");
+  } else if (percent > 15) {
+    tips.push("Reduce single-use products and switch to eco-friendly alternatives.");
+  } else {
+    tips.push("Continue sustainable practices to keep the forest healthy.");
+  }
+
+  if (rank && rank <= 5) {
+    tips.push("This region is among the most impacted – spread awareness in your community.");
+  }
+
+  tips.push("Always camp responsibly: carry trash out, avoid disturbing wildlife.");
+  tips.push("Choose reusable gear (bottles, utensils) to minimize waste.");
+  tips.push("Report illegal logging or suspicious activities to local authorities.");
+
+  return tips;
+}
 
 const InsightsPanel: React.FC<InsightsPanelProps> = ({
   isOpen = true,
@@ -81,16 +105,17 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   const trends = data.yearly_loss
     ? Array.from({ length: 30 }, (_, i) => {
         const year = 2001 + i;
-        return { year: String(year), loss: data.yearly_loss?.[year] ?? 0 };
+        return { year, loss: data.yearly_loss?.[year] ?? 0 };
       })
     : [];
 
   const maxLoss = trends.length > 0 ? Math.max(...trends.map((d) => d.loss)) : 0;
   const maxYear = trends.find((d) => d.loss === maxLoss)?.year;
-
   const percent = data.cumulative_loss_percent ?? 0;
 
-  // mini 模式：只展示趋势图 + 百分比
+  const ecoTips = generateEcoTips(percent, data.rank);
+
+  // Mini mode
   if (mode === 'mini') {
     return (
       <div className="p-4 bg-white rounded-xl shadow">
@@ -103,7 +128,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
               <XAxis dataKey="year" interval={5} />
               <YAxis />
               <Tooltip
-                formatter={(value: ValueType, _name: NameType) => [
+                formatter={(value: ValueType) => [
                   `${Number(value).toLocaleString()} ha`,
                   'Forest Loss',
                 ]}
@@ -115,12 +140,12 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                   const p = props as CustomShapeProps;
                   return (
                     <CustomBarShape
-                      x={p.x != null ? Number(p.x) : 0}
-                      y={p.y != null ? Number(p.y) : 0}
-                      width={p.width != null ? Number(p.width) : 0}
-                      height={p.height != null ? Number(p.height) : 0}
-                      value={typeof p.payload.loss === 'number' ? p.payload.loss : 0}
-                      year={p.payload.year}
+                      x={p.x ?? 0}
+                      y={p.y ?? 0}
+                      width={p.width ?? 0}
+                      height={p.height ?? 0}
+                      value={p.payload?.loss ?? 0}
+                      year={p.payload?.year}
                       maxLoss={maxLoss}
                     />
                   );
@@ -130,14 +155,14 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
           </ResponsiveContainer>
         </div>
         <p className="mt-3 text-sm text-gray-600">
-          Total forest loss:{" "}
+          Total forest loss:{' '}
           <span className="font-bold text-red-600">{percent.toFixed(1)}%</span>
         </p>
       </div>
     );
   }
 
-  // 原来的 embed / modal 完整版
+  // Embed or modal
   const Wrapper = mode === 'modal' ? motion.div : 'div';
   const wrapperClass =
     mode === 'modal'
@@ -171,7 +196,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         )}
       </div>
 
-      {/* 年度森林损失 */}
+      {/* Annual forest loss */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-3">Annual Forest Loss</h3>
         <div className="h-64">
@@ -182,7 +207,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                 <XAxis dataKey="year" interval={3} />
                 <YAxis />
                 <Tooltip
-                  formatter={(value: ValueType, _name: NameType, props?: { payload?: { year?: string } }) => {
+                  formatter={(value: ValueType, _unused, props?: { payload?: { year?: number } }) => {
                     const payload = props?.payload;
                     return [
                       `${Number(value).toLocaleString()} ha`,
@@ -197,12 +222,12 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                     const p = props as CustomShapeProps;
                     return (
                       <CustomBarShape
-                        x={p.x != null ? Number(p.x) : 0}
-                        y={p.y != null ? Number(p.y) : 0}
-                        width={p.width != null ? Number(p.width) : 0}
-                        height={p.height != null ? Number(p.height) : 0}
-                        value={typeof p.payload.loss === 'number' ? p.payload.loss : 0}
-                        year={p.payload.year}
+                        x={p.x ?? 0}
+                        y={p.y ?? 0}
+                        width={p.width ?? 0}
+                        height={p.height ?? 0}
+                        value={p.payload?.loss ?? 0}
+                        year={p.payload?.year}
                         maxLoss={maxLoss}
                       />
                     );
@@ -219,7 +244,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
             Peak loss in {maxYear}: {maxLoss.toLocaleString()} ha
           </p>
         )}
-        {/* 图例 */}
+        {/* Legend */}
         <div className="flex gap-4 mt-3 text-xs text-gray-600">
           <div className="flex items-center gap-1">
             <span className="w-4 h-3 bg-green-400 rounded-sm"></span> Historical
@@ -233,12 +258,12 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         </div>
       </div>
 
-      {/* 累积总结 */}
+      {/* Cumulative summary */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-2">Cumulative Summary</h3>
         <p className="text-gray-700 leading-relaxed">
-          Since 2001, this region has lost{" "}
-          <span className="font-bold text-red-600">{percent.toFixed(1)}%</span>{" "}
+          Since 2001, this region has lost{' '}
+          <span className="font-bold text-red-600">{percent.toFixed(1)}%</span>{' '}
           of its tree cover.
         </p>
         {data.rank && data.totalRegions && (
@@ -248,11 +273,13 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
         )}
       </div>
 
-      {/* 动态生态提示 */}
+      {/* Eco Tips */}
       <div className="mb-6 p-4 bg-green-50 rounded-lg shadow-sm">
         <h3 className="text-md font-semibold mb-2">Eco Tips</h3>
         <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-          {/* 这里仍然可以用上你原来的 ecoTips */}
+          {ecoTips.map((tip, idx) => (
+            <li key={idx}>{tip}</li>
+          ))}
         </ul>
       </div>
 
