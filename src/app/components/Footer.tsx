@@ -32,11 +32,8 @@ const Footer = () => {
               <span className="text-2xl font-bold tracking-wide">MYEcoLens</span>
             </div>
             <p className="text-gray-400 leading-relaxed max-w-md text-sm md:text-base">
-              Finding the perfect campsite in Malaysia can be tricky — and doing it responsibly can be even harder. <br />
-              <br />
-              <span className="text-gray-300">
-                MYEcoLens brings campsites, eco-guidance, and forest insights all in one place — so you can camp smart and enjoy Malaysia&apos;s forests like never before.
-              </span>
+              MYEcoLens brings campsites, eco-guidance, and forest insights all in one place — 
+              so you can camp smart and enjoy Malaysia&apos;s forests like never before.
             </p>
           </div>
 
@@ -52,6 +49,16 @@ const Footer = () => {
               <li>
                 <Link href="/guide" className="hover:text-white transition-colors duration-200">
                   Action Guide
+                </Link>
+              </li>
+              <li>
+                <Link href="/insights" className="hover:text-white transition-colors duration-200">
+                  Forest Insights
+                </Link>
+              </li>
+              <li>
+                <Link href="/why" className="hover:text-white transition-colors duration-200">
+                  Why Responsible Camping
                 </Link>
               </li>
             </ul>

@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image"; // ✅ 使用 next/image
+import Image from "next/image";
 
 interface CampSite {
   id: string;
   name: string;
   tags?: string;
+  activities?: string; // ✅ 新增 activities
   state: string;
   type?: string;
   address?: string;
@@ -26,7 +27,9 @@ const CampPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
   const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([]); // ✅ 新增
   const [attractions, setAttractions] = useState<string[]>([]);
+  const [activities, setActivities] = useState<string[]>([]); // ✅ 新增
   const [campsites, setCampsites] = useState<CampSite[]>([]);
   const [filteredCampsites, setFilteredCampsites] = useState<CampSite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +37,7 @@ const CampPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // ✅ 删除 "W.P. Kuala Lumpur"
   const states: string[] = [
     "Johor",
     "Kedah",
@@ -46,7 +50,6 @@ const CampPage: React.FC = () => {
     "Pulau Pinang",
     "Selangor",
     "Terengganu",
-    "W.P. Kuala Lumpur",
   ];
 
   const fetchCampsites = async (): Promise<CampSite[]> => {
@@ -61,6 +64,8 @@ const CampPage: React.FC = () => {
       .then((data) => {
         setCampsites(data);
         setFilteredCampsites(data);
+
+        // ✅ 收集 tags
         const allTags: string[] = Array.from(
           new Set(
             data.flatMap((site) =>
@@ -69,6 +74,16 @@ const CampPage: React.FC = () => {
           )
         );
         setAttractions(allTags);
+
+        // ✅ 收集 activities
+        const allActs: string[] = Array.from(
+          new Set(
+            data.flatMap((site) =>
+              site.activities ? site.activities.split(",").map((a) => a.trim()) : []
+            )
+          )
+        );
+        setActivities(allActs);
       })
       .catch((err) => console.error("Error fetching campsites:", err))
       .finally(() => setLoading(false));
@@ -106,13 +121,34 @@ const CampPage: React.FC = () => {
       });
     }
 
+    if (selectedActivities.length > 0) {
+      filtered = filtered.filter((site) => {
+        if (!site.activities) return false;
+        const siteActs = site.activities.split(",").map((a) => a.trim());
+        return selectedActivities.some((act) => siteActs.includes(act));
+      });
+    }
+
     setFilteredCampsites(filtered);
     setCurrentPage(1);
-  }, [campsites, searchTerm, selectedStates, priceFilter, selectedAttractions]);
+  }, [
+    campsites,
+    searchTerm,
+    selectedStates,
+    priceFilter,
+    selectedAttractions,
+    selectedActivities,
+  ]);
 
   const toggleAttraction = (attr: string) => {
     setSelectedAttractions((prev) =>
       prev.includes(attr) ? prev.filter((a) => a !== attr) : [...prev, attr]
+    );
+  };
+
+  const toggleActivity = (act: string) => {
+    setSelectedActivities((prev) =>
+      prev.includes(act) ? prev.filter((a) => a !== act) : [...prev, act]
     );
   };
 
@@ -121,6 +157,7 @@ const CampPage: React.FC = () => {
     setSearchTerm("");
     setPriceFilter("all");
     setSelectedAttractions([]);
+    setSelectedActivities([]); // ✅ 清空 activities
     setCurrentPage(1);
   };
 
@@ -129,6 +166,9 @@ const CampPage: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentCampsites = filteredCampsites.slice(startIndex, endIndex);
+
+  // 假天气数据
+  const fakeWeather = ["☀️", "🌧️", "🌤️", "⛅", "🌫️"];
 
   return (
     <main
@@ -152,6 +192,7 @@ const CampPage: React.FC = () => {
           {/* Sidebar Filters */}
           <aside className="w-80 flex-shrink-0">
             <div className="bg-white/90 shadow-md rounded-lg p-6 backdrop-blur-md">
+              {/* Filters content */}
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-green-700">Filters</h2>
                 <button
@@ -236,7 +277,7 @@ const CampPage: React.FC = () => {
               </div>
 
               {/* Attractions */}
-              <div>
+              <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-2 text-green-700">
                   Attractions
                 </h3>
@@ -254,6 +295,26 @@ const CampPage: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* ✅ Activities */}
+              <div>
+                <h3 className="text-sm font-semibold mb-2 text-green-700">
+                  Activities
+                </h3>
+                <div className="space-y-2">
+                  {activities.slice(0, 6).map((act) => (
+                    <label key={act} className="flex items-center text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selectedActivities.includes(act)}
+                        onChange={() => toggleActivity(act)}
+                        className="mr-2 text-green-600 focus:ring-green-500"
+                      />
+                      {act}
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
           </aside>
 
@@ -263,12 +324,19 @@ const CampPage: React.FC = () => {
               {loading ? (
                 <p className="text-center text-gray-500">Loading campsites...</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {currentCampsites.map((camp) => (
+                // ✅ 改成 2 列
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {currentCampsites.map((camp, index) => (
                     <div
                       key={camp.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
+                      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col relative"
                     >
+                      {/* Weather Icon */}
+                      <div className="absolute top-2 right-2 bg-white/80 px-2 py-1 rounded-full text-sm">
+                        {fakeWeather[index % fakeWeather.length]}
+                      </div>
+
+                      {/* Image */}
                       <div className="h-40 bg-gray-100 overflow-hidden relative">
                         <Image
                           src={
@@ -280,6 +348,8 @@ const CampPage: React.FC = () => {
                           className="object-cover"
                         />
                       </div>
+
+                      {/* Info */}
                       <div className="p-4 flex-1 flex flex-col">
                         <h3 className="font-semibold text-base text-gray-900 mb-2 line-clamp-2">
                           {camp.name}
@@ -290,6 +360,7 @@ const CampPage: React.FC = () => {
                         <p className="text-sm text-gray-500 mb-2">
                           📍 {camp.state}
                         </p>
+
                         <div className="mt-auto">
                           <Link href={`/camp/${camp.id}`}>
                             <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200 font-medium">

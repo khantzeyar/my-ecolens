@@ -60,6 +60,7 @@ async function main() {
           fees: row.fee?.trim() || "",
           forestType: row.forest_type?.trim() || "",
           tags: row.attractions?.trim() || "",
+          activities: row.activities?.trim() || "", // ✅ 新增 activities
           contact: row.enquiries?.trim() || "",
           imageUrl:
             row.imageUrl && row.imageUrl.trim().length > 0
