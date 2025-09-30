@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -9,10 +9,9 @@ import malaysiaGeoJsonRaw from '../data/peninsular-map.json';
 import { stateNameMap, districtNameMap } from '../utils/nameMap';
 
 import forestData from '../data/peninsular_tree_cover_loss.json';
-import statePredictions from '../data/state_tree_loss_predictions.json';
-import districtPredictions from '../data/district_tree_loss_predictions.json';
+import rawStatePredictions from '../data/state_tree_loss_predictions.json';
+import rawDistrictPredictions from '../data/district_tree_loss_predictions.json';
 
-import InsightsPanel from './InsightsPanel';
 import type { RawForestRecord, TransformedForestData } from '../utils/transformForestData';
 
 const malaysiaGeoJson = malaysiaGeoJsonRaw as FeatureCollection<Geometry, GeoJsonProperties>;
@@ -21,7 +20,6 @@ const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.Map
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false });
 const GeoJSON = dynamic(() => import('react-leaflet').then((mod) => mod.GeoJSON), { ssr: false });
 
-// ✅ 定义预测数据类型
 interface StatePrediction {
   state: string;
   year: number;
@@ -34,6 +32,26 @@ interface DistrictPrediction {
   tc_loss_pred: number;
 }
 
+// ✅ Convert predictions
+const statePredictions: StatePrediction[] = (rawStatePredictions as { state: string; year: string; tc_loss_pred: string }[]).map(
+  (d) => ({
+    state: d.state,
+    year: Number(d.year),
+    tc_loss_pred: Number(d.tc_loss_pred),
+  })
+);
+
+const districtPredictions: DistrictPrediction[] = (rawDistrictPredictions as {
+  state: string;
+  district: string;
+  year: string;
+  tc_loss_pred: string;
+}[]).map((d) => ({
+  district: d.district,
+  year: Number(d.year),
+  tc_loss_pred: Number(d.tc_loss_pred),
+}));
+
 // normalize names
 function getDistrictKey(rawName: string): string {
   if (districtNameMap[rawName]) return districtNameMap[rawName];
@@ -44,9 +62,10 @@ function getDistrictKey(rawName: string): string {
 // compute ranks
 function computeAllRanks() {
   const ranking: { name: string; percent: number }[] = (forestData as RawForestRecord[]).map((record) => {
-    const yearly_loss: Record<string, number> = {};
+    const yearly_loss: Record<number, number> = {};
     for (let year = 2001; year <= 2024; year++) {
-      yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] ?? 0;
+      const rawVal = record[`tc_loss_ha_${year}` as keyof RawForestRecord];
+      yearly_loss[year] = typeof rawVal === 'number' ? rawVal : Number(rawVal) || 0;
     }
     const totalLoss = Object.values(yearly_loss).reduce((a, b) => a + b, 0);
     const baseExtent = record.extent_2000_ha || 1;
@@ -65,22 +84,23 @@ const allRanks = computeAllRanks();
 
 // transform record
 function transformRecord(record: RawForestRecord): TransformedForestData & { name: string } {
-  const yearly_loss: Record<string, number> = {};
+  const yearly_loss: Record<number, number> = {};
   for (let year = 2001; year <= 2024; year++) {
-    yearly_loss[String(year)] = record[`tc_loss_ha_${year}`] ?? 0;
+    const rawVal = record[`tc_loss_ha_${year}` as keyof RawForestRecord];
+    yearly_loss[year] = typeof rawVal === 'number' ? rawVal : Number(rawVal) || 0;
   }
 
   const name = record.subnational2 || record.subnational1 || 'Unknown';
 
   for (let year = 2025; year <= 2030; year++) {
-    const districtPred = (districtPredictions as DistrictPrediction[]).find((d) => d.district === name && d.year === year);
+    const districtPred = districtPredictions.find((d) => d.district === name && d.year === year);
     if (districtPred) {
-      yearly_loss[String(year)] = districtPred.tc_loss_pred ?? 0;
+      yearly_loss[year] = districtPred.tc_loss_pred ?? 0;
       continue;
     }
-    const statePred = (statePredictions as StatePrediction[]).find((d) => d.state === name && d.year === year);
+    const statePred = statePredictions.find((d) => d.state === name && d.year === year);
     if (statePred) {
-      yearly_loss[String(year)] = statePred.tc_loss_pred ?? 0;
+      yearly_loss[year] = statePred.tc_loss_pred ?? 0;
     }
   }
 
@@ -106,78 +126,40 @@ function getLossValue(districtKey: string, year: number) {
     const record = (forestData as RawForestRecord[]).find(
       (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
     );
-    return record ? record[`tc_loss_ha_${year}`] ?? 0 : 0;
+    if (!record) return 0;
+    const rawVal = record[`tc_loss_ha_${year}` as keyof RawForestRecord];
+    return typeof rawVal === 'number' ? rawVal : Number(rawVal) || 0;
   }
   if (year >= 2025) {
-    const districtPred = (districtPredictions as DistrictPrediction[]).find((d) => d.district === districtKey && d.year === year);
+    const districtPred = districtPredictions.find((d) => d.district === districtKey && d.year === year);
     if (districtPred) return districtPred.tc_loss_pred ?? 0;
 
-    const statePred = (statePredictions as StatePrediction[]).find((d) => d.state === districtKey && d.year === year);
+    const statePred = statePredictions.find((d) => d.state === districtKey && d.year === year);
     if (statePred) return statePred.tc_loss_pred ?? 0;
   }
   return 0;
 }
 
-// auto-generate story text dynamically
-function getStoryText(year: number): string {
-  const losses: { name: string; value: number }[] = [];
-
-  (forestData as RawForestRecord[]).forEach((record) => {
-    const name = record.subnational2 || record.subnational1 || 'Unknown';
-    const value = getLossValue(name, year);
-    losses.push({ name, value });
-  });
-
-  if (losses.length === 0) return '';
-
-  losses.sort((a, b) => b.value - a.value);
-  const top = losses[0];
-  const bottom = losses[losses.length - 1];
-
-  if (year <= 2024) {
-    return `In ${year}, ${top.name} experienced the most forest loss (~${top.value} ha), while ${bottom.name} recorded the least.`;
-  }
-  if (year >= 2025 && year < 2030) {
-    return `In ${year}, projections show severe loss in ${top.name} (~${top.value} ha), contrasting with relatively lower loss in ${bottom.name}.`;
-  }
-  if (year === 2030) {
-    return `By 2030, forecast indicates ${top.name} remains the most impacted, while ${bottom.name} faces comparatively less deforestation pressure.`;
-  }
-  return '';
-}
-
 interface ForestMapProps {
   year: number;
-  isPlaying?: boolean;
-  storyMode?: boolean;
-  onYearChange?: (year: number) => void;
-  onStop?: () => void;
 }
 
-export default function ForestMap({
-  year,
-  isPlaying = false,
-  storyMode = false,
-  onYearChange,
-  onStop,
-}: ForestMapProps) {
-  const [selectedData, setSelectedData] = useState<TransformedForestData & { name: string } | null>(null);
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [storyText, setStoryText] = useState('');
-
-  // color scale
+export default function ForestMap({ year }: ForestMapProps) {
+  // ✅ Soft gradient: green → yellow → orange → red
   const getColor = (value: number) => {
-    return value > 5000
-      ? '#800026'
+    return value > 10000
+      ? '#e31a1c'
+      : value > 5000
+      ? '#fc8d59'
       : value > 2000
-      ? '#BD0026'
+      ? '#fdcc8a'
       : value > 1000
-      ? '#E31A1C'
+      ? '#31a354'
       : value > 500
-      ? '#FC4E2A'
+      ? '#74c476'
       : value > 100
-      ? '#FD8D3C'
-      : '#FEB24C';
+      ? '#c7e9c0'
+      : '#f7fcf5';
   };
 
   // style
@@ -190,7 +172,7 @@ export default function ForestMap({
       const districtKey = getDistrictKey(rawName);
       const value = getLossValue(districtKey, year);
 
-      return { fillColor: getColor(value), weight: 0.8, opacity: 1, color: 'white', fillOpacity: 0.7 };
+      return { fillColor: getColor(value), weight: 1, opacity: 1, color: 'white', fillOpacity: 0.8 };
     },
     [year]
   );
@@ -201,14 +183,24 @@ export default function ForestMap({
     const districtKey = getDistrictKey(rawName);
     const value = getLossValue(districtKey, year);
 
-    const infoText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value} ha`;
+    const record = (forestData as RawForestRecord[]).find(
+      (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
+    );
+
+    let extraInfo = '';
+    if (record) {
+      const data = transformRecord(record);
+      extraInfo = `<br/>Loss Rate: ${data.cumulative_loss_percent.toFixed(1)}%<br/>Rank: ${data.rank} / ${data.totalRegions}`;
+    }
+
+    const infoText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value.toLocaleString()} ha${extraInfo}`;
 
     if ('bindTooltip' in layer) {
       (layer as L.Layer & { bindTooltip: (s: string, o?: L.TooltipOptions) => void }).bindTooltip(infoText, {
         sticky: true,
         direction: 'top',
         className: 'info-tooltip',
-        opacity: 0.9,
+        opacity: 0.95,
       });
     }
 
@@ -216,71 +208,22 @@ export default function ForestMap({
       const el = (layer as L.Path).getElement() as HTMLElement | null;
       if (el) el.style.cursor = 'pointer';
     }
-
-    layer.on('click', () => {
-      const record = (forestData as RawForestRecord[]).find(
-        (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
-      );
-      if (record) {
-        setSelectedData(transformRecord(record));
-        setPanelOpen(true);
-      }
-    });
   };
-
-  // story + play effect
-  useEffect(() => {
-    if (!isPlaying) {
-      if (storyMode) setStoryText(getStoryText(year));
-      return;
-    }
-    let current = 2001;
-    const timer = setInterval(() => {
-      if (current > 2030) {
-        clearInterval(timer);
-        if (onStop) onStop();
-        return;
-      }
-      if (onYearChange) onYearChange(current);
-      setStoryText(getStoryText(current));
-      current++;
-    }, 1200);
-
-    return () => clearInterval(timer);
-  }, [isPlaying, storyMode, year, onYearChange, onStop]);
 
   const malaysiaBounds = L.geoJSON(malaysiaGeoJson).getBounds();
 
   return (
     <div className="relative">
-      {/* story box in top-left shifted right to avoid zoom control */}
-      {storyMode && storyText && (
-        <div className="absolute top-4 left-20 z-[1000] bg-white p-3 rounded-lg shadow-md w-96 text-sm border border-gray-300">
-          {storyText}
-        </div>
-      )}
-
-      {/* legend fixed top-right */}
+      {/* legend */}
       <div className="absolute top-4 right-4 z-[1000] bg-white p-3 rounded-lg shadow-md text-xs border border-gray-300">
         <div className="font-semibold mb-1">Forest Loss (ha)</div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#800026]"></span> &gt; 5000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#BD0026]"></span> 2000–5000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#E31A1C]"></span> 1000–2000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#FC4E2A]"></span> 500–1000
-        </div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-3 bg-[#FD8D3C]"></span> 100–500
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-3 bg-[#FEB24C]"></span> &lt;= 100
-        </div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#e31a1c]"></span> &gt; 10000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#fc8d59]"></span> 5000–10000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#fdcc8a]"></span> 2000–5000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#31a354]"></span> 1000–2000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#74c476]"></span> 500–1000</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-4 h-3 bg-[#c7e9c0]"></span> 100–500</div>
+        <div className="flex items-center gap-2"><span className="w-4 h-3 bg-[#f7fcf5]"></span> &lt;= 100</div>
       </div>
 
       <MapContainer
@@ -297,8 +240,6 @@ export default function ForestMap({
         />
         <GeoJSON key={year} data={malaysiaGeoJson} style={style} onEachFeature={onEachFeature} />
       </MapContainer>
-
-      <InsightsPanel isOpen={panelOpen} data={selectedData} onClose={() => setPanelOpen(false)} />
     </div>
   );
 }
