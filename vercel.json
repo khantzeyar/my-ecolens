@@ -11,8 +11,11 @@
       "epic-2-predictive-analytics": false,
       "epic-3-camping-sites": false,
       "epic-4-static-guide": false,
+      "epic-5-personalised-recommendation": false,
       "epic-6-chatbot": false,
-      "epic-8-card-generator": false
+      "epic-7-plant-identifier": false,
+      "epic-8-card-generator": false,
+      "epic-9-mobile-friendliness": false
     }
   }
 }
