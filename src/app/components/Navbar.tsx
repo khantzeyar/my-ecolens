@@ -40,6 +40,7 @@ const Navbar = () => {
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/insights')) return 'light';
     if (pathname.startsWith('/recommender')) return 'light';
+    if (pathname.startsWith('/footprints')) return 'light';
     return 'light';
   };
 
@@ -138,6 +139,7 @@ const Navbar = () => {
             { href: '/recommender', label: 'Campsite Recommender', active: pathname.startsWith('/recommender') },
             { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
+            { href: '/footprints', label: 'My Eco Footprints', active: pathname.startsWith('/footprints') },
           ].map((link, idx, arr) => (
             <React.Fragment key={link.href}>
               <Link
