@@ -1,0 +1,87 @@
+state,district,MAE,MAPE
+Johor,Batu Pahat,507.5,21.74
+Johor,Johor Baharu,542.75,79.23
+Johor,Keluang,1287.75,32.7
+Johor,Kota Tinggi,1280.5,59.61
+Johor,Kulaijaya,369.75,39.85
+Johor,Ledang,460.25,31.13
+Johor,Mersing,321.5,17.0
+Johor,Muar,306.0,23.58
+Johor,Pontian,419.25,44.91
+Johor,Segamat,1132.0,24.71
+Kedah,Baling,289.5,19.83
+Kedah,Bandar Baharu,58.75,17.69
+Kedah,Kota Setar,3.0,100.0
+Kedah,Kuala Muda,290.5,58.29
+Kedah,Kubang Pasu,96.5,19.9
+Kedah,Kulim,284.5,26.67
+Kedah,Langkawi,32.0,52.74
+Kedah,Padang Terap,242.75,29.33
+Kedah,Pendang,172.75,35.75
+Kedah,Pokok Sena,71.5,24.16
+Kedah,Sik,243.0,26.43
+Kedah,Yan,30.25,54.01
+Kelantan,Bachok,121.5,95.07
+Kelantan,Gua Musang,3080.75,26.24
+Kelantan,Jeli,175.0,17.57
+Kelantan,Kota Bharu,116.0,42.47
+Kelantan,Kuala Krai,285.75,8.53
+Kelantan,Machang,59.0,9.54
+Kelantan,Pasir Mas,201.75,19.64
+Kelantan,Pasir Putih,92.0,18.86
+Kelantan,Tanah Merah,117.25,7.99
+Kelantan,Tumpat,29.5,86.27
+Kuala Lumpur,Kuala Lumpur,4.5,41.87
+Melaka,Alor Gajah,318.0,39.04
+Melaka,Jasin,267.75,26.74
+Melaka,Melaka Tengah,29.5,19.19
+Negeri Sembilan,Jelebu,123.5,18.5
+Negeri Sembilan,Jempol,214.5,17.12
+Negeri Sembilan,Kuala Pilah,92.0,13.51
+Negeri Sembilan,Port Dickson,24.0,4.17
+Negeri Sembilan,Rembau,48.75,15.95
+Negeri Sembilan,Seremban,272.25,33.2
+Negeri Sembilan,Tampin,243.5,27.74
+Pahang,Bentong,271.0,15.38
+Pahang,Bera,1272.75,27.08
+Pahang,Cameron Highlands,23.5,18.88
+Pahang,Jerantut,923.5,17.17
+Pahang,Kuantan,1222.25,31.12
+Pahang,Lipis,1588.75,28.96
+Pahang,Maran,457.25,21.17
+Pahang,Pekan,617.5,11.08
+Pahang,Raub,827.25,36.7
+Pahang,Rompin,1570.25,21.64
+Pahang,Temerloh,578.25,23.64
+Perak,Batang Padang,510.0,21.47
+Perak,Hilir Perak,1020.5,46.53
+Perak,Hulu Perak,328.0,11.84
+Perak,Kampar,181.25,40.68
+Perak,Kerian,382.75,52.63
+Perak,Kinta,392.25,38.27
+Perak,Kuala Kangsar,856.0,42.73
+Perak,Larut and Matang,374.5,31.32
+Perak,Manjung,234.0,23.32
+Perak,Perak Tengah,362.75,27.6
+Perlis,Perlis,147.75,67.46
+Pulau Pinang,Barat Daya,11.25,23.85
+Pulau Pinang,Seberang Perai Selatan,99.25,57.7
+Pulau Pinang,Seberang Perai Tengah,30.25,52.37
+Pulau Pinang,Seberang Perai Utara,205.0,146.51
+Pulau Pinang,Timur Laut,8.5,46.33
+Selangor,Gombak,182.25,84.13
+Selangor,Hulu Langat,150.0,37.03
+Selangor,Hulu Selangor,1050.75,85.44
+Selangor,Klang,162.0,77.62
+Selangor,Kuala Langat,298.0,33.01
+Selangor,Kuala Selangor,316.25,32.21
+Selangor,Petaling,47.25,51.41
+Selangor,Sabak Bernam,187.25,37.81
+Selangor,Sepang,143.0,34.25
+Terengganu,Besut,170.0,13.37
+Terengganu,Dungun,451.5,19.42
+Terengganu,Hulu Terengganu,848.5,39.83
+Terengganu,Kemaman,1113.5,36.24
+Terengganu,Kuala Terengganu,398.5,45.74
+Terengganu,Marang,202.0,16.98
+Terengganu,Setiu,359.25,25.32

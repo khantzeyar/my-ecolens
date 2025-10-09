@@ -40,7 +40,6 @@ const Navbar = () => {
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/insights')) return 'light';
-    if (pathname.startsWith('/footprints')) return 'light';
     return 'light';
   };
 
@@ -141,30 +140,34 @@ const Navbar = () => {
               : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.1)})`,
           }}
         >
-          {links.map((link, idx, arr) => {
-            const text = getTextStyles(link.active);
-            return (
-              <React.Fragment key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${text.className}`}
-                  style={text.style}
-                >
-                  {link.label}
-                </Link>
-                {idx < arr.length - 1 && (
-                  <div
-                    className="w-px h-4 mx-1 shadow-sm"
-                    style={{
-                      backgroundColor: isDarkBackground
-                        ? `rgba(255, 255, 255, 0.4)`
-                        : `rgba(0, 0, 0, 0.2)`,
-                    }}
-                  />
-                )}
-              </React.Fragment>
-            );
-          })}
+          {[
+            { href: '/', label: 'Home', active: pathname === '/' },
+            { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
+            { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
+            { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
+          ].map((link, idx, arr) => (
+            <React.Fragment key={link.href}>
+              <Link
+                href={link.href}
+                className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
+                  getTextStyles(link.active).className
+                }`}
+                style={getTextStyles(link.active).style}
+              >
+                {link.label}
+              </Link>
+              {idx < arr.length - 1 && (
+                <div
+                  className="w-px h-4 mx-1 shadow-sm"
+                  style={{
+                    backgroundColor: isDarkBackground
+                      ? `rgba(255, 255, 255, 0.4)`
+                      : `rgba(0, 0, 0, 0.2)`,
+                  }}
+                ></div>
+              )}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </nav>
