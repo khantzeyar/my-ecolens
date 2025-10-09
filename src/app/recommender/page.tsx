@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 // === Type Definitions ===
 interface RecommendationForm {
@@ -282,7 +283,7 @@ export default function RecommendPage() {
                   What attractions interest you?
                 </h2>
                 <p className="text-gray-600">
-                  Choose the features you'd like your campsite to have
+                  Choose the features you&apos;d like your campsite to have
                 </p>
               </div>
 
@@ -361,10 +362,13 @@ export default function RecommendPage() {
                   >
                     <div className="md:flex">
                       <div className="md:w-1/3 h-64 md:h-auto">
-                        <img
-                          src={recommendation.campsite.imageUrl}
+                        <Image
+                          src={recommendation.campsite.imageUrl || "/images/default-camp.jpg"}
                           alt={recommendation.campsite.name}
+                          width={600}
+                          height={400}
                           className="w-full h-full object-cover"
+                          priority
                         />
                       </div>
 
