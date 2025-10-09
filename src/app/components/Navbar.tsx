@@ -2,7 +2,6 @@
  * Navbar (Epic-1 + Epic-2 with Epic-3 UI)
  * - Epic-1 routes: Home, Camping Sites, Guide
  * - Epic-2: Forest Insights (/insights)
- * - Footprints (/footprints) — plain text (no icon, no count)
  * - UI: Epic-3 glassmorphism
  */
 'use client';
@@ -40,6 +39,7 @@ const Navbar = () => {
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/insights')) return 'light';
+    if (pathname.startsWith('/recommender')) return 'light';
     return 'light';
   };
 
@@ -88,14 +88,6 @@ const Navbar = () => {
     }
   };
 
-  const links = [
-    { href: '/', label: 'Home', active: pathname === '/' },
-    { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
-    { href: '/footprints', label: 'Footprints', active: pathname.startsWith('/footprints') },
-    { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
-    { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
-  ] as const;
-
   return (
     <nav
       className={`fixed top-0 w-full z-50 p-4 transition-all duration-300 ${
@@ -143,6 +135,7 @@ const Navbar = () => {
           {[
             { href: '/', label: 'Home', active: pathname === '/' },
             { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
+            { href: '/recommender', label: 'Campsite Recommender', active: pathname.startsWith('/recommender') },
             { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
           ].map((link, idx, arr) => (
