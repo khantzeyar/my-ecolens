@@ -16,17 +16,16 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Mobile menu toggle
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
-      }
+      if (currentScrollY > lastScrollY && currentScrollY > 100) setIsVisible(false);
+      else if (currentScrollY < lastScrollY) setIsVisible(true);
+
       setLastScrollY(currentScrollY);
     };
 
@@ -47,45 +46,46 @@ const Navbar = () => {
 
   const getNavbarStyles = () => {
     const scrollProgress = Math.min(scrollY / 200, 1);
-    if (isDarkBackground) {
-      return {
-        backdropOpacity: Math.max(0.1, scrollProgress * 0.3),
-        bgOpacity: Math.max(0.15, scrollProgress * 0.25),
-        borderOpacity: Math.max(0.2, scrollProgress * 0.4),
-      };
-    } else {
-      return {
-        backdropOpacity: Math.max(0.05, scrollProgress * 0.2),
-        bgOpacity: Math.max(0.25, scrollProgress * 0.4),
-        borderOpacity: Math.max(0.3, scrollProgress * 0.5),
-      };
-    }
+    return isDarkBackground
+      ? {
+          backdropOpacity: Math.max(0.1, scrollProgress * 0.3),
+          bgOpacity: Math.max(0.15, scrollProgress * 0.25),
+          borderOpacity: Math.max(0.2, scrollProgress * 0.4),
+        }
+      : {
+          backdropOpacity: Math.max(0.05, scrollProgress * 0.2),
+          bgOpacity: Math.max(0.25, scrollProgress * 0.4),
+          borderOpacity: Math.max(0.3, scrollProgress * 0.5),
+        };
   };
 
   const styles = getNavbarStyles();
 
   const getTextStyles = (isActive: boolean) => {
-    if (isActive) {
+    if (isActive)
       return {
-        className:
-          'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
+        className: 'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
         style: {},
       };
-    }
-    if (isDarkBackground) {
+
+    if (isDarkBackground)
       return {
-        className:
-          'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
+        className: 'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
         style: { textShadow: '0 1px 3px rgba(0,0,0,0.7)' },
       };
-    } else {
-      return {
-        className:
-          'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
-        style: { textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
-      };
-    }
+
+    return {
+      className: 'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
+      style: { textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
+    };
   };
+
+  const navLinks = [
+    { href: '/', label: 'Home', active: pathname === '/' },
+    { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
+    { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
+    { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
+  ];
 
   return (
     <nav
@@ -107,39 +107,32 @@ const Navbar = () => {
             : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.15)})`,
         }}
       >
-        <Link href="/" className="cursor-pointer group">
-          <div className="flex items-center">
-            <Image
-              src="/logo.svg"
-              alt="Logo"
-              width={50}
-              height={50}
-              className="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg"
-              style={{ height: '50px', width: 'auto' }}
-            />
-          </div>
+        {/* Logo */}
+        <Link href="/" className="cursor-pointer group flex items-center">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={150}
+            height={150}
+            className="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg"
+          />
         </Link>
 
+        {/* Desktop Nav Links */}
         <div
-          className="flex items-center backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg"
+          className="hidden md:flex items-center backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg"
           style={{
-            backgroundColor: `rgba(255, 255, 255, ${
-              Math.max(0.2, styles.bgOpacity + 0.1)
-            })`,
+            backgroundColor: `rgba(255, 255, 255, ${Math.max(0.2, styles.bgOpacity + 0.1)})`,
             border: isDarkBackground
               ? `1px solid rgba(255, 255, 255, ${styles.borderOpacity})`
               : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.1)})`,
           }}
         >
-          {[
-            { href: '/', label: 'Home', active: pathname === '/' },
-            { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
-            { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
-            { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
-          ].map((link, idx, arr) => (
+          {navLinks.map((link, idx, arr) => (
             <React.Fragment key={link.href}>
               <Link
                 href={link.href}
+                onClick={() => setIsMenuOpen(false)}
                 className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
                   getTextStyles(link.active).className
                 }`}
@@ -160,7 +153,44 @@ const Navbar = () => {
             </React.Fragment>
           ))}
         </div>
+
+        {/* Mobile Menu Button (Remix Icon) */}
+        <button
+          className="md:hidden p-2 rounded-lg hover:bg-white/20 transition"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <i
+            className={`${
+              isMenuOpen ? 'ri-close-line' : 'ri-menu-line'
+            } text-2xl ${
+              isDarkBackground ? 'text-white' : 'text-gray-800'
+            } transition-all`}
+          ></i>
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {isMenuOpen && (
+        <div
+          className={`md:hidden mt-2 mx-4 backdrop-blur-xl rounded-xl shadow-lg overflow-hidden transition-all duration-300 ${
+            isDarkBackground ? 'bg-black/50' : 'bg-white/70'
+          }`}
+        >
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMenuOpen(false)}
+              className={`block px-6 py-3 border-b border-white/10 text-sm ${
+                getTextStyles(link.active).className
+              }`}
+              style={getTextStyles(link.active).style}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };
