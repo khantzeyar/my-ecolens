@@ -140,34 +140,30 @@ export default function PlantIdentifier() {
           <h2 className="text-xl font-semibold mb-2">Top Match</h2>
 
           <div className="flex flex-col gap-2">
-            <p>
-              <strong>Common name:</strong>{" "}
-              {result.results[0].species.commonNames?.[0] || "N/A"}
-            </p>
-            <p>
-              <strong>Scientific name:</strong>{" "}
-              {result.results[0].species.scientificNameWithoutAuthor}
-            </p>
-            <p>
-              <strong>Score:</strong>{" "}
-              {(result.results[0].score * 100).toFixed(1)}%
-            </p>
-
-            {result.results[0].images?.length > 0 && (
-              <Image
-                src={result.results[0].images[0].url.s}
-                alt="Plant example"
-                width={200}
-                height={200}
-                className="rounded-md mt-2 object-cover"
-              />
+            {result.results[0].score < 0.2 ? (
+            <p className="text-gray-600">Unable to identify. Tip: Make sure the image is well-lit, focused, and the subject is clearly visible.</p>
+            ) : (
+            <>
+                <p>
+                <strong>Common name:</strong>{" "}
+                {result.results[0].species.commonNames?.[0] || "N/A"}
+                </p>
+                <p>
+                <strong>Scientific name:</strong>{" "}
+                {result.results[0].species.scientificNameWithoutAuthor}
+                </p>
+                <p>
+                <strong>Confidence:</strong>{" "}
+                {(result.results[0].score * 100).toFixed(1)}%
+                </p>
+            </>
             )}
           </div>
         </div>
       )}
 
       {result && result.results && result.results.length === 0 && (
-        <p className="mt-4 text-gray-600">No matches found. Try another photo.</p>
+        <p className="mt-4 text-gray-600">No matches found. Tip: Make sure the image is well-lit, focused, and the subject is clearly visible.</p>
       )}
     </div>
   );
