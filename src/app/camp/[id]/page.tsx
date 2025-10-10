@@ -323,34 +323,35 @@ export default function CampDetail({ params }: CampDetailProps) {
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 {/* Left block */}
                 <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <h1 className="text-4xl font-bold mb-2">{camp.name}</h1>
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h1 className="text-4xl font-bold">{camp.name}</h1>
+                        {/* Favorite star aligned with title */}
+                        <button
+                          aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                          onClick={() => toggleFavorite(routeId || String(camp.id))}
+                          className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200"
+                          title={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            className="w-6 h-6"
+                            fill={isFavorited ? "#f59e0b" : "none"}
+                            stroke={isFavorited ? "#f59e0b" : "#9ca3af"}
+                            strokeWidth="2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 2.25l2.955 5.985 6.607.96-4.781 4.658 1.129 6.586L12 17.77l-5.91 3.669 1.129-6.586L2.438 9.195l6.607-.96L12 2.25z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                       <p className="text-gray-600">{camp.type}</p>
                     </div>
-
-                    {/* Favorite star next to title */}
-                    <button
-                      aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
-                      onClick={() => toggleFavorite(routeId || String(camp.id))}
-                      className="p-2 rounded-full bg-white border shadow-sm hover:shadow transition"
-                      title={isFavorited ? "Remove from favorites" : "Add to favorites"}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        className="w-7 h-7"
-                        fill={isFavorited ? "#f59e0b" : "none"}
-                        stroke={isFavorited ? "#f59e0b" : "#6b7280"}
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 2.25l2.955 5.985 6.607.96-4.781 4.658 1.129 6.586L12 17.77l-5.91 3.669 1.129-6.586L2.438 9.195l6.607-.96L12 2.25z"
-                        />
-                      </svg>
-                    </button>
                   </div>
 
                   {(camp.tags || camp.activities) && (
