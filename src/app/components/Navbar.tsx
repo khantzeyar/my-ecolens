@@ -139,6 +139,7 @@ const Navbar = () => {
             { href: '/recommender', label: 'Campsite Recommender', active: pathname.startsWith('/recommender') },
             { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
+            { href: '/plant', label: 'Plant Identifier', active: pathname.startsWith('/plant') },
             { href: '/footprints', label: 'My Eco Footprints', active: pathname.startsWith('/footprints') },
           ].map((link, idx, arr) => (
             <React.Fragment key={link.href}>
