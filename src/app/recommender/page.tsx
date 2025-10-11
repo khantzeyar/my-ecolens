@@ -443,8 +443,8 @@ export default function RecommendPage() {
                     </div>
                   </motion.div>
 
-                  {/* Disclaimer */}
-                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-5 rounded-xl shadow-sm mx-auto max-w-[890px]">
+                  {/* Note */}
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mx-auto max-w-[890px]">
                     ⚠️ <span className="font-semibold">Note:</span> Weather can be unpredictable. 
                     Always pack appropriately and check the latest local updates for a safe camping trip.
                   </div>
