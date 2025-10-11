@@ -20,70 +20,28 @@ interface CampSite {
   imageUrl?: string;
 }
 
-/* ---------- Fee meta (structured info parsed from original fees text) ---------- */
+/* ---------- Fee meta (minimal: only need "free for everyone") ---------- */
 interface FeeMeta {
   hasText: boolean;
-  fullyFree: boolean;
-  freeCitizens: boolean;
-  freeChildren: boolean;
-  freeSeniors: boolean;
-  freeOKU: boolean;
-  hasAnyFreeOption: boolean;
-  minPrice: number | null;
-  maxPrice: number | null;
-  hasPrice: boolean;
+  fullyFree: boolean; // free for everyone (no price mentioned)
 }
 
 function deriveFeeMeta(fees?: string): FeeMeta {
   if (!fees || !fees.trim()) {
-    return {
-      hasText: false,
-      fullyFree: false,
-      freeCitizens: false,
-      freeChildren: false,
-      freeSeniors: false,
-      freeOKU: false,
-      hasAnyFreeOption: false,
-      minPrice: null,
-      maxPrice: null,
-      hasPrice: false,
-    };
+    return { hasText: false, fullyFree: false };
   }
-
   const text = fees.replace(/\s+/g, " ");
   const lower = text.toLowerCase();
 
+  // any explicit price means not "free for everyone"
   const priceMatches = [...lower.matchAll(/rm\s*([0-9]+(?:\.[0-9]{1,2})?)/g)];
-  const prices = priceMatches.map((m) => parseFloat(m[1]));
-  const hasPrice = prices.length > 0;
-  const minPrice = prices.length ? Math.min(...prices) : null;
-  const maxPrice = prices.length ? Math.max(...prices) : null;
+  const hasPrice = priceMatches.length > 0;
 
-  const hasFreeWord = /\bfree\b|free\s*admission/i.test(text);
+  const hasFreeWord = /\bfree\b|free\s*admission|no\s*charge|no\s*entry\s*fee/i.test(text);
+
   const fullyFree = hasFreeWord && !hasPrice;
 
-  const freeCitizens =
-    /(citizen|malaysian|warga\s*negar|warganegara)/i.test(text) && /\bfree\b/i.test(text);
-  const freeChildren =
-    /(child|children|kids?|under\s*\d+\s*years?)/i.test(text) && /\bfree\b/i.test(text);
-  const freeSeniors =
-    /(senior|older|60\s*years?\s*(and\s*above)?)/i.test(text) && /\bfree\b/i.test(text);
-  const freeOKU = /(oku|disabled|disabilities)/i.test(text) && /\bfree\b/i.test(text);
-
-  const hasAnyFreeOption = fullyFree || freeCitizens || freeChildren || freeSeniors || freeOKU;
-
-  return {
-    hasText: true,
-    fullyFree,
-    freeCitizens,
-    freeChildren,
-    freeSeniors,
-    freeOKU,
-    hasAnyFreeOption,
-    minPrice,
-    maxPrice,
-    hasPrice,
-  };
+  return { hasText: true, fullyFree };
 }
 
 /* ---------------- Favorites utils (shared behavior with detail page) ---------------- */
@@ -139,24 +97,16 @@ const CampPage: React.FC = () => {
   }, []);
   const itemsPerPage = cols * 3;
 
-  // ===== Entry fee filters (keep free-related only) =====
+  // ===== Entry fee filter: ONLY "Free for everyone" =====
   const [onlyFullyFree, setOnlyFullyFree] = useState(false);
-  const [onlyHasFreeOption, setOnlyHasFreeOption] = useState(false);
-  const [needFreeCitizens, setNeedFreeCitizens] = useState(false);
-  const [needFreeChildren, setNeedFreeChildren] = useState(false);
-  const [needFreeSeniors, setNeedFreeSeniors] = useState(false);
-  const [needFreeOKU, setNeedFreeOKU] = useState(false);
 
   // ===== Favorites (synced across pages/tabs) =====
   const [favorites, setFavorites] = useState<string[]>([]);
   useEffect(() => {
-    // initial load
     setFavorites(readFavorites());
-    // cross-tab sync
     const onStorage = (e: StorageEvent) => {
       if (e.key === FAVORITES_KEY) setFavorites(readFavorites());
     };
-    // same-tab sync
     const onCustom = () => setFavorites(readFavorites());
     window.addEventListener("storage", onStorage);
     window.addEventListener("favorites-updated", onCustom as EventListener);
@@ -234,7 +184,7 @@ const CampPage: React.FC = () => {
     return map;
   }, [campsites]);
 
-  // Filtering (no Max price logic)
+  // Filtering
   useEffect(() => {
     let filtered = campsites;
 
@@ -264,20 +214,13 @@ const CampPage: React.FC = () => {
       });
     }
 
-    // Entry-fee based filters
-    filtered = filtered.filter((site) => {
-      const meta = feeMetaMap.get(site.id)!;
-
-      if (onlyFullyFree && !meta.fullyFree) return false;
-      if (onlyHasFreeOption && !meta.hasAnyFreeOption) return false;
-
-      if (needFreeCitizens && !meta.freeCitizens) return false;
-      if (needFreeChildren && !meta.freeChildren) return false;
-      if (needFreeSeniors && !meta.freeSeniors) return false;
-      if (needFreeOKU && !meta.freeOKU) return false;
-
-      return true;
-    });
+    // Entry-fee based filter: only "Free for everyone"
+    if (onlyFullyFree) {
+      filtered = filtered.filter((site) => {
+        const meta = feeMetaMap.get(site.id)!;
+        return meta.fullyFree;
+      });
+    }
 
     setFilteredCampsites(filtered);
     setCurrentPage(1);
@@ -288,11 +231,6 @@ const CampPage: React.FC = () => {
     selectedAttractions,
     selectedActivities,
     onlyFullyFree,
-    onlyHasFreeOption,
-    needFreeCitizens,
-    needFreeChildren,
-    needFreeSeniors,
-    needFreeOKU,
     feeMetaMap,
   ]);
 
@@ -314,11 +252,6 @@ const CampPage: React.FC = () => {
     setSelectedAttractions([]);
     setSelectedActivities([]);
     setOnlyFullyFree(false);
-    setOnlyHasFreeOption(false);
-    setNeedFreeCitizens(false);
-    setNeedFreeChildren(false);
-    setNeedFreeSeniors(false);
-    setNeedFreeOKU(false);
     setCurrentPage(1);
   };
 
@@ -440,73 +373,18 @@ const CampPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Entry Fee */}
+              {/* Entry Fee — ONLY "Free for everyone" */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-3 text-green-700">Entry Fee</h3>
-
-                <label className="flex items-center text-sm mb-2">
+                <label className="flex items-center text-sm">
                   <input
                     type="checkbox"
                     checked={onlyFullyFree}
                     onChange={(e) => setOnlyFullyFree(e.target.checked)}
                     className="mr-2 text-green-600 focus:ring-green-500"
                   />
-                  Fully Free (everyone)
+                  Free for everyone
                 </label>
-
-                <label className="flex items-center text-sm mb-4">
-                  <input
-                    type="checkbox"
-                    checked={onlyHasFreeOption}
-                    onChange={(e) => setOnlyHasFreeOption(e.target.checked)}
-                    className="mr-2 text-green-600 focus:ring-green-500"
-                  />
-                  Has any free option
-                </label>
-
-                <div className="rounded-md border p-3 bg-white/80">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">
-                    Free for specific groups
-                  </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeCitizens}
-                        onChange={(e) => setNeedFreeCitizens(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Citizens
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeChildren}
-                        onChange={(e) => setNeedFreeChildren(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Children
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeSeniors}
-                        onChange={(e) => setNeedFreeSeniors(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Seniors (60+)
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeOKU}
-                        onChange={(e) => setNeedFreeOKU(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      OKU / Disabled
-                    </label>
-                  </div>
-                </div>
               </div>
 
               {/* Attractions */}
@@ -558,7 +436,6 @@ const CampPage: React.FC = () => {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
                     {currentCampsites.map((camp) => {
-                      const meta = feeMetaMap.get(camp.id)!;
                       const fav = isFavorited(camp.id);
                       return (
                         <div
@@ -614,24 +491,7 @@ const CampPage: React.FC = () => {
                             </p>
                             <p className="text-sm text-gray-500 mb-3">📍 {camp.state}</p>
 
-                            {/* Fee badges */}
-                            <div className="flex flex-wrap gap-1 mb-3">
-                              {meta.fullyFree && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700">
-                                  Fully Free
-                                </span>
-                              )}
-                              {!meta.fullyFree && meta.hasAnyFreeOption && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-50 text-emerald-700">
-                                  Free options
-                                </span>
-                              )}
-                              {meta.minPrice !== null && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700">
-                                  from RM {meta.minPrice.toFixed(2).replace(/\.00$/, "")}
-                                </span>
-                              )}
-                            </div>
+                            {/* (Removed fee badges per request) */}
 
                             <div className="mt-auto">
                               <Link href={`/camp/${camp.id}`}>

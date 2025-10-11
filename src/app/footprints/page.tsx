@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import type * as L from "leaflet";
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -36,14 +35,6 @@ interface CampSite {
   longitude?: number;
 }
 
-interface Plant {
-  id: string;
-  name: string;
-  imageUrl: string;
-  dateIdentified: string;
-  location?: { lat: number; lng: number };
-}
-
 interface Visit {
   campsiteId: string;
   name: string;
@@ -51,46 +42,33 @@ interface Visit {
   durationDays?: number;
 }
 
-type Tab = "favorites" | "plants" | "visits" | "map";
+type Tab = "favorites" | "visits" | "map";
 
 export default function MyFootprintsPage() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [camps, setCamps] = useState<CampSite[]>([]);
-  const [plants, setPlants] = useState<Plant[]>([]);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("favorites");
 
+  // All camps for map reference
   const [allCamps, setAllCamps] = useState<CampSite[]>([]);
   const [showAll, setShowAll] = useState(true);
   const [showVisited, setShowVisited] = useState(true);
   const [showFavorites, setShowFavorites] = useState(true);
 
-  // Load local data
   useEffect(() => {
     const fav = localStorage.getItem("favorites");
-    const plantData = localStorage.getItem("identifiedPlants");
     const visitData = localStorage.getItem("visitHistory");
 
     if (fav) {
       try {
-        const parsedFav = JSON.parse(fav);
-        if (Array.isArray(parsedFav)) {
-          setFavorites(parsedFav.map((x) => String(x)));
-        } else {
-          setFavorites([]);
-        }
+        setFavorites(JSON.parse(fav).map((x: any) => String(x)));
       } catch {
         setFavorites([]);
       }
     }
-    if (plantData) {
-      try {
-        setPlants(JSON.parse(plantData));
-      } catch {
-        setPlants([]);
-      }
-    }
+
     if (visitData) {
       try {
         setVisits(JSON.parse(visitData));
@@ -98,21 +76,84 @@ export default function MyFootprintsPage() {
         setVisits([]);
       }
     }
-
-    // Example: load all campsites (you can replace this with your real fetch)
-    (async () => {
-      const data = await fetch("/api/campsites").then((r) => r.json());
-      setAllCamps(data);
-      setCamps(data.filter((c: CampSite) => favorites.includes(String(c.id))));
-      setLoading(false);
-    })();
   }, []);
 
-  const [LRef, setLRef] = useState<typeof L | null>(null);
+  // Fetch favorite camps
+  useEffect(() => {
+    if (favorites.length === 0) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchCamps = async () => {
+      try {
+        const results: CampSite[] = [];
+        for (const id of favorites) {
+          const res = await fetch(`/api/campsites/${id}`);
+          if (res.ok) {
+            const data: CampSite = await res.json();
+            results.push(data);
+          }
+        }
+        setCamps(results);
+      } catch (error) {
+        console.error("Error loading favorites:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCamps();
+  }, [favorites]);
+
+  // Fetch all camps for map
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await fetch(`/api/campsites`);
+        if (res.ok) {
+          const list: CampSite[] = await res.json();
+          setAllCamps(list);
+        }
+      } catch (e) {
+        console.error("Failed to load all campsites:", e);
+      }
+    };
+    fetchAll();
+  }, []);
+
+  // Compute markers
+  const favoriteCampPoints = useMemo(
+    () =>
+      allCamps.filter(
+        (c) => c.latitude && c.longitude && favorites.includes(String(c.id))
+      ),
+    [allCamps, favorites]
+  );
+
+  const visitedCampPoints = useMemo(() => {
+    const ids = new Set(visits.map((v) => String(v.campsiteId)));
+    return allCamps.filter(
+      (c) => c.latitude && c.longitude && ids.has(String(c.id))
+    );
+  }, [allCamps, visits]);
+
+  const stats = useMemo(() => {
+    const allCount = allCamps.filter((c) => c.latitude && c.longitude).length;
+    const visitedIds = new Set(visitedCampPoints.map((c) => c.id));
+    const favIds = new Set(favoriteCampPoints.map((c) => c.id));
+    return {
+      all: allCount,
+      visited: visitedIds.size,
+      favorites: favIds.size,
+    };
+  }, [allCamps, visitedCampPoints, favoriteCampPoints]);
+
+  const [LRef, setLRef] = useState<any>(null);
   useEffect(() => {
     (async () => {
-      const leafletModule = await import("leaflet");
-      setLRef(leafletModule);
+      const L = await import("leaflet");
+      setLRef(L);
     })();
   }, []);
 
@@ -128,28 +169,6 @@ export default function MyFootprintsPage() {
       popupAnchor: [0, -8],
     });
   };
-
-  const visitedCampPoints = useMemo(
-    () =>
-      allCamps.filter((c) =>
-        visits.some((v) => String(v.campsiteId) === String(c.id))
-      ),
-    [allCamps, visits]
-  );
-
-  const favoriteCampPoints = useMemo(
-    () => allCamps.filter((c) => favorites.includes(String(c.id))),
-    [allCamps, favorites]
-  );
-
-  const stats = useMemo(
-    () => ({
-      all: allCamps.length,
-      visited: visitedCampPoints.length,
-      favorites: favoriteCampPoints.length,
-    }),
-    [allCamps, visitedCampPoints, favoriteCampPoints]
-  );
 
   if (loading) {
     return (
@@ -189,7 +208,6 @@ export default function MyFootprintsPage() {
         <div className="flex flex-wrap gap-3 mb-6 justify-center">
           {[
             { id: "favorites", label: "Favorites" },
-            { id: "plants", label: "Identified Plants" },
             { id: "visits", label: "Visit History" },
             { id: "map", label: "My Footprint Map" },
           ].map((tab) => (
@@ -207,7 +225,7 @@ export default function MyFootprintsPage() {
           ))}
         </div>
 
-        {/* === Favorites Tab === */}
+        {/* Favorites */}
         {activeTab === "favorites" && (
           <>
             {favorites.length === 0 ? (
@@ -250,6 +268,26 @@ export default function MyFootprintsPage() {
                           {camp.type}
                         </p>
                       )}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {camp.tags &&
+                          camp.tags.split(",").map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+                            >
+                              {tag.trim()}
+                            </span>
+                          ))}
+                        {camp.activities &&
+                          camp.activities.split(",").map((act, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
+                            >
+                              {act.trim()}
+                            </span>
+                          ))}
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -258,12 +296,42 @@ export default function MyFootprintsPage() {
           </>
         )}
 
-        {/* === Map Tab === */}
+        {/* Visit History */}
+        {activeTab === "visits" && (
+          <div className="bg-white/90 rounded-2xl p-8 shadow-md">
+            {visits.length === 0 ? (
+              <p className="text-gray-600 text-center text-lg">
+                You haven’t logged any visits yet.
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {visits.map((visit, idx) => (
+                  <li
+                    key={idx}
+                    className="border-l-4 border-green-600 pl-4 bg-white/80 py-3 rounded"
+                  >
+                    <h4 className="text-lg font-semibold text-gray-800">
+                      {visit.name}
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      Visited on {visit.dateVisited}
+                      {visit.durationDays
+                        ? ` · Stayed ${visit.durationDays} days`
+                        : ""}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {/* Map */}
         {activeTab === "map" && (
           <div className="bg-white/90 rounded-3xl p-5 shadow-xl ring-1 ring-green-100 backdrop-blur-sm h-[560px] md:h-[600px] lg:h-[640px] relative overflow-hidden">
-            {/* Top-right: layer toggles */}
+            {/* Top-right controls */}
             <div className="absolute z-[400] top-4 right-4">
-              <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg px-3 py-2 flex items-center gap-2">
+              <div className="bg-white/90 rounded-full shadow-lg px-3 py-2 flex items-center gap-2">
                 <button
                   className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                     showAll
@@ -297,9 +365,9 @@ export default function MyFootprintsPage() {
               </div>
             </div>
 
-            {/* Top-left: stats */}
+            {/* Top-left stats */}
             <div className="absolute z-[400] top-4 left-4">
-              <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg px-3 py-2 text-sm">
+              <div className="bg-white/90 rounded-xl shadow-lg px-3 py-2 text-sm">
                 <div className="flex items-center gap-2">
                   <span
                     className="inline-block w-3 h-3 rounded-full"
@@ -333,9 +401,9 @@ export default function MyFootprintsPage() {
             <MapContainer
               center={[4.5, 102.0]}
               zoom={7.2}
-              scrollWheelZoom
+              scrollWheelZoom={true}
               style={{ height: "100%", width: "100%", borderRadius: "1.5rem" }}
-              zoomControl
+              zoomControl={true}
               maxBounds={[
                 [0.8, 99.5],
                 [7.3, 104.7],
