@@ -7,6 +7,9 @@ import rawDistrictPredictions from "../data/district_tree_loss_predictions.json"
 import { MultiValue } from "react-select";
 
 // ---------------- Types ----------------
+type TabKey = "map" | "trends";
+type TrendMode = "state" | "district";
+
 interface OptionType {
   value: string;
   label: string;
@@ -26,12 +29,14 @@ interface DistrictPrediction {
 }
 
 // ---------------- Normalize prediction JSON ----------------
-const districtPredictions: DistrictPrediction[] = (rawDistrictPredictions as unknown as {
-  district: string;
-  state: string;
-  year: string;
-  tc_loss_pred: string;
-}[]).map((d) => ({
+const districtPredictions: DistrictPrediction[] = (
+  rawDistrictPredictions as unknown as {
+    district: string;
+    state: string;
+    year: string;
+    tc_loss_pred: string;
+  }[]
+).map((d) => ({
   district: d.district,
   state: d.state,
   year: parseInt(d.year, 10),
@@ -45,16 +50,19 @@ const ForestMap = dynamic(
 );
 
 const Select = dynamic(
-  () => import("react-select") as unknown as Promise<
-    React.ComponentType<{
-      isMulti: true;
-      options: OptionType[];
-      value: OptionType[];
-      onChange: (newValue: MultiValue<OptionType>) => void;
-      className?: string;
-      isDisabled?: boolean;
-    }>
-  >,
+  () =>
+    import("react-select") as unknown as Promise<
+      React.ComponentType<{
+        isMulti: true;
+        options: OptionType[];
+        value: OptionType[];
+        onChange: (newValue: MultiValue<OptionType>) => void;
+        className?: string;
+        isDisabled?: boolean;
+        closeMenuOnSelect?: boolean;
+        blurInputOnSelect?: boolean;
+      }>
+    >,
   { ssr: false }
 );
 
@@ -95,7 +103,12 @@ function stateLossByYear(stateName: string, year: number): number {
   if (year <= 2024) {
     return (forestData as ForestRecord[])
       .filter((d) => d.subnational1 === stateName)
-      .reduce((sum, d) => sum + ((typeof d[`tc_loss_ha_${year}`] === "number" ? d[`tc_loss_ha_${year}`] : 0) as number), 0);
+      .reduce(
+        (sum, d) =>
+          sum +
+          ((typeof d[`tc_loss_ha_${year}`] === "number" ? d[`tc_loss_ha_${year}`] : 0) as number),
+        0
+      );
   }
   return districtPredictions
     .filter((p) => p.state === stateName && p.year === year)
@@ -106,7 +119,12 @@ function districtLossByYear(districtName: string, year: number): number {
   if (year <= 2024) {
     return (forestData as ForestRecord[])
       .filter((d) => d.subnational2 === districtName)
-      .reduce((sum, d) => sum + ((typeof d[`tc_loss_ha_${year}`] === "number" ? d[`tc_loss_ha_${year}`] : 0) as number), 0);
+      .reduce(
+        (sum, d) =>
+          sum +
+          ((typeof d[`tc_loss_ha_${year}`] === "number" ? d[`tc_loss_ha_${year}`] : 0) as number),
+        0
+      );
   }
   return districtPredictions
     .filter((p) => p.district === districtName && p.year === year)
@@ -144,64 +162,96 @@ function formatHa(v: number) {
 
 // ---------------- Main ----------------
 export default function ForestPage() {
+  // 顶部页签
+  const [active, setActive] = useState<TabKey>("map");
+
   const [year, setYear] = useState(2001);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1); // playback speed
+
+  // 趋势模式：先选 States 还是 Districts
+  const [trendMode, setTrendMode] = useState<TrendMode>("state");
+
   const [selectedStates, setSelectedStates] = useState<string[]>(["Pahang"]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+
+  // 切换模式时清空另一侧选择，避免混淆
+  useEffect(() => {
+    if (trendMode === "state" && selectedDistricts.length) setSelectedDistricts([]);
+    if (trendMode === "district" && selectedStates.length) setSelectedStates([]);
+  }, [trendMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const stateOptions: OptionType[] = allStates.map((s) => ({ value: s, label: s }));
   const districtOptions: OptionType[] = allDistricts.map((d) => ({ value: d, label: d }));
 
-  // ------- Chart data (unchanged core) -------
+  // ------- Chart data -------
+  const seriesKeys = trendMode === "state" ? selectedStates : selectedDistricts;
+
   const chartData = useMemo(() => {
     return Array.from({ length: 2030 - 2001 + 1 }, (_, i) => {
       const y = 2001 + i;
       const entry: Record<string, number> = { year: y };
-      selectedStates.forEach((s) => {
-        entry[s] = computeStateTrend(s)[i]?.loss || 0;
-      });
-      selectedDistricts.forEach((d) => {
-        entry[d] = computeDistrictTrend(d)[i]?.loss || 0;
-      });
+
+      if (trendMode === "state") {
+        seriesKeys.forEach((s) => {
+          entry[s] = computeStateTrend(s)[i]?.loss || 0;
+        });
+      } else {
+        seriesKeys.forEach((d) => {
+          entry[d] = computeDistrictTrend(d)[i]?.loss || 0;
+        });
+      }
       return entry;
     });
-  }, [selectedStates, selectedDistricts]);
+  }, [seriesKeys, trendMode]);
 
-  const colors = ["#FF5722", "#2196F3", "#9C27B0", "#FFC107", "#009688", "#795548", "#E91E63", "#00BCD4"];
+  const colors = [
+    "#FF5722",
+    "#2196F3",
+    "#9C27B0",
+    "#FFC107",
+    "#009688",
+    "#795548",
+    "#E91E63",
+    "#00BCD4",
+  ];
 
   // ------- Auto play timeline -------
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    if (active === "trends") setIsPlaying(false);
+  }, [active]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
     if (isPlaying) {
       timer = setInterval(() => {
         setYear((prev) => (prev < 2030 ? prev + 1 : 2001));
       }, 1000 / speed);
     }
-    return () => clearInterval(timer);
+    return () => (timer ? clearInterval(timer) : undefined);
   }, [isPlaying, speed]);
 
-  // ------- Narrative metrics (dynamic text) -------
+  // ------- Narrative metrics -------
   const natLossThisYear = useMemo(() => nationalLossByYear(year), [year]);
-  const natLossPrevYear = useMemo(() => (year > 2001 ? nationalLossByYear(year - 1) : 0), [year]);
+  const natLossPrevYear = useMemo(
+    () => (year > 2001 ? nationalLossByYear(year - 1) : 0),
+    [year]
+  );
   const yoy = useMemo(() => {
     if (year <= 2001 || natLossPrevYear === 0) return 0;
     return ((natLossThisYear - natLossPrevYear) / natLossPrevYear) * 100;
   }, [natLossThisYear, natLossPrevYear, year]);
 
-  const cumulativeNatLoss = useMemo(() => sumUntil(year, nationalLossByYear), [year]);
+  const cumulativeNatLoss = useMemo(
+    () => sumUntil(year, nationalLossByYear),
+    [year]
+  );
 
   const topStatesThisYear = useMemo(() => {
     const arr = allStates.map((s) => ({ state: s, loss: stateLossByYear(s, year) }));
     arr.sort((a, b) => b.loss - a.loss);
     return arr.slice(0, 3);
   }, [year]);
-
-  const selectedLabel = useMemo(() => {
-    if (selectedStates.length > 0) return selectedStates.join(", ");
-    if (selectedDistricts.length > 0) return selectedDistricts.join(", ");
-    return "Malaysia";
-  }, [selectedStates, selectedDistricts]);
 
   const narration = useMemo(() => {
     const dir = yoy > 5 ? "higher than" : yoy < -5 ? "lower than" : "about the same as";
@@ -212,195 +262,269 @@ export default function ForestPage() {
             .join("; ")}.`
         : "";
 
-    return `In ${year}, estimated national tree-cover loss is ${formatHa(natLossThisYear)}, ${dir} ${year - 1}. ${topLine}`;
+    return `In ${year}, estimated national tree-cover loss is ${formatHa(
+      natLossThisYear
+    )}, ${dir} ${year - 1}. ${topLine}`;
   }, [year, yoy, natLossThisYear, topStatesThisYear]);
 
   // ---------------- Render ----------------
   return (
     <main
-      className="p-8 pt-36 space-y-12 min-h-screen bg-fixed bg-cover bg-center"
+      className="p-8 pt-36 space-y-8 min-h-screen bg-fixed bg-cover bg-center"
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
-      {/* ---------- Story Intro ---------- */}
-      <header className="text-center mb-10">
+      {/* ---------- Title ---------- */}
+      <header className="text-center">
         <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-lg">
           Forest Insights
         </h1>
-        <p className="mt-5 text-[18px] md:text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-          This page tells a story with data: where forest loss concentrates, how it changes over time,
-          and what it means for eco-friendly choices. Use the timeline to watch change unfold, then compare states or districts below.
-        </p>
       </header>
 
-      {/* ---------- Key Numbers + Yearly Narration ---------- */}
-      <section className="bg-white/90 backdrop-blur p-6 md:p-8 rounded-3xl shadow-xl border">
-        <div className="grid md:grid-cols-4 gap-6 mb-6">
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Selected scope</div>
-            <div className="mt-2 text-2xl font-bold text-gray-900">{selectedLabel}</div>
-            <p className="text-sm text-gray-600 mt-1">Map & chart reflect this selection.</p>
-          </div>
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">This year loss</div>
-            <div className="mt-2 text-2xl font-bold text-emerald-700">{formatHa(natLossThisYear)}</div>
-            <p className={`text-sm mt-1 ${yoy > 0 ? "text-red-600" : yoy < 0 ? "text-emerald-700" : "text-gray-600"}`}>
-              YoY: {isFinite(yoy) ? `${yoy > 0 ? "+" : ""}${yoy.toFixed(1)}%` : "-"}
+      {/* ---------- How to read（标题下面） ---------- */}
+      <section className="bg-white/85 backdrop-blur p-5 md:p-6 rounded-2xl shadow border">
+        <h3 className="text-xl font-bold text-gray-900 mb-3">How to read this page</h3>
+        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
+          <div className="rounded-xl border p-4 bg-gray-50">
+            <div className="font-semibold mb-1">Map & timeline</div>
+            <p>
+              Drag the year slider or press Play to animate from 2001–2030. The
+              choropleth shows annual tree-cover loss (ha) by district/state.
             </p>
           </div>
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Cumulative since 2001</div>
-            <div className="mt-2 text-2xl font-bold text-gray-900">{formatHa(cumulativeNatLoss)}</div>
-            <p className="text-sm text-gray-600 mt-1">National total up to {year}.</p>
+          <div className="rounded-xl border p-4 bg-gray-50">
+            <div className="font-semibold mb-1">Forest Loss Trends</div>
+            <p>
+              Compare yearly loss between multiple states or districts. Pick the
+              series you want, then read the legend and hover for values.
+            </p>
           </div>
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Top hotspots {year}</div>
-            <ul className="mt-2 space-y-1">
-              {topStatesThisYear.map((t, i) => (
-                <li key={t.state} className="text-sm text-gray-800">
-                  <span className="font-semibold">{i + 1}. {t.state}</span> — {formatHa(t.loss)}
-                </li>
-              ))}
-              {topStatesThisYear.length === 0 && <li className="text-sm text-gray-500">No data</li>}
+          <div className="rounded-xl border p-4 bg-gray-50">
+            <div className="font-semibold mb-1">Data & methodology</div>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <span className="font-medium">2001–2024</span>: historical
+                annual tree-cover loss aggregated by district/state.
+              </li>
+              <li>
+                <span className="font-medium">2025–2030</span>: district-level
+                predictions aggregated to states.
+              </li>
+              <li>
+                Values show <em>tree-cover loss</em> (ha), not net
+                deforestation.
+              </li>
             </ul>
           </div>
         </div>
-
-        <div className="rounded-2xl border p-5 bg-emerald-50">
-          <div className="text-sm md:text-base text-emerald-900 leading-relaxed">
-            <span className="font-semibold">Yearly narration: </span>{narration}
-          </div>
-        </div>
       </section>
 
-      {/* ---------- Map + Timeline Controls ---------- */}
-      <section id="district" className="bg-white p-8 rounded-3xl shadow-xl border">
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-4">
-          <h2 className="text-3xl font-bold text-green-700">Forest Loss Map</h2>
-          <p className="text-sm text-gray-600 max-w-xl">
-            Drag the slider or press Play to animate changes from 2001 to 2030 (predictions after 2024).
-          </p>
+      {/* ---------- Tabs ---------- */}
+      <div className="max-w-5xl mx-auto w-full">
+        <div className="bg-white/70 backdrop-blur rounded-2xl p-1 flex">
+          {[
+            { key: "map" as const, label: "Map & Timeline" },
+            { key: "trends" as const, label: "Trends & Selectors" },
+          ].map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setActive(t.key)}
+              className={`flex-1 py-2 md:py-3 rounded-xl text-sm md:text-base transition ${
+                active === t.key
+                  ? "bg-white shadow font-semibold text-gray-900"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Controls */}
-        <div className="flex flex-wrap items-center gap-4 bg-gray-50 px-6 py-4 rounded-2xl shadow border border-gray-200 mb-6">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
-          >
-            {isPlaying ? "Pause" : "Play"}
-          </button>
-
-          <label className="text-sm text-gray-600">Speed</label>
-          <select
-            value={speed}
-            onChange={(e) => setSpeed(Number(e.target.value))}
-            className="border px-2 py-1 rounded"
-          >
-            <option value={0.5}>0.5x</option>
-            <option value={1}>1x</option>
-            <option value={2}>2x</option>
-          </select>
-
-          <input
-            type="range"
-            min="2001"
-            max="2030"
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="w-56"
-          />
-          <span className="font-bold">{year}</span>
-        </div>
-
-        {/* Map only needs year */}
-        <ForestMap year={year} />
-      </section>
-
-      {/* ---------- Compare: States vs Districts ---------- */}
-      <section id="state" className="bg-white p-8 rounded-3xl shadow-xl border">
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-4">
-          <h2 className="text-3xl font-bold text-green-700">Forest Loss Trends</h2>
-          <p className="text-sm text-gray-600 max-w-xl">
-            Compare multiple states or districts. For clarity, the selector disables district picks when states are selected (and vice versa).
-          </p>
-        </div>
-
-        <div className="flex gap-6 mb-6">
-          <div className="flex-1">
-            <label className="block mb-2 font-semibold">Select States</label>
-            <Select
-              isMulti
-              options={stateOptions}
-              value={selectedStates.map((s) => ({ value: s, label: s }))}
-              onChange={(vals: MultiValue<OptionType>) => setSelectedStates(vals.map((v) => v.value))}
-              className="text-gray-700"
-              isDisabled={selectedDistricts.length > 0}
-            />
+      {/* ========== Tab 内容 ========== */}
+      {active === "map" ? (
+        <section id="map-tab" className="bg-white p-6 rounded-3xl shadow-xl border">
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-700">
+              Forest Loss Map
+            </h2>
+            <p className="text-sm text-gray-600 max-w-xl">
+              Drag the slider or press Play to animate changes from 2001 to 2030
+              (predictions after 2024).
+            </p>
           </div>
-          <div className="flex-1">
-            <label className="block mb-2 font-semibold">Select Districts</label>
-            <Select
-              isMulti
-              options={districtOptions}
-              value={selectedDistricts.map((d) => ({ value: d, label: d }))}
-              onChange={(vals: MultiValue<OptionType>) => setSelectedDistricts(vals.map((v) => v.value))}
-              className="text-gray-700"
-              isDisabled={selectedStates.length > 0}
-            />
-          </div>
-        </div>
 
-        <ResponsiveContainer width="100%" height={420}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="year" />
-            <YAxis />
-            <Tooltip formatter={(v: number) => [`${v.toLocaleString()} ha`, "Loss"]} />
-            <Legend />
-            {[...selectedStates, ...selectedDistricts].map((key, idx) => (
-              <Line
-                key={key}
-                type="monotone"
-                dataKey={key}
-                stroke={colors[idx % colors.length]}
-                strokeWidth={3}
-                dot={false}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start">
+            {/* Map */}
+            <section className="rounded-2xl overflow-hidden">
+              <ForestMap year={year} />
+            </section>
+
+            {/* Right panel: Play bar + Top 3 hotspots */}
+            <aside className="bg-gray-50 border rounded-2xl p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <button
+                  onClick={() => setIsPlaying(!isPlaying)}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+                >
+                  {isPlaying ? "Pause" : "Play"}
+                </button>
+
+                <label className="text-sm text-gray-600">Speed</label>
+                <select
+                  value={speed}
+                  onChange={(e) => setSpeed(Number(e.target.value))}
+                  className="border px-2 py-1 rounded"
+                >
+                  <option value={0.5}>0.5x</option>
+                  <option value={1}>1x</option>
+                  <option value={2}>2x</option>
+                </select>
+
+                <span className="ml-auto font-semibold">{year}</span>
+              </div>
+
+              <input
+                type="range"
+                min={2001}
+                max={2030}
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+                className="w-full"
               />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </section>
+              <p className="mt-1 text-xs text-gray-500">
+                2001–2030 (predictions after 2024)
+              </p>
 
-      {/* ---------- How to read + Methodology ---------- */}
-      <section className="bg-white p-8 rounded-3xl shadow-xl border">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">How to read this page</h3>
-        <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-700">
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="font-semibold mb-1">Map</div>
-            <p>Warm colors indicate higher tree-cover loss. Use the timeline to see when and where hotspots appear.</p>
+              {/* ✅ Top 3 hotspots 列表（移动到右侧面板） */}
+              <div className="mt-4 rounded-xl border bg-white p-3">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Top 3 hotspots · {year}
+                </div>
+                <ul className="space-y-1.5 text-gray-900">
+                  {topStatesThisYear.map((t, i) => (
+                    <li key={t.state} className="text-sm">
+                      <span className="font-semibold">
+                        {i + 1}. {t.state}
+                      </span>{" "}
+                      — {formatHa(t.loss)}
+                    </li>
+                  ))}
+                  {topStatesThisYear.length === 0 && (
+                    <li className="text-gray-500 text-xs">No data</li>
+                  )}
+                </ul>
+              </div>
+            </aside>
           </div>
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="font-semibold mb-1">Trends</div>
-            <p>Lines show annual loss per state/district. Focus on direction and relative magnitude rather than exact values.</p>
-          </div>
-          <div className="rounded-2xl border p-5 bg-gray-50">
-            <div className="font-semibold mb-1">Narration</div>
-            <p>The banner summarizes this year’s loss, YoY change, and top hotspots to anchor your interpretation.</p>
-          </div>
-        </div>
 
-        <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-3">Data & methodology</h3>
-        <ul className="list-disc pl-6 text-sm text-gray-700 space-y-2">
-          <li><span className="font-semibold">2001–2024:</span> historical annual tree-cover loss aggregated by district/state.</li>
-          <li><span className="font-semibold">2025–2030:</span> district-level predictions aggregated to states for comparability.</li>
-          <li>Values represent <em>tree-cover loss</em> (hectares) and are not the same as net deforestation or biodiversity loss.</li>
-          <li>Predictions are indicative; use them to explore possible patterns, not precise forecasts.</li>
-        </ul>
-      </section>
+          {/* 下面只保留 Yearly narration（不再重复 hotspots 列表） */}
+          <div className="mt-5 rounded-2xl border p-4 md:p-5 bg-emerald-50">
+            <div className="text-sm md:text-base text-emerald-900 leading-relaxed">
+              <span className="font-semibold">Yearly narration: </span>
+              {narration}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section id="trends-tab" className="bg-white p-6 rounded-3xl shadow-xl border">
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-700">
+              Forest Loss Trends
+            </h2>
+            <p className="text-sm text-gray-600 max-w-xl">
+              Compare multiple states or districts. Choose a mode first, then
+              pick one or more series to plot.
+            </p>
+          </div>
+
+          {/* 模式切换：States / Districts */}
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-sm text-gray-600 mr-2">Mode:</span>
+            <div className="inline-flex rounded-xl border bg-white overflow-hidden">
+              <button
+                onClick={() => setTrendMode("state")}
+                className={`px-3 py-1.5 text-sm ${
+                  trendMode === "state"
+                    ? "bg-emerald-600 text-white"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                States
+              </button>
+              <button
+                onClick={() => setTrendMode("district")}
+                className={`px-3 py-1.5 text-sm border-l ${
+                  trendMode === "district"
+                    ? "bg-emerald-600 text-white"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                Districts
+              </button>
+            </div>
+          </div>
+
+          {/* 选择器：根据模式显示一个 */}
+          {trendMode === "state" ? (
+            <div className="mb-5">
+              <div className="font-semibold text-sm mb-2">Select States</div>
+              <Select
+                isMulti
+                options={stateOptions}
+                value={selectedStates.map((s) => ({ value: s, label: s }))}
+                onChange={(vals: MultiValue<OptionType>) =>
+                  setSelectedStates(vals.map((v) => v.value))
+                }
+                className="text-gray-700"
+                closeMenuOnSelect={false}
+                blurInputOnSelect={false}
+              />
+            </div>
+          ) : (
+            <div className="mb-5">
+              <div className="font-semibold text-sm mb-2">Select Districts</div>
+              <Select
+                isMulti
+                options={districtOptions}
+                value={selectedDistricts.map((d) => ({ value: d, label: d }))}
+                onChange={(vals: MultiValue<OptionType>) =>
+                  setSelectedDistricts(vals.map((v) => v.value))
+                }
+                className="text-gray-700"
+                closeMenuOnSelect={false}
+                blurInputOnSelect={false}
+              />
+            </div>
+          )}
+
+          {/* 趋势图 */}
+          <ResponsiveContainer width="100%" height={420}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip formatter={(v: number) => [`${v.toLocaleString()} ha`, "Loss"]} />
+              <Legend />
+              {seriesKeys.map((key, idx) => (
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={colors[idx % colors.length]}
+                  strokeWidth={3}
+                  dot={false}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </section>
+      )}
 
       {/* ---------- Eco Tips / Next Steps ---------- */}
-      <section id="eco-tips" className="bg-white p-8 rounded-3xl shadow-xl border">
-        <h2 className="text-3xl font-bold text-green-700 mb-4">Eco Tips & Next steps</h2>
+      <section id="eco-tips" className="bg-white p-6 rounded-3xl shadow-xl border">
+        <h2 className="text-3xl font-bold text-green-700 mb-4">
+          Eco Tips & Next steps
+        </h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="p-5 bg-green-50 rounded-2xl border border-green-200">
             <ul className="list-disc pl-6 text-gray-700 space-y-2 text-sm">
@@ -409,9 +533,11 @@ export default function ForestPage() {
               <li>Choose eco-friendly tourism and certified operators.</li>
             </ul>
           </div>
-          <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-200">
+          <div className="p-5 bg-emerald-50 rounded-2xl border-emerald-200 border">
             <p className="text-sm text-emerald-900">
-              Tip: Pick a hotspot year on the timeline, note which states rise in the “Top hotspots” list, then compare them in the chart to see if spikes are one-off or part of a longer trend.
+              Tip: Pick a hotspot year on the timeline, note which states rise
+              in the trends chart, then see if spikes are one-off or part of a
+              longer trend.
             </p>
           </div>
         </div>
