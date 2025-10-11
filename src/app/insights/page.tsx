@@ -271,7 +271,7 @@ export default function ForestPage() {
             </span>
           </h1>
           <p className="text-base md:text-lg text-white/90 drop-shadow-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Explore Malaysia's Forest Cover Changes from 2001 to 2030
+            Explore Malaysia&apos;s Forest Cover Changes from 2001 to 2030
           </p>
         </header>
 
