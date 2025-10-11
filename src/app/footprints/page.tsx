@@ -35,14 +35,6 @@ interface CampSite {
   longitude?: number;
 }
 
-interface Plant {
-  id: string;
-  name: string;
-  imageUrl: string;
-  dateIdentified: string;
-  location?: { lat: number; lng: number };
-}
-
 interface Visit {
   campsiteId: string;
   name: string;
@@ -50,27 +42,23 @@ interface Visit {
   durationDays?: number;
 }
 
-type Tab = "favorites" | "plants" | "visits" | "map";
+type Tab = "favorites" | "visits" | "map";
 
 export default function MyFootprintsPage() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [camps, setCamps] = useState<CampSite[]>([]);
-  const [plants, setPlants] = useState<Plant[]>([]);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("favorites");
 
   // All camps for map reference
   const [allCamps, setAllCamps] = useState<CampSite[]>([]);
-  // Map layer toggles
   const [showAll, setShowAll] = useState(true);
   const [showVisited, setShowVisited] = useState(true);
   const [showFavorites, setShowFavorites] = useState(true);
 
-  // Load local data
   useEffect(() => {
     const fav = localStorage.getItem("favorites");
-    const plantData = localStorage.getItem("identifiedPlants");
     const visitData = localStorage.getItem("visitHistory");
 
     if (fav) {
@@ -80,13 +68,7 @@ export default function MyFootprintsPage() {
         setFavorites([]);
       }
     }
-    if (plantData) {
-      try {
-        setPlants(JSON.parse(plantData));
-      } catch {
-        setPlants([]);
-      }
-    }
+
     if (visitData) {
       try {
         setVisits(JSON.parse(visitData));
@@ -96,7 +78,7 @@ export default function MyFootprintsPage() {
     }
   }, []);
 
-  // Fetch favorite camps details
+  // Fetch favorite camps
   useEffect(() => {
     if (favorites.length === 0) {
       setLoading(false);
@@ -140,7 +122,7 @@ export default function MyFootprintsPage() {
     fetchAll();
   }, []);
 
-  // Compute favorite and visited points
+  // Compute markers
   const favoriteCampPoints = useMemo(
     () =>
       allCamps.filter(
@@ -156,7 +138,6 @@ export default function MyFootprintsPage() {
     );
   }, [allCamps, visits]);
 
-  // Stats
   const stats = useMemo(() => {
     const allCount = allCamps.filter((c) => c.latitude && c.longitude).length;
     const visitedIds = new Set(visitedCampPoints.map((c) => c.id));
@@ -168,7 +149,6 @@ export default function MyFootprintsPage() {
     };
   }, [allCamps, visitedCampPoints, favoriteCampPoints]);
 
-  // Simple colored dot icon
   const [LRef, setLRef] = useState<any>(null);
   useEffect(() => {
     (async () => {
@@ -206,7 +186,6 @@ export default function MyFootprintsPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="relative flex items-center justify-center mb-10 mt-10">
-          {/* subtle glass chip behind the title for contrast */}
           <div className="absolute -z-0 top-1/2 -translate-y-1/2 w-[min(90%,720px)] h-16 rounded-full bg-black/35 backdrop-blur-sm blur-md"></div>
           <h1
             className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-center text-white"
@@ -229,7 +208,6 @@ export default function MyFootprintsPage() {
         <div className="flex flex-wrap gap-3 mb-6 justify-center">
           {[
             { id: "favorites", label: "Favorites" },
-            { id: "plants", label: "Identified Plants" },
             { id: "visits", label: "Visit History" },
             { id: "map", label: "My Footprint Map" },
           ].map((tab) => (
@@ -318,43 +296,7 @@ export default function MyFootprintsPage() {
           </>
         )}
 
-        {/* Plants */}
-        {activeTab === "plants" && (
-          <div className="bg-white/90 rounded-2xl p-8 shadow-md">
-            {plants.length === 0 ? (
-              <p className="text-gray-600 text-center text-lg">
-                You haven’t identified any plants yet.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {plants.map((plant) => (
-                  <div
-                    key={plant.id}
-                    className="bg-white rounded-xl shadow hover:shadow-lg overflow-hidden transition"
-                  >
-                    <Image
-                      src={plant.imageUrl || "/images/plant-placeholder.jpg"}
-                      alt={plant.name}
-                      width={400}
-                      height={300}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="font-semibold text-lg text-gray-800">
-                        {plant.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        Identified on {plant.dateIdentified}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Visits */}
+        {/* Visit History */}
         {activeTab === "visits" && (
           <div className="bg-white/90 rounded-2xl p-8 shadow-md">
             {visits.length === 0 ? (
@@ -387,9 +329,9 @@ export default function MyFootprintsPage() {
         {/* Map */}
         {activeTab === "map" && (
           <div className="bg-white/90 rounded-3xl p-5 shadow-xl ring-1 ring-green-100 backdrop-blur-sm h-[560px] md:h-[600px] lg:h-[640px] relative overflow-hidden">
-            {/* Top-right: layer toggles */}
+            {/* Top-right controls */}
             <div className="absolute z-[400] top-4 right-4">
-              <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg px-3 py-2 flex items-center gap-2">
+              <div className="bg-white/90 rounded-full shadow-lg px-3 py-2 flex items-center gap-2">
                 <button
                   className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                     showAll
@@ -423,9 +365,9 @@ export default function MyFootprintsPage() {
               </div>
             </div>
 
-            {/* Top-left: stats */}
+            {/* Top-left stats */}
             <div className="absolute z-[400] top-4 left-4">
-              <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg px-3 py-2 text-sm">
+              <div className="bg-white/90 rounded-xl shadow-lg px-3 py-2 text-sm">
                 <div className="flex items-center gap-2">
                   <span
                     className="inline-block w-3 h-3 rounded-full"
@@ -457,22 +399,20 @@ export default function MyFootprintsPage() {
             </div>
 
             <MapContainer
-              // Focus on Peninsular Malaysia; clamp pan range
               center={[4.5, 102.0]}
               zoom={7.2}
               scrollWheelZoom={true}
               style={{ height: "100%", width: "100%", borderRadius: "1.5rem" }}
               zoomControl={true}
               maxBounds={[
-                [0.8, 99.5], // SW
-                [7.3, 104.7], // NE
+                [0.8, 99.5],
+                [7.3, 104.7],
               ]}
               maxBoundsViscosity={1.0}
               minZoom={6.6}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-              {/* All camps (grey) */}
               {showAll &&
                 allCamps
                   .filter((c) => c.latitude && c.longitude)
@@ -499,7 +439,6 @@ export default function MyFootprintsPage() {
                     </Marker>
                   ))}
 
-              {/* Visited (green) */}
               {showVisited &&
                 visitedCampPoints.map((camp) => (
                   <Marker
@@ -524,7 +463,6 @@ export default function MyFootprintsPage() {
                   </Marker>
                 ))}
 
-              {/* Favorites (gold) */}
               {showFavorites &&
                 favoriteCampPoints.map((camp) => (
                   <Marker
