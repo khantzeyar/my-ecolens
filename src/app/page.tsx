@@ -1,9 +1,13 @@
 /**
- * Landing page (refined UI, keep structure & copy)
+ * Landing page (merged to match target left design)
  * - Symmetric hero wave (Q/T curve) + matched color
  * - Center highlight so hero text is always readable
  * - Seamless gradient into Overview
  * - CTA: solid light card + dark text + green filled button
+ * - Overview cards: pale green gradient, rounded top gradient bar, solid green icon tile, CTA text w/ arrow
+ * - Keyboard shortcut (Alt/⌘ + /) to open chatbot
+ * - Down-arrow scroll to Overview
+ * - Floating chatbot button
  */
 
 "use client";
@@ -11,6 +15,78 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect } from "react";
+
+/* ---------- Reusable card (matches the left screenshot style) ---------- */
+function OverviewCard({
+  href,
+  title,
+  desc,
+  cta = "Open",
+  topBar = "from-emerald-600 to-teal-600",
+  bg = "from-emerald-50 to-white",
+  iconTile = "bg-emerald-600",
+  ariaLabel,
+  onClick,
+  children,
+}: {
+  href: string;
+  title: string;
+  desc: string;
+  cta?: string;
+  topBar?: string; // gradient for the top bar
+  bg?: string; // subtle card background gradient
+  iconTile?: string; // solid color for the icon square
+  ariaLabel?: string;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  children: React.ReactNode; // the icon svg
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      aria-label={ariaLabel ?? `Go to ${title}`}
+      className="group relative rounded-[22px] bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+    >
+      {/* Top rounded gradient bar */}
+      <div className={`absolute inset-x-0 top-0 h-3 rounded-t-[22px] bg-gradient-to-r ${topBar}`} />
+
+      {/* Card body with very light green gradient */}
+      <div className={`pt-8 pb-6 px-6 rounded-[22px] bg-gradient-to-b ${bg} overflow-hidden`}>
+        {/* Icon tile */}
+        <div className={`mx-auto mb-4 h-12 w-12 ${iconTile} rounded-xl text-white shadow-md grid place-items-center`}>
+          <div className="w-6 h-6">{children}</div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-xl font-extrabold text-gray-900 text-center mb-2">{title}</h3>
+
+        {/* Description */}
+        <p className="text-gray-600 text-center leading-relaxed max-w-[28ch] mx-auto">
+          {desc}
+        </p>
+
+        {/* CTA row */}
+        <div className="mt-5 flex items-center justify-center">
+          <span className="text-emerald-600 font-semibold">
+            {cta}
+          </span>
+          <svg
+            className="ml-2 h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-x-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Subtle white footer strip to match the reference look */}
+      <div className="h-6 rounded-b-[22px] bg-white" />
+    </Link>
+  );
+}
 
 export default function Home() {
   // Dispatch a global event for your chatbot to listen to
@@ -22,19 +98,23 @@ export default function Home() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const isMac = navigator.platform.toUpperCase().includes("MAC");
-      const ok =
-        (isMac && e.metaKey && e.key === "/") ||
-        (!isMac && e.altKey && e.key === "/");
+      const ok = (isMac && e.metaKey && e.key === "/") || (!isMac && e.altKey && e.key === "/");
       if (ok) handleOpenChatbot();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // NEW: scroll to overview when clicking the down arrow
+  // Scroll to overview when clicking the down arrow
   const scrollToOverview = () => {
     const el = document.querySelector("#overview-section");
     el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Wrapper to use OverviewCard but prevent navigation for chatbot card
+  const openChatbotViaCard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    handleOpenChatbot();
   };
 
   return (
@@ -42,13 +122,7 @@ export default function Home() {
       {/* ===== Hero ===== */}
       <section className="relative flex items-center justify-center h-[88vh] sm:h-screen overflow-hidden">
         {/* Background video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        >
+        <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
           <source src="/forest-video.mp4" type="video/mp4" />
         </video>
 
@@ -68,9 +142,8 @@ export default function Home() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-lg sm:text-xl opacity-95 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
-            Providing campsite locations, eco-friendly tips, and forest insights
-            so that you can explore responsibly and enjoy the forests with
-            confidence.
+            Providing campsite locations, eco-friendly tips, and forest insights so that you can explore responsibly and
+            enjoy the forests with confidence.
           </p>
 
           {/* CTAs */}
@@ -93,7 +166,6 @@ export default function Home() {
               Why Eco Camping Matters
             </Link>
 
-            {/* NEW: Recommendation button */}
             <Link
               href="/recommender"
               className="inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold
@@ -105,34 +177,20 @@ export default function Home() {
           </div>
         </div>
 
-        {/* NEW: Down arrow indicator (click to scroll) */}
+        {/* Down arrow indicator (click to scroll) */}
         <button
           onClick={scrollToOverview}
           aria-label="Scroll down"
           className="absolute bottom-8 z-10 text-white/95 hover:text-emerald-300 transition-colors animate-bounce"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 
         {/* Decorative bottom wave — symmetric + brand color */}
-        <svg
-          className="pointer-events-none absolute -bottom-2 left-0 w-full h-[120px] text-[#F5FBF8]"
-          viewBox="0 0 1440 160"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0 120 Q 360 60 720 120 T 1440 120 L 1440 160 L 0 160 Z"
-            fill="currentColor"
-          />
+        <svg className="pointer-events-none absolute -bottom-2 left-0 w-full h-[120px] text-[#F5FBF8]" viewBox="0 0 1440 160" preserveAspectRatio="none">
+          <path d="M0 120 Q 360 60 720 120 T 1440 120 L 1440 160 L 0 160 Z" fill="currentColor" />
         </svg>
       </section>
 
@@ -153,63 +211,132 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Use responsive columns so adding cards won’t break layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-8 items-stretch">
+          {/* Two rows × four columns from lg and up */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 items-stretch">
+            {/* Discover Camping Sites */}
             <OverviewCard
               href="/camp"
               title="Discover Camping Sites"
               desc="Find campsites across Malaysia with interactive maps and filters."
-            />
+              cta="Explore"
+              topBar="from-teal-600 to-emerald-700"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-emerald-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-8 9 8M5 10v8a2 2 0 002 2h10a2 2 0 002-2v-8" />
+              </svg>
+            </OverviewCard>
+
+            {/* Forest Insights */}
             <OverviewCard
               href="/insights"
               title="Forest Insights"
               desc="Explore data on forest cover, loss trends, and sustainability insights."
-            />
+              cta="Learn"
+              topBar="from-emerald-600 to-green-700"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-emerald-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v8m-4-4h8M12 3a9 9 0 110 18 9 9 0 010-18z" />
+              </svg>
+            </OverviewCard>
+
+            {/* Camping Guide */}
             <OverviewCard
               href="/guide"
               title="Camping Guide"
               desc="Learn eco-friendly camping tips and do's & don'ts for responsible camping."
-            />
+              cta="Read"
+              topBar="from-teal-600 to-cyan-600"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-teal-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6.5C4 5.12 5.12 4 6.5 4H20v14H7.5A3.5 3.5 0 014 14.5v-8z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 9h16" />
+              </svg>
+            </OverviewCard>
+
+            {/* Plant Identifier */}
             <OverviewCard
               href="/plant"
               title="Plant Identifier"
               desc="Identify plants you encounter while camping using our recognition tool."
-            />
+              cta="Identify"
+              topBar="from-lime-600 to-green-600"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-green-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 13c2.5-5 7-4.5 7-4.5S18 13 12 19C6 13 5 8.5 5 8.5S9.5 8 12 13z" />
+              </svg>
+            </OverviewCard>
+
+            {/* Why Eco Camping Matters */}
             <OverviewCard
               href="/why"
               title="Why Eco Camping Matters"
               desc="Learn why responsible camping is important for protecting Malaysia's forests and biodiversity."
-            />
+              cta="Discover"
+              topBar="from-green-700 to-emerald-700"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-emerald-700"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21l-7-7a5 5 0 117-7 5 5 0 117 7l-7 7z" />
+              </svg>
+            </OverviewCard>
+
+            {/* Campsite Recommender */}
             <OverviewCard
               href="/recommender"
               title="Campsite Recommender"
               desc="Get suggestions based on your preferences and predicted weather."
-            />
+              cta="Open"
+              topBar="from-emerald-600 to-green-600"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-emerald-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M4 11h16M6 19h12a2 2 0 002-2v-6H4v6a2 2 0 002 2z" />
+              </svg>
+            </OverviewCard>
+
+            {/* My Eco Footprints */}
             <OverviewCard
               href="/footprints"
               title="My Eco Footprints"
               desc="Track favorites, identified plants, visit history, and your map."
-            />
-
-            {/* ===== Chatbot introduction card (aligned with the row) ===== */}
-            <div
-              onClick={handleOpenChatbot}
-              role="button"
-              tabIndex={0}
-              aria-label="Open Chatbot"
-              className="group relative overflow-hidden rounded-2xl bg-white p-6 text-center ring-1 ring-gray-200 shadow-sm
-                         hover:shadow-lg hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
-                         h-full flex flex-col justify-center cursor-pointer"
+              cta="Open"
+              topBar="from-teal-600 to-emerald-600"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-teal-600"
             >
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-600" />
-              <h3 className="text-xl font-bold mb-2 group-hover:text-emerald-700">
-                Chatbot Assistant
-              </h3>
-              <p className="text-gray-600">
-                Get quick answers about eco-friendly camping, find tips and site info, and chat anytime.
-              </p>
-            </div>
-            {/* ===== end chatbot card ===== */}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 14a4 4 0 100-8 4 4 0 000 8zm10 0a4 4 0 100-8 4 4 0 000 8zM7 14v6m10-6v6" />
+              </svg>
+            </OverviewCard>
+
+            {/* Chatbot card — same style; prevent navigation */}
+            <OverviewCard
+              href="/#open-chatbot"
+              onClick={openChatbotViaCard}
+              title="Chatbot Assistant"
+              desc="Get quick answers about eco-friendly camping, find tips and site info, and chat anytime."
+              cta="Open"
+              topBar="from-emerald-600 to-green-600"
+              bg="from-emerald-50 to-white"
+              iconTile="bg-emerald-600"
+              ariaLabel="Open Chatbot"
+            >
+              {/* chat bubble + sparkles icon */}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 14.5V20a1 1 0 001 1h5l4 0c4.4 0 8-3.13 8-6.75S18.4 7.5 14 7.5H8C4.7 7.5 2 9.74 2 12.25c0 1.5.88 2.83 2 3.75z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.5 3.5h1M21 5.25h.75M17.75 5.25h-.75" />
+              </svg>
+            </OverviewCard>
           </div>
         </div>
       </section>
@@ -266,9 +393,7 @@ export default function Home() {
           {/* Solid white card + dark text */}
           <div className="rounded-3xl bg-white shadow-[0_24px_80px_-24px_rgba(16,185,129,0.55)] ring-1 ring-black/5">
             <div className="px-8 py-10 text-center">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-2">
-                Want to learn more?
-              </h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-2">Want to learn more?</h2>
               <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
                 Click the button below to start chatting with our bot and get more information.
               </p>
@@ -298,36 +423,17 @@ export default function Home() {
         <span className="relative inline-flex h-14 w-14 items-center justify-center">
           {/* Inline SVG icon (chat bubble with sparkles) */}
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 14.5C3.447 14.5 3 14.947 3 15.5V20.25C3 20.664 3.336 21 3.75 21H8.5C9.053 21 9.5 20.553 9.5 20V19.5H14C18.418 19.5 22 16.366 22 12.75C22 9.134 18.418 6 14 6H8C4.686 6 2 8.239 2 10.75C2 12.261 2.87 13.592 4 14.5Z" fill="currentColor"/>
-            <path d="M17 3.25a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-.5A.75.75 0 0 1 17 3.75v-.5ZM20.5 4.25a.75.75 0 0 1 .75-.75h.25a.75.75 0 0 1 .75.75v.25a.75.75 0 0 1-.75.75H21.25a.75.75 0 0 1-.75-.75v-.25Z" fill="currentColor"/>
+            <path
+              d="M4 14.5C3.447 14.5 3 14.947 3 15.5V20.25C3 20.664 3.336 21 3.75 21H8.5C9.053 21 9.5 20.553 9.5 20V19.5H14C18.418 19.5 22 16.366 22 12.75C22 9.134 18.418 6 14 6H8C4.686 6 2 8.239 2 10.75C2 12.261 2.87 13.592 4 14.5Z"
+              fill="currentColor"
+            />
+            <path
+              d="M17 3.25a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-.5A.75.75 0 0 1 17 3.75v-.5ZM20.5 4.25a.75.75 0 0 1 .75-.75h.25a.75.75 0 0 1 .75.75v.25a.75.75 0 0 1-.75.75H21.25a.75.75 0 0 1-.75-.75v-.25Z"
+              fill="currentColor"
+            />
           </svg>
         </span>
       </button>
     </main>
-  );
-}
-
-/* ===== Reusable card component ===== */
-function OverviewCard({
-  href,
-  title,
-  desc,
-}: {
-  href: string;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group relative overflow-hidden rounded-2xl bg-white p-6 text-center ring-1 ring-gray-200 shadow-sm
-                 hover:shadow-lg hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
-                 h-full flex flex-col justify-center"
-      aria-label={`Go to ${title}`}
-    >
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-600" />
-      <h3 className="text-xl font-bold mb-2 group-hover:text-emerald-700">{title}</h3>
-      <p className="text-gray-600">{desc}</p>
-    </Link>
   );
 }
