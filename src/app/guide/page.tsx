@@ -27,6 +27,18 @@ interface Tip {
   learnMoreHref?: string;
 }
 
+interface PlaceResult {
+  place_id: string;
+  lat: string;
+  lon: string;
+  display_name: string;
+  type?: string;
+  class?: string;
+  address?: Record<string, string>;
+  extratags?: Record<string, string>;
+  distanceKm?: number;
+}
+
 type Category =
   | ({
       id: string;
@@ -303,21 +315,37 @@ function dedupe<T extends { place_id?: string }>(arr: T[]) {
   });
 }
 
+function hasChecklist(
+  category: Category
+): category is Extract<Category, { checklist: ChecklistGroup[] }> {
+  return "checklist" in category;
+}
+
+function isCategoryWithChecklist(category: Category): category is Category & { checklist: ChecklistGroup[] } {
+  return "checklist" in category;
+}
+
+function isCategoryWithTips(category: Category): category is Category & { tips: Tip[] } {
+  return "tips" in category;
+}
+
 // ---------- Main ----------
 export default function GuidePage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const firstCategory = categories[0];
   const [customChecklist, setCustomChecklist] = useState<ChecklistGroup[]>(
-    (categories[0] as any).checklist ?? []
+    hasChecklist(firstCategory) ? firstCategory.checklist : []
+  );
+  const [targetGroup, setTargetGroup] = useState(
+    hasChecklist(firstCategory) ? firstCategory.checklist[0]?.group ?? "" : ""
   );
   const [newItem, setNewItem] = useState("");
-  const [targetGroup, setTargetGroup] = useState(
-    (categories[0] as any).checklist?.[0]?.group ?? ""
-  );
+
 
   // Emergency: location + facilities
   const [pos, setPos] = useState<{ lat: number; lon: number } | null>(null);
-  const [facilities, setFacilities] = useState<any[]>([]);
+  const [facilities, setFacilities] = useState<PlaceResult[]>([]);
   const [hLoading, setHLoading] = useState(false);
   const [hError, setHError] = useState<string | null>(null);
   const [searchType, setSearchType] = useState<"hospitals" | "clinics">(
@@ -508,8 +536,12 @@ export default function GuidePage() {
             maximumAge: 30000,
           });
           setPos({ lat: p2.coords.latitude, lon: p2.coords.longitude });
-        } catch (err: any) {
-          setHError(err?.message || "Failed to get your location.");
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            setHError(err.message);
+          } else {
+            setHError("Failed to get your location.");
+          }
         }
       } finally {
         setHLoading(false);
@@ -524,7 +556,6 @@ export default function GuidePage() {
 
     // If Permissions API exists, use it to reduce unnecessary prompts.
     try {
-      // @ts-expect-error — PermissionName typing is broader in browsers
       navigator.permissions
         ?.query({ name: "geolocation" as PermissionName })
         .then((status) => {
@@ -559,7 +590,7 @@ export default function GuidePage() {
       const text = await res.text().catch(() => "");
       throw new Error(text || `Nominatim error: ${res.status}`);
     }
-    return (await res.json()) as any[];
+    return (await res.json()) as PlaceResult[];
   };
 
   const fetchFacilities = async (mode: "hospitals" | "clinics") => {
@@ -583,7 +614,7 @@ export default function GuidePage() {
           ? ["hospital", "emergency", "medical centre", "medical center"]
           : ["clinic", "polyclinic", "health clinic", "medical clinic"];
 
-      let results: any[] = [];
+      let results: PlaceResult[] = [];
       for (const { dLat, dLon } of boxes) {
         const box = {
           left: pos.lon - dLon,
@@ -595,10 +626,12 @@ export default function GuidePage() {
         const batches = await Promise.allSettled(
           terms.map((t) => queryNominatim(t, box))
         );
-        const merged: any[] = [];
-        for (const b of batches)
-          if (b.status === "fulfilled")
-            merged.push(...(b as PromiseFulfilledResult<any[]>).value);
+        const merged: PlaceResult[] = [];
+        for (const b of batches) {
+          if (b.status === "fulfilled") {
+            merged.push(...b.value);
+          }
+        }
         if (merged.length > 0) {
           results = merged;
           break;
@@ -624,11 +657,12 @@ export default function GuidePage() {
         .sort((a, b) => a.distanceKm - b.distanceKm);
 
       setFacilities(withDistance);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const err = e instanceof Error ? e : new Error(String(e));
       const msg =
-        typeof e?.message === "string" && e.message.includes("Too Many Requests")
+        err.message.includes("Too Many Requests")
           ? "Map service is rate-limiting this network. Please retry in ~1 minute."
-          : e?.message || "Failed to fetch places.";
+          : err.message || "Failed to fetch places.";
       setHError(msg);
     } finally {
       setHLoading(false);
@@ -639,11 +673,10 @@ export default function GuidePage() {
 
   // -------------- Subpage --------------
   if (activeCategory && category) {
-    const isChecklist = (category as any).checklist;
-    const tips: Tip[] = (category as any).tips || [];
-
-    const isEmergency = (category as any).id === "emergency";
-    const isNature = (category as any).id === "nature";
+    const isChecklist = isCategoryWithChecklist(category);
+    const tips = isCategoryWithTips(category) ? category.tips : [];
+    const isEmergency = category.id === "emergency";
+    const isNature = category.id === "nature";
 
     return (
       <main
@@ -661,18 +694,18 @@ export default function GuidePage() {
             <nav className="hidden md:flex gap-2 text-white/95">
               {categories.map((c) => (
                 <button
-                  key={(c as any).id}
+                  key={c.id}
                   className="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 border border-white/20"
-                  onClick={() => setActiveCategory((c as any).id)}
+                  onClick={() => setActiveCategory(c.id)}
                 >
-                  {(c as any).title}
+                  {c.title}
                 </button>
               ))}
             </nav>
           </div>
 
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow">
-            {(category as any).title}
+            {category.title}
           </h2>
 
           {/* Emergency */}
@@ -772,7 +805,11 @@ export default function GuidePage() {
                                   {h.display_name}
                                 </div>
                                 <div className="text-sm text-gray-700 mt-1">
-                                  Straight-line: {h.distanceKm.toFixed(2)} km
+                                  {typeof h.distanceKm === "number" && (
+                                    <div className="text-sm text-gray-700 mt-1">
+                                      Straight-line: {h.distanceKm.toFixed(2)} km
+                                    </div>
+                                  )}
                                 </div>
                                 {phone && (
                                   <div className="text-sm text-gray-700 mt-1">
@@ -886,8 +923,9 @@ export default function GuidePage() {
             <>
               <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {(
-                  (categories.find((c) => (c as any).id === "nature") as any)
-                    .tips as Tip[]
+                  categories.find(
+                    (c): c is Category & { tips: Tip[] } => c.id === "nature" && "tips" in c
+                  )?.tips || []
                 ).map((tip) => (
                   <div
                     key={tip.title}
@@ -985,7 +1023,7 @@ export default function GuidePage() {
           {isChecklist && (
             <div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(customChecklist as any).map((group: ChecklistGroup) => (
+                {customChecklist.map((group: ChecklistGroup) => (
                   <div
                     key={group.group}
                     className="bg-white/85 p-4 rounded-2xl shadow border border-gray-200 hover:shadow-lg transition"
@@ -993,10 +1031,8 @@ export default function GuidePage() {
                     <h3 className="font-bold text-gray-900">{group.group}</h3>
                     <ul className="pl-5 mt-2 text-gray-700 space-y-2">
                       {group.items.map((item) => {
-                        const itemName =
-                          typeof item === "string" ? item : item.name;
-                        const isCustom =
-                          typeof item !== "string" && item.custom;
+                        const itemName = typeof item === "string" ? item : item.name;
+                        const isCustom = typeof item !== "string" && item.custom;
                         return (
                           <li
                             key={itemName}
@@ -1013,9 +1049,7 @@ export default function GuidePage() {
                             </label>
                             {isCustom && (
                               <button
-                                onClick={() =>
-                                  deleteItem(group.group, itemName)
-                                }
+                                onClick={() => deleteItem(group.group, itemName)}
                                 className="ml-2 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition"
                               >
                                 <i className="ri-delete-bin-line text-lg" />
@@ -1031,9 +1065,7 @@ export default function GuidePage() {
 
               {/* Add custom item */}
               <div className="mt-8 bg-white/85 p-4 rounded-2xl shadow border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-3">
-                  Add Your Own Items
-                </h3>
+                <h3 className="font-bold text-gray-900 mb-3">Add Your Own Items</h3>
                 <div className="flex flex-col md:flex-row gap-3 mb-4">
                   <input
                     type="text"
@@ -1047,7 +1079,7 @@ export default function GuidePage() {
                     onChange={(e) => setTargetGroup(e.target.value)}
                     className="px-3 py-2 border rounded"
                   >
-                    {(customChecklist as any).map((group: ChecklistGroup) => (
+                    {customChecklist.map((group) => (
                       <option key={group.group} value={group.group}>
                         {group.group}
                       </option>
@@ -1073,147 +1105,143 @@ export default function GuidePage() {
               </div>
             </div>
           )}
+          </div>
+        </main>
+      );
+    }
+
+    // -------------- Main page --------------
+    return (
+      <main
+        className="pt-28 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover"
+        style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Hero */}
+          <header className="text-center mb-12 mt-8 md:mt-14">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow-sm">
+              Camping Guide
+            </h1>
+            <p className="mt-3 text-white/90 text-lg drop-shadow">
+              Pack smart, stay safe, and enjoy the wild. Everything you need in one place.
+            </p>
+            {/* Quick Access */}
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mt-6">
+              {categories.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => setActiveCategory(c.id)}
+                  className="px-3 py-1 rounded-full bg-white/15 text-white/95 hover:bg-white/25 border border-white/20"
+                >
+                  {c.title}
+                </button>
+              ))}
+            </div>
+          </header>
+
+          {/* Category cards — one per row */}
+          <div className="grid grid-cols-1 gap-8 mb-16">
+            {categories.map((cat) => {
+              const props = { ...cat };
+              if (cat.id === "essentials") {
+                props.itemCount = essentialsCount; // live total (includes custom items)
+              }
+              return (
+                <GuideCard
+                  key={cat.id}
+                  {...props}
+                  onClick={() => setActiveCategory(cat.id)}
+                />
+              );
+            })}
+          </div>
+
+          {/* Do’s & Don’ts */}
+          <section className="bg-white/85 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-xl border border-gray-200 mb-12">
+            <h2 className="text-3xl font-bold text-center text-green-700 mb-8">
+              Responsible Camping: Do’s & Don’ts
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              <div className="bg-green-50 p-6 rounded-2xl shadow border border-green-100">
+                <h3 className="font-bold text-green-700 mb-3">✅ Do’s</h3>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li>Clean up your campsite and take all trash with you.</li>
+                  <li>Respect wildlife and keep a safe distance.</li>
+                  <li>Follow local park and forest regulations.</li>
+                  <li>
+                    Use eco-friendly products (biodegradable soap, reusable containers).
+                  </li>
+                  <li>Save water and use it sparingly at campsites.</li>
+                  <li>Use solar-powered lamps or rechargeable batteries.</li>
+                </ul>
+              </div>
+              <div className="bg-red-50 p-6 rounded-2xl shadow border border-red-100">
+                <h3 className="font-bold text-red-600 mb-3">❌ Don’ts</h3>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li>Do not leave litter or food scraps behind.</li>
+                  <li>Do not start open fires outside of safe zones.</li>
+                  <li>Do not damage plants or trees for firewood.</li>
+                  <li>Do not feed wild animals — it harms their habits.</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Illustrated steps */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="flex flex-col items-center text-center">
+                <Image
+                  src="/images/cleanup.jpg"
+                  alt="Pack Trash Correctly"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
+                />
+                <h3 className="font-bold text-gray-800">Pack Trash Correctly</h3>
+                <p className="text-gray-600 mt-2">
+                  Use trash bags and seal them tightly. Carry all waste back instead of burying it.
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <Image
+                  src="/images/fire-safety.jpg"
+                  alt="Extinguish Fires Properly"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
+                />
+                <h3 className="font-bold text-gray-800">
+                  Extinguish Fires Properly
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Pour water and stir ashes until cold. Never leave smoldering embers behind.
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <Image
+                  src="/images/resources.jpg"
+                  alt="Eco-friendly Habits"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
+                />
+                <h3 className="font-bold text-gray-800">Eco-friendly Habits</h3>
+                <p className="text-gray-600 mt-2">
+                  Use biodegradable soap, reusable bottles, and minimize plastic waste.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Bottom CTA */}
+          <div className="text-center">
+            <Link
+              href="/why"
+              className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-emerald-600 text-white text-lg md:text-xl font-semibold shadow hover:bg-emerald-700"
+            >
+              Why Eco Camping Matters
+            </Link>
+          </div>
         </div>
       </main>
     );
-  }
-
-  // -------------- Main page --------------
-  return (
-    <main
-      className="pt-28 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover"
-      style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}
-    >
-      <div className="max-w-7xl mx-auto">
-        {/* Hero */}
-        <header className="text-center mb-12 mt-8 md:mt-14">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow-sm">
-            Camping Guide
-          </h1>
-          <p className="mt-3 text-white/90 text-lg drop-shadow">
-            Pack smart, stay safe, and enjoy the wild. Everything you need in
-            one place.
-          </p>
-          {/* Quick Access */}
-          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mt-6">
-            {categories.map((c) => (
-              <button
-                key={(c as any).id}
-                onClick={() => setActiveCategory((c as any).id)}
-                className="px-3 py-1 rounded-full bg-white/15 text-white/95 hover:bg-white/25 border border-white/20"
-              >
-                {(c as any).title}
-              </button>
-            ))}
-          </div>
-        </header>
-
-        {/* Category cards — one per row */}
-        <div className="grid grid-cols-1 gap-8 mb-16">
-          {categories.map((cat) => {
-            // Inject dynamic count for Essentials card
-            const props = { ...(cat as any) };
-            if ((cat as any).id === "essentials") {
-              props.itemCount = essentialsCount; // live total from current checklist (includes custom items)
-            }
-            return (
-              <GuideCard
-                key={(cat as any).id}
-                {...props}
-                onClick={() => setActiveCategory((cat as any).id)}
-              />
-            );
-          })}
-        </div>
-
-        {/* Do’s & Don’ts */}
-        <section className="bg-white/85 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-xl border border-gray-200 mb-12">
-          <h2 className="text-3xl font-bold text-center text-green-700 mb-8">
-            Responsible Camping: Do’s & Don’ts
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-green-50 p-6 rounded-2xl shadow border border-green-100">
-              <h3 className="font-bold text-green-700 mb-3">✅ Do’s</h3>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
-                <li>Clean up your campsite and take all trash with you.</li>
-                <li>Respect wildlife and keep a safe distance.</li>
-                <li>Follow local park and forest regulations.</li>
-                <li>
-                  Use eco-friendly products (biodegradable soap, reusable
-                  containers).
-                </li>
-                <li>Save water and use it sparingly at campsites.</li>
-                <li>Use solar-powered lamps or rechargeable batteries.</li>
-              </ul>
-            </div>
-            <div className="bg-red-50 p-6 rounded-2xl shadow border border-red-100">
-              <h3 className="font-bold text-red-600 mb-3">❌ Don’ts</h3>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
-                <li>Do not leave litter or food scraps behind.</li>
-                <li>Do not start open fires outside of safe zones.</li>
-                <li>Do not damage plants or trees for firewood.</li>
-                <li>Do not feed wild animals — it harms their habits.</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Illustrated steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center text-center">
-              <Image
-                src="/images/cleanup.jpg"
-                alt="Pack Trash Correctly"
-                width={160}
-                height={160}
-                className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
-              />
-              <h3 className="font-bold text-gray-800">Pack Trash Correctly</h3>
-              <p className="text-gray-600 mt-2">
-                Use trash bags and seal them tightly. Carry all waste back
-                instead of burying it.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <Image
-                src="/images/fire-safety.jpg"
-                alt="Extinguish Fires Properly"
-                width={160}
-                height={160}
-                className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
-              />
-              <h3 className="font-bold text-gray-800">Extinguish Fires Properly</h3>
-              <p className="text-gray-600 mt-2">
-                Pour water and stir ashes until cold. Never leave smoldering
-                embers behind.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <Image
-                src="/images/resources.jpg"
-                alt="Eco-friendly Habits"
-                width={160}
-                height={160}
-                className="w-40 h-40 object-cover rounded-xl mb-4 shadow"
-              />
-              <h3 className="font-bold text-gray-800">Eco-friendly Habits</h3>
-              <p className="text-gray-600 mt-2">
-                Use biodegradable soap, reusable bottles, and minimize plastic
-                waste.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Bottom CTA */}
-        <div className="text-center">
-          <Link
-            href="/why"
-            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-emerald-600 text-white text-lg md:text-xl font-semibold shadow hover:bg-emerald-700"
-          >
-            Why Eco Camping Matters
-          </Link>
-        </div>
-      </div>
-    </main>
-  );
 }

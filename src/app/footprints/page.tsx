@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import type * as L from "leaflet"; 
+import type * as L from "leaflet";
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -60,9 +60,8 @@ export default function MyFootprintsPage() {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("favorites");
-  // All camps for map reference
+
   const [allCamps, setAllCamps] = useState<CampSite[]>([]);
-   // Map layer toggles
   const [showAll, setShowAll] = useState(true);
   const [showVisited, setShowVisited] = useState(true);
   const [showFavorites, setShowFavorites] = useState(true);
@@ -99,10 +98,17 @@ export default function MyFootprintsPage() {
         setVisits([]);
       }
     }
+
+    // Example: load all campsites (you can replace this with your real fetch)
+    (async () => {
+      const data = await fetch("/api/campsites").then((r) => r.json());
+      setAllCamps(data);
+      setCamps(data.filter((c: CampSite) => favorites.includes(String(c.id))));
+      setLoading(false);
+    })();
   }, []);
 
   const [LRef, setLRef] = useState<typeof L | null>(null);
-
   useEffect(() => {
     (async () => {
       const leafletModule = await import("leaflet");
@@ -123,6 +129,28 @@ export default function MyFootprintsPage() {
     });
   };
 
+  const visitedCampPoints = useMemo(
+    () =>
+      allCamps.filter((c) =>
+        visits.some((v) => String(v.campsiteId) === String(c.id))
+      ),
+    [allCamps, visits]
+  );
+
+  const favoriteCampPoints = useMemo(
+    () => allCamps.filter((c) => favorites.includes(String(c.id))),
+    [allCamps, favorites]
+  );
+
+  const stats = useMemo(
+    () => ({
+      all: allCamps.length,
+      visited: visitedCampPoints.length,
+      favorites: favoriteCampPoints.length,
+    }),
+    [allCamps, visitedCampPoints, favoriteCampPoints]
+  );
+
   if (loading) {
     return (
       <div className="pt-20 min-h-screen flex justify-center items-center">
@@ -139,7 +167,6 @@ export default function MyFootprintsPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="relative flex items-center justify-center mb-10 mt-10">
-          {/* subtle glass chip behind the title for contrast */}
           <div className="absolute -z-0 top-1/2 -translate-y-1/2 w-[min(90%,720px)] h-16 rounded-full bg-black/35 backdrop-blur-sm blur-md"></div>
           <h1
             className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-center text-white"
@@ -180,7 +207,7 @@ export default function MyFootprintsPage() {
           ))}
         </div>
 
-        {/* Favorites */}
+        {/* === Favorites Tab === */}
         {activeTab === "favorites" && (
           <>
             {favorites.length === 0 ? (
@@ -223,26 +250,6 @@ export default function MyFootprintsPage() {
                           {camp.type}
                         </p>
                       )}
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {camp.tags &&
-                          camp.tags.split(",").map((tag, idx) => (
-                            <span
-                              key={idx}
-                              className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
-                            >
-                              {tag.trim()}
-                            </span>
-                          ))}
-                        {camp.activities &&
-                          camp.activities.split(",").map((act, idx) => (
-                            <span
-                              key={idx}
-                              className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
-                            >
-                              {act.trim()}
-                            </span>
-                          ))}
-                      </div>
                     </div>
                   </Link>
                 ))}
@@ -251,73 +258,7 @@ export default function MyFootprintsPage() {
           </>
         )}
 
-        {/* Plants */}
-        {activeTab === "plants" && (
-          <div className="bg-white/90 rounded-2xl p-8 shadow-md">
-            {plants.length === 0 ? (
-              <p className="text-gray-600 text-center text-lg">
-                You haven’t identified any plants yet.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {plants.map((plant) => (
-                  <div
-                    key={plant.id}
-                    className="bg-white rounded-xl shadow hover:shadow-lg overflow-hidden transition"
-                  >
-                    <Image
-                      src={plant.imageUrl || "/images/plant-placeholder.jpg"}
-                      alt={plant.name}
-                      width={400}
-                      height={300}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="font-semibold text-lg text-gray-800">
-                        {plant.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        Identified on {plant.dateIdentified}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Visits */}
-        {activeTab === "visits" && (
-          <div className="bg-white/90 rounded-2xl p-8 shadow-md">
-            {visits.length === 0 ? (
-              <p className="text-gray-600 text-center text-lg">
-                You haven’t logged any visits yet.
-              </p>
-            ) : (
-              <ul className="space-y-4">
-                {visits.map((visit, idx) => (
-                  <li
-                    key={idx}
-                    className="border-l-4 border-green-600 pl-4 bg-white/80 py-3 rounded"
-                  >
-                    <h4 className="text-lg font-semibold text-gray-800">
-                      {visit.name}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      Visited on {visit.dateVisited}
-                      {visit.durationDays
-                        ? ` · Stayed ${visit.durationDays} days`
-                        : ""}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-
-        {/* Map */}
+        {/* === Map Tab === */}
         {activeTab === "map" && (
           <div className="bg-white/90 rounded-3xl p-5 shadow-xl ring-1 ring-green-100 backdrop-blur-sm h-[560px] md:h-[600px] lg:h-[640px] relative overflow-hidden">
             {/* Top-right: layer toggles */}
@@ -390,22 +331,20 @@ export default function MyFootprintsPage() {
             </div>
 
             <MapContainer
-              // Focus on Peninsular Malaysia; clamp pan range
               center={[4.5, 102.0]}
               zoom={7.2}
-              scrollWheelZoom={true}
+              scrollWheelZoom
               style={{ height: "100%", width: "100%", borderRadius: "1.5rem" }}
-              zoomControl={true}
+              zoomControl
               maxBounds={[
-                [0.8, 99.5], // SW
-                [7.3, 104.7], // NE
+                [0.8, 99.5],
+                [7.3, 104.7],
               ]}
               maxBoundsViscosity={1.0}
               minZoom={6.6}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-              {/* All camps (grey) */}
               {showAll &&
                 allCamps
                   .filter((c) => c.latitude && c.longitude)
@@ -432,7 +371,6 @@ export default function MyFootprintsPage() {
                     </Marker>
                   ))}
 
-              {/* Visited (green) */}
               {showVisited &&
                 visitedCampPoints.map((camp) => (
                   <Marker
@@ -457,7 +395,6 @@ export default function MyFootprintsPage() {
                   </Marker>
                 ))}
 
-              {/* Favorites (gold) */}
               {showFavorites &&
                 favoriteCampPoints.map((camp) => (
                   <Marker
