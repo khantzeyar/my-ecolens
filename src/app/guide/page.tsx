@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import jsPDF from "jspdf";
@@ -329,6 +329,9 @@ export default function GuidePage() {
     (window.location.protocol === "https:" ||
       window.location.hostname === "localhost");
 
+  // prevent duplicate auto-requests
+  const hasRequestedRef = useRef(false);
+
   // --- Dynamic count for Essentials (includes user-added custom items)
   const essentialsCount = useMemo(
     () => customChecklist.reduce((sum, g) => sum + g.items.length, 0),
@@ -513,6 +516,35 @@ export default function GuidePage() {
       }
     })();
   };
+
+  // 👉 NEW: Auto-request location when the Emergency page opens.
+  useEffect(() => {
+    const isEmergency = activeCategory === "emergency";
+    if (!isEmergency || hasRequestedRef.current || pos) return;
+
+    // If Permissions API exists, use it to reduce unnecessary prompts.
+    try {
+      // @ts-expect-error — PermissionName typing is broader in browsers
+      navigator.permissions
+        ?.query({ name: "geolocation" as PermissionName })
+        .then((status) => {
+          if (status.state === "granted" || status.state === "prompt") {
+            hasRequestedRef.current = true;
+            requestLocation();
+          } else {
+            // If denied, keep UI as-is; user can still click the button.
+            hasRequestedRef.current = true;
+          }
+        })
+        .catch(() => {
+          hasRequestedRef.current = true;
+          requestLocation();
+        });
+    } catch {
+      hasRequestedRef.current = true;
+      requestLocation();
+    }
+  }, [activeCategory, pos]); // runs when user enters Emergency Info
 
   // Search helpers
   const queryNominatim = async (
