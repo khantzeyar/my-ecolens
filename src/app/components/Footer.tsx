@@ -2,18 +2,19 @@
  * Unified Footer (Epic-1 logic + Epic-3 UI)
  * - Keeps Epic-1 routes and sources
  * - Applies Epic-3 style improvements (glassmorphism, gradients, hover effects)
+ * - Quick Navigation includes all pages except Home
  */
 'use client';
 
-import React from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
     <footer className="relative bg-gray-900 text-white py-14">
       {/* Top gradient border */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-600"></div>
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-600" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -32,12 +33,12 @@ const Footer = () => {
               <span className="text-2xl font-bold tracking-wide">Campeco</span>
             </div>
             <p className="text-gray-400 leading-relaxed max-w-md text-sm md:text-base">
-              Campeco brings campsites, eco-guidance, and forest insights all in one place — 
+              Campeco brings campsites, eco-guidance, and forest insights all in one place —
               so you can camp smart and enjoy Malaysia&apos;s forests like never before.
             </p>
           </div>
 
-          {/* Quick Navigation */}
+          {/* Quick Navigation (no Home) */}
           <div>
             <h3 className="font-semibold mb-4 text-lg text-emerald-400">Quick Navigation</h3>
             <ul className="space-y-3 text-gray-400 text-sm md:text-base">
@@ -47,18 +48,33 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="hover:text-white transition-colors duration-200">
-                  Action Guide
-                </Link>
-              </li>
-              <li>
                 <Link href="/insights" className="hover:text-white transition-colors duration-200">
                   Forest Insights
                 </Link>
               </li>
               <li>
+                <Link href="/guide" className="hover:text-white transition-colors duration-200">
+                  Camping Guide
+                </Link>
+              </li>
+              <li>
+                <Link href="/plant" className="hover:text-white transition-colors duration-200">
+                  Plant Identifier
+                </Link>
+              </li>
+              <li>
                 <Link href="/why" className="hover:text-white transition-colors duration-200">
                   Why Eco Camping Matters
+                </Link>
+              </li>
+              <li>
+                <Link href="/recommender" className="hover:text-white transition-colors duration-200">
+                  Campsite Recommender
+                </Link>
+              </li>
+              <li>
+                <Link href="/footprints" className="hover:text-white transition-colors duration-200">
+                  My Eco Footprints
                 </Link>
               </li>
             </ul>
@@ -82,7 +98,7 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="mt-12 border-t border-white/10"></div>
+        <div className="mt-12 border-t border-white/10" />
 
         {/* Copyright */}
         <div className="mt-6 text-center">
@@ -92,7 +108,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
