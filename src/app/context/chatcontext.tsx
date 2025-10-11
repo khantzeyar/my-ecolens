@@ -30,8 +30,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     sender: "bot",
     timestamp: new Date(),
     suggestions: [
-      "Camping sites in Selangor",
-      "Eco-friendly tips",
+      "Importance of Eco Camping",
+      "Camping Guide",
       "Insights on Malaysia's forests",
     ],
   };
