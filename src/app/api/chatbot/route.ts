@@ -337,6 +337,8 @@ export async function POST(req: Request) {
     ${PAGE_MAPPINGS.map((p) => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
     - Only provide weather info if linked to a specific campsite.
     - Do not provide generic state-level forecasts.
+    - The website's recommender suggests campsites based on weather forecasts and user preferences. (Smarter than the chatbot).
+    - Please structure your responses clearly. Include line breaks between different topics.
 
       User question: ${message}
     `;
