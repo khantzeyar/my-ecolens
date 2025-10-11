@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import type * as L from "leaflet"; 
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -59,10 +60,9 @@ export default function MyFootprintsPage() {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("favorites");
-
   // All camps for map reference
   const [allCamps, setAllCamps] = useState<CampSite[]>([]);
-  // Map layer toggles
+   // Map layer toggles
   const [showAll, setShowAll] = useState(true);
   const [showVisited, setShowVisited] = useState(true);
   const [showFavorites, setShowFavorites] = useState(true);
@@ -75,7 +75,12 @@ export default function MyFootprintsPage() {
 
     if (fav) {
       try {
-        setFavorites(JSON.parse(fav).map((x: any) => String(x)));
+        const parsedFav = JSON.parse(fav);
+        if (Array.isArray(parsedFav)) {
+          setFavorites(parsedFav.map((x) => String(x)));
+        } else {
+          setFavorites([]);
+        }
       } catch {
         setFavorites([]);
       }
@@ -96,84 +101,12 @@ export default function MyFootprintsPage() {
     }
   }, []);
 
-  // Fetch favorite camps details
-  useEffect(() => {
-    if (favorites.length === 0) {
-      setLoading(false);
-      return;
-    }
+  const [LRef, setLRef] = useState<typeof L | null>(null);
 
-    const fetchCamps = async () => {
-      try {
-        const results: CampSite[] = [];
-        for (const id of favorites) {
-          const res = await fetch(`/api/campsites/${id}`);
-          if (res.ok) {
-            const data: CampSite = await res.json();
-            results.push(data);
-          }
-        }
-        setCamps(results);
-      } catch (error) {
-        console.error("Error loading favorites:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCamps();
-  }, [favorites]);
-
-  // Fetch all camps for map
-  useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const res = await fetch(`/api/campsites`);
-        if (res.ok) {
-          const list: CampSite[] = await res.json();
-          setAllCamps(list);
-        }
-      } catch (e) {
-        console.error("Failed to load all campsites:", e);
-      }
-    };
-    fetchAll();
-  }, []);
-
-  // Compute favorite and visited points
-  const favoriteCampPoints = useMemo(
-    () =>
-      allCamps.filter(
-        (c) => c.latitude && c.longitude && favorites.includes(String(c.id))
-      ),
-    [allCamps, favorites]
-  );
-
-  const visitedCampPoints = useMemo(() => {
-    const ids = new Set(visits.map((v) => String(v.campsiteId)));
-    return allCamps.filter(
-      (c) => c.latitude && c.longitude && ids.has(String(c.id))
-    );
-  }, [allCamps, visits]);
-
-  // Stats
-  const stats = useMemo(() => {
-    const allCount = allCamps.filter((c) => c.latitude && c.longitude).length;
-    const visitedIds = new Set(visitedCampPoints.map((c) => c.id));
-    const favIds = new Set(favoriteCampPoints.map((c) => c.id));
-    return {
-      all: allCount,
-      visited: visitedIds.size,
-      favorites: favIds.size,
-    };
-  }, [allCamps, visitedCampPoints, favoriteCampPoints]);
-
-  // Simple colored dot icon
-  const [LRef, setLRef] = useState<any>(null);
   useEffect(() => {
     (async () => {
-      const L = await import("leaflet");
-      setLRef(L);
+      const leafletModule = await import("leaflet");
+      setLRef(leafletModule);
     })();
   }, []);
 

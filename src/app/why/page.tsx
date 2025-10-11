@@ -77,8 +77,10 @@ export default function WhyPage() {
   // Auto-play images every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => 
-        (prev + 1) % impactData[activeTab as keyof typeof impactData].images.length
+      setCurrentImageIndex(
+        (prev) =>
+          (prev + 1) %
+          impactData[activeTab as keyof typeof impactData].images.length
       );
     }, 3000);
 
@@ -110,7 +112,7 @@ export default function WhyPage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-8">
             The Impact of Irresponsible Camping
           </h2>
-          
+
           {/* Tabs */}
           <div className="flex flex-wrap gap-3 mb-10">
             {Object.entries(impactData).map(([key, data]) => (
@@ -130,27 +132,32 @@ export default function WhyPage() {
 
           {/* Tab Content */}
           <div className="grid grid-cols-1 md:grid-cols-7 gap-8 items-start">
-            {/* Left Side - Text (占4列) */}
+            {/* Left Side - Text */}
             <div className="md:col-span-4 pt-0">
               <h3 className="text-2xl font-bold text-green-700 mb-4">
                 {currentTabData.title}
               </h3>
               <ul className="space-y-3">
                 {currentTabData.content.map((item, index) => (
-                  <li key={index} className="flex items-start text-gray-700 text-base">
-                    <span className="text-green-600 font-bold mr-3 mt-0.5">•</span>
+                  <li
+                    key={index}
+                    className="flex items-start text-gray-700 text-base"
+                  >
+                    <span className="text-green-600 font-bold mr-3 mt-0.5">
+                      •
+                    </span>
                     <span className="leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Right Side - Stacked Images (占3列) */}
+            {/* Right Side - Stacked Images */}
             <div className="md:col-span-3 relative h-80 pt-0">
               {currentTabData.images.map((image, index) => {
                 const isActive = index === currentImageIndex;
                 const offset = index - currentImageIndex;
-                
+
                 return (
                   <div
                     key={index}
@@ -158,13 +165,14 @@ export default function WhyPage() {
                     className="absolute inset-0 cursor-pointer transition-all duration-500 ease-out"
                     style={{
                       transform: `
-                        translateX(${offset * 25}px) 
-                        translateY(${offset * 15}px) 
+                        translateX(${offset * 25}px)
+                        translateY(${offset * 15}px)
                         rotate(${offset * 4}deg)
                         scale(${isActive ? 1 : 0.93 - Math.abs(offset) * 0.05})
                       `,
                       zIndex: 5 - Math.abs(offset),
-                      opacity: Math.abs(offset) > 2 ? 0 : 1 - Math.abs(offset) * 0.15,
+                      opacity:
+                        Math.abs(offset) > 2 ? 0 : 1 - Math.abs(offset) * 0.15
                     }}
                   >
                     <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
@@ -179,7 +187,7 @@ export default function WhyPage() {
                   </div>
                 );
               })}
-              
+
               {/* Navigation Dots */}
               <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
                 {currentTabData.images.map((_, index) => (
@@ -209,7 +217,8 @@ export default function WhyPage() {
                 The Meaning of Eco-Camping
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Eco-camping is more than just an outdoor activity — it's a commitment and responsibility to nature.
+                Eco-camping is more than just an outdoor activity — it&apos;s a
+                commitment and responsibility to nature.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Through responsible camping practices, we can:
@@ -232,7 +241,10 @@ export default function WhyPage() {
 
             {/* Right Side - Video */}
             <div>
-              <div className="relative w-full rounded-xl overflow-hidden shadow-lg" style={{ paddingBottom: "56.25%" }}>
+              <div
+                className="relative w-full rounded-xl overflow-hidden shadow-lg"
+                style={{ paddingBottom: "56.25%" }}
+              >
                 <iframe
                   className="absolute top-0 left-0 w-full h-full"
                   src="https://www.youtube.com/embed/Y5e3r1f-kzg?si=uXZg44LlLztVhggE"
@@ -255,7 +267,8 @@ export default function WhyPage() {
             Want to See the Data?
           </h2>
           <p className="text-gray-800 mb-8 font-medium text-lg max-w-4xl mx-auto">
-            Explore interactive charts and maps to understand how Malaysia's forests are changing from 2001 to 2030.
+            Explore interactive charts and maps to understand how Malaysia&apos;s
+            forests are changing from 2001 to 2030.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <a
