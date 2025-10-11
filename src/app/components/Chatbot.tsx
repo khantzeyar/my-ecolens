@@ -93,8 +93,8 @@ export default function Chatbot() {
         sender: "bot",
         timestamp: new Date(),
         suggestions: [
-          "Camping sites in Selangor",
-          "Eco-friendly tips",
+          "Importance of Eco Camping",
+          "Camping Guide",
           "Insights on Malaysia's forests",
         ],
       },
