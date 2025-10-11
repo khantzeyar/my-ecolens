@@ -39,6 +39,8 @@ const Navbar = () => {
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/insights')) return 'light';
+    if (pathname.startsWith('/recommender')) return 'light';
+    if (pathname.startsWith('/footprints')) return 'light';
     return 'light';
   };
 
@@ -134,9 +136,11 @@ const Navbar = () => {
           {[
             { href: '/', label: 'Home', active: pathname === '/' },
             { href: '/camp', label: 'Camping Sites', active: pathname.startsWith('/camp') },
+            { href: '/recommender', label: 'Campsite Recommender', active: pathname.startsWith('/recommender') },
             { href: '/insights', label: 'Forest Insights', active: pathname.startsWith('/insights') },
             { href: '/guide', label: 'Guide', active: pathname.startsWith('/guide') },
             { href: '/plant', label: 'Plant Identifier', active: pathname.startsWith('/plant') },
+            { href: '/footprints', label: 'My Eco Footprints', active: pathname.startsWith('/footprints') },
           ].map((link, idx, arr) => (
             <React.Fragment key={link.href}>
               <Link

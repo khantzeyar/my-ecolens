@@ -23,16 +23,16 @@ const Footer = () => {
               <div className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-xl backdrop-blur-sm">
                 <Image
                   src="/icons/ecolens-icon.svg"
-                  alt="Logo"
+                  alt="Campeco Logo"
                   width={120}
                   height={120}
                   className="drop-shadow-lg"
                 />
               </div>
-              <span className="text-2xl font-bold tracking-wide">MYEcoLens</span>
+              <span className="text-2xl font-bold tracking-wide">Campeco</span>
             </div>
             <p className="text-gray-400 leading-relaxed max-w-md text-sm md:text-base">
-              MYEcoLens brings campsites, eco-guidance, and forest insights all in one place — 
+              Campeco brings campsites, eco-guidance, and forest insights all in one place — 
               so you can camp smart and enjoy Malaysia&apos;s forests like never before.
             </p>
           </div>
@@ -58,7 +58,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link href="/why" className="hover:text-white transition-colors duration-200">
-                  Why Responsible Camping
+                  Why Eco Camping Matters
                 </Link>
               </li>
             </ul>
@@ -87,7 +87,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="mt-6 text-center">
           <p className="text-gray-500 text-sm">
-            © 2025 <span className="text-emerald-400 font-semibold">MYEcoLens</span>. All rights reserved.
+            © {new Date().getFullYear()} <span className="text-emerald-400 font-semibold">Campeco</span>. All rights reserved.
           </p>
         </div>
       </div>
