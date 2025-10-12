@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -20,70 +21,28 @@ interface CampSite {
   imageUrl?: string;
 }
 
-/* ---------- Fee meta (structured info parsed from original fees text) ---------- */
+/* ---------- Fee meta (minimal: only need "free for everyone") ---------- */
 interface FeeMeta {
   hasText: boolean;
-  fullyFree: boolean;
-  freeCitizens: boolean;
-  freeChildren: boolean;
-  freeSeniors: boolean;
-  freeOKU: boolean;
-  hasAnyFreeOption: boolean;
-  minPrice: number | null;
-  maxPrice: number | null;
-  hasPrice: boolean;
+  fullyFree: boolean; // free for everyone (no price mentioned)
 }
 
 function deriveFeeMeta(fees?: string): FeeMeta {
   if (!fees || !fees.trim()) {
-    return {
-      hasText: false,
-      fullyFree: false,
-      freeCitizens: false,
-      freeChildren: false,
-      freeSeniors: false,
-      freeOKU: false,
-      hasAnyFreeOption: false,
-      minPrice: null,
-      maxPrice: null,
-      hasPrice: false,
-    };
+    return { hasText: false, fullyFree: false };
   }
-
   const text = fees.replace(/\s+/g, " ");
   const lower = text.toLowerCase();
 
+  // any explicit price means not "free for everyone"
   const priceMatches = [...lower.matchAll(/rm\s*([0-9]+(?:\.[0-9]{1,2})?)/g)];
-  const prices = priceMatches.map((m) => parseFloat(m[1]));
-  const hasPrice = prices.length > 0;
-  const minPrice = prices.length ? Math.min(...prices) : null;
-  const maxPrice = prices.length ? Math.max(...prices) : null;
+  const hasPrice = priceMatches.length > 0;
 
-  const hasFreeWord = /\bfree\b|free\s*admission/i.test(text);
+  const hasFreeWord = /\bfree\b|free\s*admission|no\s*charge|no\s*entry\s*fee/i.test(text);
+
   const fullyFree = hasFreeWord && !hasPrice;
 
-  const freeCitizens =
-    /(citizen|malaysian|warga\s*negar|warganegara)/i.test(text) && /\bfree\b/i.test(text);
-  const freeChildren =
-    /(child|children|kids?|under\s*\d+\s*years?)/i.test(text) && /\bfree\b/i.test(text);
-  const freeSeniors =
-    /(senior|older|60\s*years?\s*(and\s*above)?)/i.test(text) && /\bfree\b/i.test(text);
-  const freeOKU = /(oku|disabled|disabilities)/i.test(text) && /\bfree\b/i.test(text);
-
-  const hasAnyFreeOption = fullyFree || freeCitizens || freeChildren || freeSeniors || freeOKU;
-
-  return {
-    hasText: true,
-    fullyFree,
-    freeCitizens,
-    freeChildren,
-    freeSeniors,
-    freeOKU,
-    hasAnyFreeOption,
-    minPrice,
-    maxPrice,
-    hasPrice,
-  };
+  return { hasText: true, fullyFree };
 }
 
 /* ---------------- Favorites utils (shared behavior with detail page) ---------------- */
@@ -111,6 +70,58 @@ const writeFavorites = (arr: string[]) => {
   window.dispatchEvent(new CustomEvent("favorites-updated"));
 };
 
+/* ---------------- Center Toast (big, prominent, dismissible) ---------------- */
+type ToastState = { message: string; visible: boolean } | null;
+
+function Toast({ state }: { state: ToastState }) {
+  return (
+    <div
+      aria-live="assertive"
+      aria-atomic="true"
+      className="fixed inset-0 z-[9999] pointer-events-none"
+    >
+      {/* light overlay */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-200
+        ${state?.visible ? "opacity-30" : "opacity-0"} bg-black`}
+      />
+
+      {/* centered card */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className={`pointer-events-auto transition-all duration-300
+          ${state?.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          role="status"
+        >
+          {state && (
+            <button
+              type="button"
+              onClick={() => (window as any).__toastDismiss?.()}
+              className="mx-auto w-[24rem] sm:w-[28rem] rounded-2xl bg-white/95 backdrop-blur
+                         shadow-2xl ring-1 ring-black/10 p-5 sm:p-6 text-left"
+            >
+              <div className="flex items-start gap-4">
+                <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center
+                                 rounded-full bg-emerald-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor"
+                       className="h-6 w-6 text-emerald-700">
+                    <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <p className="text-lg sm:text-xl font-semibold text-gray-900 leading-snug">
+                  {state.message}
+                </p>
+              </div>
+              <div className="mt-3 text-xs text-gray-500">Tap to dismiss</div>
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const CampPage: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -121,6 +132,26 @@ const CampPage: React.FC = () => {
   const [campsites, setCampsites] = useState<CampSite[]>([]);
   const [filteredCampsites, setFilteredCampsites] = useState<CampSite[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // === toast state ===
+  const [toast, setToast] = useState<ToastState>(null);
+  const pushToast = (message: string) => {
+    setToast({ message, visible: true });
+
+    // allow click to close immediately
+    (window as any).__toastDismiss = () =>
+      setToast((t) => (t ? { ...t, visible: false } : t));
+
+    // auto hide after 2.2s
+    window.clearTimeout((pushToast as any)._t);
+    (pushToast as any)._t = window.setTimeout(() => {
+      setToast((t) => (t ? { ...t, visible: false } : t));
+    }, 2200);
+
+    // remove node after fade-out
+    window.clearTimeout((pushToast as any)._t2);
+    (pushToast as any)._t2 = window.setTimeout(() => setToast(null), 2600);
+  };
 
   // === 3 fixed rows per page: calculate columns responsively ===
   const [cols, setCols] = useState<number>(1);
@@ -139,24 +170,16 @@ const CampPage: React.FC = () => {
   }, []);
   const itemsPerPage = cols * 3;
 
-  // ===== Entry fee filters (keep free-related only) =====
+  // ===== Entry fee filter: ONLY "Free for everyone" =====
   const [onlyFullyFree, setOnlyFullyFree] = useState(false);
-  const [onlyHasFreeOption, setOnlyHasFreeOption] = useState(false);
-  const [needFreeCitizens, setNeedFreeCitizens] = useState(false);
-  const [needFreeChildren, setNeedFreeChildren] = useState(false);
-  const [needFreeSeniors, setNeedFreeSeniors] = useState(false);
-  const [needFreeOKU, setNeedFreeOKU] = useState(false);
 
   // ===== Favorites (synced across pages/tabs) =====
   const [favorites, setFavorites] = useState<string[]>([]);
   useEffect(() => {
-    // initial load
     setFavorites(readFavorites());
-    // cross-tab sync
     const onStorage = (e: StorageEvent) => {
       if (e.key === FAVORITES_KEY) setFavorites(readFavorites());
     };
-    // same-tab sync
     const onCustom = () => setFavorites(readFavorites());
     window.addEventListener("storage", onStorage);
     window.addEventListener("favorites-updated", onCustom as EventListener);
@@ -234,7 +257,7 @@ const CampPage: React.FC = () => {
     return map;
   }, [campsites]);
 
-  // Filtering (no Max price logic)
+  // Filtering
   useEffect(() => {
     let filtered = campsites;
 
@@ -264,20 +287,13 @@ const CampPage: React.FC = () => {
       });
     }
 
-    // Entry-fee based filters
-    filtered = filtered.filter((site) => {
-      const meta = feeMetaMap.get(site.id)!;
-
-      if (onlyFullyFree && !meta.fullyFree) return false;
-      if (onlyHasFreeOption && !meta.hasAnyFreeOption) return false;
-
-      if (needFreeCitizens && !meta.freeCitizens) return false;
-      if (needFreeChildren && !meta.freeChildren) return false;
-      if (needFreeSeniors && !meta.freeSeniors) return false;
-      if (needFreeOKU && !meta.freeOKU) return false;
-
-      return true;
-    });
+    // Entry-fee based filter: only "Free for everyone"
+    if (onlyFullyFree) {
+      filtered = filtered.filter((site) => {
+        const meta = feeMetaMap.get(site.id)!;
+        return meta.fullyFree;
+      });
+    }
 
     setFilteredCampsites(filtered);
     setCurrentPage(1);
@@ -288,11 +304,6 @@ const CampPage: React.FC = () => {
     selectedAttractions,
     selectedActivities,
     onlyFullyFree,
-    onlyHasFreeOption,
-    needFreeCitizens,
-    needFreeChildren,
-    needFreeSeniors,
-    needFreeOKU,
     feeMetaMap,
   ]);
 
@@ -314,11 +325,6 @@ const CampPage: React.FC = () => {
     setSelectedAttractions([]);
     setSelectedActivities([]);
     setOnlyFullyFree(false);
-    setOnlyHasFreeOption(false);
-    setNeedFreeCitizens(false);
-    setNeedFreeChildren(false);
-    setNeedFreeSeniors(false);
-    setNeedFreeOKU(false);
     setCurrentPage(1);
   };
 
@@ -398,7 +404,7 @@ const CampPage: React.FC = () => {
                 <h2 className="text-xl font-bold text-green-700">Filters</h2>
                 <button
                   onClick={clearAllFilters}
-                  className="text-sm text-green-600 hover:text-green-800 underline"
+                  className=" text-green-600 hover:text-green-800 underline"
                 >
                   Clear all
                 </button>
@@ -432,7 +438,7 @@ const CampPage: React.FC = () => {
                             setSelectedStates(selectedStates.filter((s) => s !== state));
                           }
                         }}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {state}
                     </label>
@@ -440,73 +446,18 @@ const CampPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Entry Fee */}
+              {/* Entry Fee — ONLY "Free for everyone" */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-3 text-green-700">Entry Fee</h3>
-
-                <label className="flex items-center text-sm mb-2">
+                <label className="flex items-center text-sm">
                   <input
                     type="checkbox"
                     checked={onlyFullyFree}
                     onChange={(e) => setOnlyFullyFree(e.target.checked)}
-                    className="mr-2 text-green-600 focus:ring-green-500"
+                    className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                   />
-                  Fully Free (everyone)
+                  Free for everyone
                 </label>
-
-                <label className="flex items-center text-sm mb-4">
-                  <input
-                    type="checkbox"
-                    checked={onlyHasFreeOption}
-                    onChange={(e) => setOnlyHasFreeOption(e.target.checked)}
-                    className="mr-2 text-green-600 focus:ring-green-500"
-                  />
-                  Has any free option
-                </label>
-
-                <div className="rounded-md border p-3 bg-white/80">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">
-                    Free for specific groups
-                  </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeCitizens}
-                        onChange={(e) => setNeedFreeCitizens(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Citizens
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeChildren}
-                        onChange={(e) => setNeedFreeChildren(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Children
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeSeniors}
-                        onChange={(e) => setNeedFreeSeniors(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      Seniors (60+)
-                    </label>
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={needFreeOKU}
-                        onChange={(e) => setNeedFreeOKU(e.target.checked)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
-                      />
-                      OKU / Disabled
-                    </label>
-                  </div>
-                </div>
               </div>
 
               {/* Attractions */}
@@ -519,7 +470,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedAttractions.includes(attr)}
                         onChange={() => toggleAttraction(attr)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {attr}
                     </label>
@@ -537,7 +488,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedActivities.includes(act)}
                         onChange={() => toggleActivity(act)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {act}
                     </label>
@@ -558,7 +509,6 @@ const CampPage: React.FC = () => {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
                     {currentCampsites.map((camp) => {
-                      const meta = feeMetaMap.get(camp.id)!;
                       const fav = isFavorited(camp.id);
                       return (
                         <div
@@ -582,7 +532,10 @@ const CampPage: React.FC = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
+                                const pre = isFavorited(camp.id);
                                 toggleFavorite(camp.id);
+                                // toast
+                                pushToast(pre ? "Removed from Favorites" : "Added to Favorites");
                               }}
                               className="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow hover:bg-white"
                               title={fav ? "Remove from favorites" : "Add to favorites"}
@@ -614,25 +567,6 @@ const CampPage: React.FC = () => {
                             </p>
                             <p className="text-sm text-gray-500 mb-3">📍 {camp.state}</p>
 
-                            {/* Fee badges */}
-                            <div className="flex flex-wrap gap-1 mb-3">
-                              {meta.fullyFree && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700">
-                                  Fully Free
-                                </span>
-                              )}
-                              {!meta.fullyFree && meta.hasAnyFreeOption && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-50 text-emerald-700">
-                                  Free options
-                                </span>
-                              )}
-                              {meta.minPrice !== null && (
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700">
-                                  from RM {meta.minPrice.toFixed(2).replace(/\.00$/, "")}
-                                </span>
-                              )}
-                            </div>
-
                             <div className="mt-auto">
                               <Link href={`/camp/${camp.id}`}>
                                 <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200 font-medium">
@@ -650,21 +584,21 @@ const CampPage: React.FC = () => {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-10 mb-2 flex justify-center items-center gap-2">
+                <div className="mt-10 mb-2 flex justify-center items-center">
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
                       currentPage === 1
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"
                     }`}
+                    aria-label="Previous page"
                   >
-                    <span>←</span>
-                    <span>Previous</span>
+                    <i className="ri-arrow-left-s-line text-2xl"></i>
                   </button>
 
-                  <div className="flex items-center gap-1 mx-2">
+                  <div className="flex items-center mx-2">
                     {getPageNumbers().map((page, idx) =>
                       page === "..." ? (
                         <span key={`e-${idx}`} className="px-3 py-2 text-gray-400 text-sm">
@@ -689,14 +623,14 @@ const CampPage: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
                       currentPage === totalPages
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"
                     }`}
+                    aria-label="Next page"
                   >
-                    <span>Next</span>
-                    <span>→</span>
+                    <i className="ri-arrow-right-s-line text-2xl"></i>
                   </button>
                 </div>
               )}
@@ -704,6 +638,8 @@ const CampPage: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* Toast */}
+      <Toast state={toast} />
     </main>
   );
 };

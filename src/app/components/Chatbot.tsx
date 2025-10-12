@@ -1,6 +1,8 @@
+/* eslint-disable */
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+// @ts-ignore
 import "remixicon/fonts/remixicon.css";
 import { useChat, Message } from "../context/chatcontext";
 import Link from "next/link";

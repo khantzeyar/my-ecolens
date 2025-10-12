@@ -19,6 +19,7 @@
     "csv-parse": "^6.1.0",
     "csv-parser": "^3.2.0",
     "csvtojson": "^2.0.10",
+    "dependencies": "^0.0.1",
     "framer-motion": "^12.23.14",
     "html-to-image": "^1.11.13",
     "jspdf": "^3.0.3",
@@ -33,7 +34,7 @@
     "react-leaflet": "^5.0.0",
     "react-select": "^5.10.2",
     "recharts": "^3.2.0",
-    "remixicon": "^4.6.0"
+    "remixicon": "^4.7.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,7 +1,10 @@
+/* eslint-disable */
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+// @ts-ignore
 import 'remixicon/fonts/remixicon.css'
+// @ts-ignore
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'

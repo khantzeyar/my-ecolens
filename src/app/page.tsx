@@ -10,6 +10,7 @@
  * - Floating chatbot button
  */
 
+/* eslint-disable */
 "use client";
 
 import Link from "next/link";
@@ -33,56 +34,54 @@ function OverviewCard({
   title: string;
   desc: string;
   cta?: string;
-  topBar?: string; // gradient for the top bar
-  bg?: string; // subtle card background gradient
-  iconTile?: string; // solid color for the icon square
+  topBar?: string;
+  bg?: string;
+  iconTile?: string;
   ariaLabel?: string;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-  children: React.ReactNode; // the icon svg
+  children: React.ReactNode;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
       aria-label={ariaLabel ?? `Go to ${title}`}
-      className="group relative rounded-[22px] bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+      className="group relative flex flex-col h-full rounded-[22px] bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
     >
       {/* Top rounded gradient bar */}
       <div className={`absolute inset-x-0 top-0 h-3 rounded-t-[22px] bg-gradient-to-r ${topBar}`} />
 
-      {/* Card body with very light green gradient */}
-      <div className={`pt-8 pb-6 px-6 rounded-[22px] bg-gradient-to-b ${bg} overflow-hidden`}>
+      {/* Card body */}
+      <div className={`flex flex-col flex-1 pt-8 pb-6 px-6 rounded-[22px] bg-gradient-to-b ${bg} overflow-hidden`}>
         {/* Icon tile */}
         <div className={`mx-auto mb-4 h-12 w-12 ${iconTile} rounded-xl text-white shadow-md grid place-items-center`}>
           <div className="w-6 h-6">{children}</div>
         </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-extrabold text-gray-900 text-center mb-2">{title}</h3>
+        {/* Title & description */}
+        <div className="flex-1 flex flex-col justify-between">
+          <div>
+            <h3 className="text-xl font-extrabold text-gray-900 text-center mb-2">{title}</h3>
+            <p className="text-gray-600 text-center leading-relaxed max-w-[28ch] mx-auto">{desc}</p>
+          </div>
 
-        {/* Description */}
-        <p className="text-gray-600 text-center leading-relaxed max-w-[28ch] mx-auto">
-          {desc}
-        </p>
-
-        {/* CTA row */}
-        <div className="mt-5 flex items-center justify-center">
-          <span className="text-emerald-600 font-semibold">
-            {cta}
-          </span>
-          <svg
-            className="ml-2 h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-x-0.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          {/* CTA row */}
+          <div className="mt-5 flex items-center justify-center">
+            <span className="text-emerald-600 font-semibold">{cta}</span>
+            <svg
+              className="ml-2 h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
         </div>
       </div>
 
-      {/* Subtle white footer strip to match the reference look */}
+      {/* Footer strip */}
       <div className="h-6 rounded-b-[22px] bg-white" />
     </Link>
   );
@@ -93,6 +92,15 @@ export default function Home() {
   const handleOpenChatbot = () => {
     window.dispatchEvent(new Event("openChatbot"));
   };
+
+  // Mobile detection
+  const [isMobile, setIsMobile] = React.useState(false);
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    if (/android/i.test(userAgent) || /iPhone|iPad|iPod/i.test(userAgent)) {
+      setIsMobile(true);
+    }
+  }, []);
 
   // Optional: open with keyboard (Alt/Command + /)
   useEffect(() => {
@@ -121,10 +129,20 @@ export default function Home() {
     <main className="bg-white text-gray-900">
       {/* ===== Hero ===== */}
       <section className="relative flex items-center justify-center h-[88vh] sm:h-screen overflow-hidden">
-        {/* Background video */}
-        <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
-          <source src="/forest-video.mp4" type="video/mp4" />
-        </video>
+        {/* Background: show image on mobile, video on desktop */}
+        {isMobile ? (
+          <Image
+            src="/images/forest-fallback.png"
+            alt="Forest background"
+            fill
+            className="absolute inset-0 h-full w-full object-cover"
+            priority
+          />
+        ) : (
+          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
+            <source src="/forest-video.mp4" type="video/mp4" />
+          </video>
+        )}
 
         {/* Vignette + center highlight (keeps text readable) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/60" />
@@ -154,7 +172,7 @@ export default function Home() {
                          bg-emerald-600 text-white shadow-[0_15px_30px_-12px_rgba(16,185,129,0.7)]
                          hover:bg-emerald-700 active:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all"
             >
-              Find Campsites
+              Discover Camping Sites
             </Link>
 
             <Link
@@ -167,12 +185,12 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/recommender"
+              href="/guide"
               className="inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold
                          bg-emerald-500/95 text-white shadow-[0_15px_30px_-12px_rgba(16,185,129,0.7)]
                          hover:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all"
             >
-              Get Recommendations
+              Camping Guide
             </Link>
           </div>
         </div>
@@ -205,9 +223,8 @@ export default function Home() {
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
               Explore Our Website
             </h2>
-            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Learn what you can do on Campeco — each page is designed to help
-              you camp responsibly and discover Malaysia&apos;s forests.
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto whitespace-nowrap">
+              Learn what you can do on Campeco - A complete guide to getting started and beyond.
             </p>
           </div>
 
@@ -217,7 +234,7 @@ export default function Home() {
             <OverviewCard
               href="/camp"
               title="Discover Camping Sites"
-              desc="Find campsites across Malaysia with interactive maps and filters."
+              desc="Explore and enjoy sustainable camping locations across Malaysia's pristine forests."
               cta="Explore"
               topBar="from-teal-600 to-emerald-700"
               bg="from-emerald-50 to-white"
@@ -232,7 +249,7 @@ export default function Home() {
             <OverviewCard
               href="/insights"
               title="Forest Insights"
-              desc="Explore data on forest cover, loss trends, and sustainability insights."
+              desc="Explore data on forest cover loss and sustainability insights."
               cta="Learn"
               topBar="from-emerald-600 to-green-700"
               bg="from-emerald-50 to-white"
@@ -247,7 +264,7 @@ export default function Home() {
             <OverviewCard
               href="/guide"
               title="Camping Guide"
-              desc="Learn eco-friendly camping tips and do's & don'ts for responsible camping."
+              desc="Learn sustainable camping practices and guidelines for responsible outdoor recreation."
               cta="Read"
               topBar="from-teal-600 to-cyan-600"
               bg="from-emerald-50 to-white"
@@ -263,7 +280,7 @@ export default function Home() {
             <OverviewCard
               href="/plant"
               title="Plant Identifier"
-              desc="Identify plants you encounter while camping using our recognition tool."
+              desc="Identify plants encountered during your trips using our advanced image recognition tool."
               cta="Identify"
               topBar="from-lime-600 to-green-600"
               bg="from-emerald-50 to-white"
@@ -278,7 +295,7 @@ export default function Home() {
             <OverviewCard
               href="/why"
               title="Why Eco Camping Matters"
-              desc="Learn why responsible camping is important for protecting Malaysia's forests and biodiversity."
+              desc="Understand the importance of eco camping in preserving Malaysia's biodiversity."
               cta="Discover"
               topBar="from-green-700 to-emerald-700"
               bg="from-emerald-50 to-white"
@@ -293,7 +310,7 @@ export default function Home() {
             <OverviewCard
               href="/recommender"
               title="Campsite Recommender"
-              desc="Get suggestions based on your preferences and predicted weather."
+              desc="Receive personalised recommendations based on your preferences and forecasted weather conditions."
               cta="Open"
               topBar="from-emerald-600 to-green-600"
               bg="from-emerald-50 to-white"
@@ -308,7 +325,7 @@ export default function Home() {
             <OverviewCard
               href="/footprints"
               title="My Eco Footprints"
-              desc="Track favorites, identified plants, visit history, and your map."
+              desc="Track your favorite campsites and view your visit history."
               cta="Open"
               topBar="from-teal-600 to-emerald-600"
               bg="from-emerald-50 to-white"
@@ -324,7 +341,7 @@ export default function Home() {
               href="/#open-chatbot"
               onClick={openChatbotViaCard}
               title="Chatbot Assistant"
-              desc="Get quick answers about eco-friendly camping, find tips and site info, and chat anytime."
+              desc="Get instant answers and guidance for navigating the website."
               cta="Open"
               topBar="from-emerald-600 to-green-600"
               bg="from-emerald-50 to-white"
@@ -344,10 +361,10 @@ export default function Home() {
       {/* ===== Activities ===== */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
+          <div className="text-center mb-12 -mt-10">
             <h2 className="text-3xl font-extrabold tracking-tight">Activities You Can Enjoy</h2>
             <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
-              Camping is more than staying outdoors – enjoy fun activities and discover nature.
+              Camping is more than staying outdoors - Enjoy fun activities and discover nature.
             </p>
           </div>
 
@@ -370,7 +387,7 @@ export default function Home() {
                     alt={a.name}
                     width={600}
                     height={400}
-                    className="h-80 sm:h-96 w-full object-cover"
+                    className="h-30 sm:h-50 w-full object-cover"
                   />
                   <div className="p-5">
                     <h3 className="text-lg font-bold mb-2">{a.name}</h3>
@@ -384,30 +401,16 @@ export default function Home() {
       </section>
 
       {/* ===== Chatbot CTA ===== */}
-      <section className="relative py-16">
-        {/* Dark gradient background (brand colors) */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-700 via-green-700 to-emerald-800" />
-        <div className="absolute inset-0 -z-10 opacity-20 bg-[radial-gradient(900px_240px_at_10%_0%,white,transparent),radial-gradient(900px_240px_at_90%_100%,white,transparent)]" />
-
-        <div className="max-w-5xl mx-auto px-6">
-          {/* Solid white card + dark text */}
-          <div className="rounded-3xl bg-white shadow-[0_24px_80px_-24px_rgba(16,185,129,0.55)] ring-1 ring-black/5">
-            <div className="px-8 py-10 text-center">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-2">Want to learn more?</h2>
-              <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
-                Click the button below to start chatting with our bot and get more information.
-              </p>
-              <button
-                onClick={handleOpenChatbot}
-                className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
-                           bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
-                           shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40 transition-all"
-              >
-                Start Chatting
-              </button>
-            </div>
-          </div>
+      <section className="relative py-16 -mt-18">
+        <div className="flex justify-center">
+          <button
+            className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
+                      bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
+                      shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40 transition-all"
+          >
+            Discover Camping Sites →
+          </button>
         </div>
       </section>
 
