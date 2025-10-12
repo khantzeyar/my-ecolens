@@ -352,7 +352,7 @@ export default function CampDetail({ params }: CampDetailProps) {
           <div className="bg-gray-100 rounded-full p-1 flex w-fit mx-auto">
             <button
               onClick={() => setActiveTab("detail")}
-              className={`px-8 py-3 rounded-full font-medium transition-all ${
+              className={`px-8 py-3 rounded-full font-medium transition-all cursor-pointer ${
                 activeTab === "detail"
                   ? "bg-white text-green-700 shadow-md"
                   : "text-gray-600 hover:text-gray-800"
@@ -362,7 +362,7 @@ export default function CampDetail({ params }: CampDetailProps) {
             </button>
             <button
               onClick={() => setActiveTab("insight")}
-              className={`px-8 py-3 rounded-full font-medium transition-all ${
+              className={`px-8 py-3 rounded-full font-medium transition-all cursor-pointer ${
                 activeTab === "insight"
                   ? "bg-white text-green-700 shadow-md"
                   : "text-gray-600 hover:text-gray-800"
@@ -388,13 +388,13 @@ export default function CampDetail({ params }: CampDetailProps) {
                         <button
                           aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
                           onClick={() => toggleFavorite(routeId || String(camp.id))}
-                          className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200"
+                          className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200 cursor-pointer"
                           title={isFavorited ? "Remove from favorites" : "Add to favorites"}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            className="w-6 h-6"
+                            className="w-5 h-5"
                             fill={isFavorited ? "#f59e0b" : "none"}
                             stroke={isFavorited ? "#f59e0b" : "#9ca3af"}
                             strokeWidth="2"
@@ -453,7 +453,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   ) : (
                     <button
                       onClick={handleMarkVisited}
-                      className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 text-sm shadow-sm"
+                      className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 text-sm shadow-sm cursor-pointer"
                     >
                       Mark as Visited
                     </button>
@@ -603,7 +603,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 of its total forest area.
               </p>
 
-              <div className="max-w-lg mx-auto">
+              <div className="max-w-4xl mx-auto w-full">
                 <InsightsPanel
                   mode="mini"
                   data={{
