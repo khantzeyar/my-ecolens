@@ -49,10 +49,9 @@ interface WeatherApiItem {
 
 type TabType = "detail" | "insight";
 
-/** ---------------- Favorites helpers (robust sync) ---------------- */
+/* ---------------- Favorites helpers (robust sync) ---------------- */
 function normalizeFavArray(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
-  // ensure all ids are strings and unique
   const list = raw.map((x) => String(x));
   return Array.from(new Set(list));
 }
@@ -73,7 +72,7 @@ function setFavorites(arr: string[]) {
   window.dispatchEvent(new CustomEvent("favorites-updated"));
 }
 
-/** ---------------- Visit history helpers (manual mark) ---------------- */
+/* ---------------- Visit history helpers (manual mark) ---------------- */
 interface VisitRecord {
   campsiteId: number | string;
   name: string;
@@ -103,11 +102,67 @@ function checkVisited(campId: number | string, date: string) {
   );
 }
 
+/* ---------------- Center Toast (big & centered) ---------------- */
+type ToastState = { message: string; visible: boolean } | null;
+
+function CenterToast({ state }: { state: ToastState }) {
+  return (
+    <div
+      aria-live="assertive"
+      className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center"
+    >
+      <div
+        className={`transition-all duration-300 ${
+          state?.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
+      >
+        {state && (
+          <div className="pointer-events-auto rounded-2xl bg-white/95 backdrop-blur shadow-2xl ring-1 ring-black/5 px-8 py-5">
+            <div className="flex items-center gap-4">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  className="h-6 w-6 text-emerald-700"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              <p className="text-xl font-semibold text-gray-800">
+                {state.message}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CampDetail({ params }: CampDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>("detail");
   const [camp, setCamp] = useState<CampSite | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // toast
+  const [toast, setToast] = useState<ToastState>(null);
+  const pushToast = (message: string) => {
+    setToast({ message, visible: true });
+    // auto hide after 1.6s
+    window.clearTimeout((pushToast as any)._t);
+    (pushToast as any)._t = window.setTimeout(
+      () => setToast((t) => (t ? { ...t, visible: false } : t)),
+      1600
+    );
+  };
 
   // ===== Favorites synced via route param id (string) =====
   const [routeId, setRouteId] = useState<string>("");
@@ -127,11 +182,12 @@ export default function CampDetail({ params }: CampDetailProps) {
   const toggleFavorite = (id: string) => {
     const strId = String(id);
     const favs = getFavorites();
-    const next = favs.includes(strId)
-      ? favs.filter((x) => x !== strId)
-      : [...favs, strId];
+    const wasFav = favs.includes(strId);
+    const next = wasFav ? favs.filter((x) => x !== strId) : [...favs, strId];
     setFavorites(next);
     setIsFavorited(next.includes(strId));
+    // centered toast message for add/remove
+    pushToast(wasFav ? "Removed from Favorites" : "Added to Favorites");
   };
 
   // 手动标记访问
@@ -169,7 +225,7 @@ export default function CampDetail({ params }: CampDetailProps) {
     const fetchData = async () => {
       try {
         const resolved = await params;
-        const id = resolved.id; // use route param for favorites
+        const id = resolved.id;
         setRouteId(id);
         refreshFavoriteFromStorage(id);
 
@@ -231,7 +287,7 @@ export default function CampDetail({ params }: CampDetailProps) {
       if (e.key === "favorites" && routeId) refreshFavoriteFromStorage(routeId);
     };
     const onFocus = () => routeId && refreshFavoriteFromStorage(routeId);
-    const onCustom = () => routeId && refreshFavoriteFromStorage(routeId); // same-tab updates
+    const onCustom = () => routeId && refreshFavoriteFromStorage(routeId);
     window.addEventListener("storage", onStorage);
     window.addEventListener("focus", onFocus);
     window.addEventListener("favorites-updated", onCustom as EventListener);
@@ -319,7 +375,7 @@ export default function CampDetail({ params }: CampDetailProps) {
         <div className="bg-white/95 rounded-2xl p-8 shadow-xl">
           {activeTab === "detail" ? (
             <div className="space-y-8">
-              {/* Header：左侧 标题+类型+标签；右侧 日期+按钮；星标仍在标题旁 */}
+              {/* Header */}
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 {/* Left block */}
                 <div className="flex-1">
@@ -327,7 +383,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h1 className="text-4xl font-bold">{camp.name}</h1>
-                        {/* Favorite star aligned with title */}
+                        {/* Favorite star */}
                         <button
                           aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
                           onClick={() => toggleFavorite(routeId || String(camp.id))}
@@ -378,7 +434,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   )}
                 </div>
 
-                {/* Right controls: date + mark/unmark (no outer frame) */}
+                {/* Right controls */}
                 <div className="flex items-center gap-3">
                   <input
                     type="date"
@@ -569,6 +625,9 @@ export default function CampDetail({ params }: CampDetailProps) {
           )}
         </div>
       </div>
+
+      {/* Centered big toast */}
+      <CenterToast state={toast} />
     </main>
   );
 }

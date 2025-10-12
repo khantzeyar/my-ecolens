@@ -69,6 +69,58 @@ const writeFavorites = (arr: string[]) => {
   window.dispatchEvent(new CustomEvent("favorites-updated"));
 };
 
+/* ---------------- Center Toast (big, prominent, dismissible) ---------------- */
+type ToastState = { message: string; visible: boolean } | null;
+
+function Toast({ state }: { state: ToastState }) {
+  return (
+    <div
+      aria-live="assertive"
+      aria-atomic="true"
+      className="fixed inset-0 z-[9999] pointer-events-none"
+    >
+      {/* light overlay */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-200
+        ${state?.visible ? "opacity-30" : "opacity-0"} bg-black`}
+      />
+
+      {/* centered card */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className={`pointer-events-auto transition-all duration-300
+          ${state?.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          role="status"
+        >
+          {state && (
+            <button
+              type="button"
+              onClick={() => (window as any).__toastDismiss?.()}
+              className="mx-auto w-[24rem] sm:w-[28rem] rounded-2xl bg-white/95 backdrop-blur
+                         shadow-2xl ring-1 ring-black/10 p-5 sm:p-6 text-left"
+            >
+              <div className="flex items-start gap-4">
+                <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center
+                                 rounded-full bg-emerald-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor"
+                       className="h-6 w-6 text-emerald-700">
+                    <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <p className="text-lg sm:text-xl font-semibold text-gray-900 leading-snug">
+                  {state.message}
+                </p>
+              </div>
+              <div className="mt-3 text-xs text-gray-500">Tap to dismiss</div>
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const CampPage: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -79,6 +131,26 @@ const CampPage: React.FC = () => {
   const [campsites, setCampsites] = useState<CampSite[]>([]);
   const [filteredCampsites, setFilteredCampsites] = useState<CampSite[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // === toast state ===
+  const [toast, setToast] = useState<ToastState>(null);
+  const pushToast = (message: string) => {
+    setToast({ message, visible: true });
+
+    // allow click to close immediately
+    (window as any).__toastDismiss = () =>
+      setToast((t) => (t ? { ...t, visible: false } : t));
+
+    // auto hide after 2.2s
+    window.clearTimeout((pushToast as any)._t);
+    (pushToast as any)._t = window.setTimeout(() => {
+      setToast((t) => (t ? { ...t, visible: false } : t));
+    }, 2200);
+
+    // remove node after fade-out
+    window.clearTimeout((pushToast as any)._t2);
+    (pushToast as any)._t2 = window.setTimeout(() => setToast(null), 2600);
+  };
 
   // === 3 fixed rows per page: calculate columns responsively ===
   const [cols, setCols] = useState<number>(1);
@@ -459,7 +531,10 @@ const CampPage: React.FC = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
+                                const pre = isFavorited(camp.id);
                                 toggleFavorite(camp.id);
+                                // toast
+                                pushToast(pre ? "Removed from Favorites" : "Added to Favorites");
                               }}
                               className="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow hover:bg-white"
                               title={fav ? "Remove from favorites" : "Add to favorites"}
@@ -490,8 +565,6 @@ const CampPage: React.FC = () => {
                               {camp.forestType || "Forest Park"}
                             </p>
                             <p className="text-sm text-gray-500 mb-3">📍 {camp.state}</p>
-
-                            {/* (Removed fee badges per request) */}
 
                             <div className="mt-auto">
                               <Link href={`/camp/${camp.id}`}>
@@ -564,6 +637,9 @@ const CampPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Toast */}
+      <Toast state={toast} />
     </main>
   );
 };
