@@ -120,18 +120,19 @@ export default function Home() {
       {/* ===== Hero ===== */}
       <section className="relative flex items-center justify-center h-[88vh] sm:h-screen overflow-hidden">
         {/* Background video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          controls={false}
-          disablePictureInPicture
-          controlsList="nodownload nofullscreen noremoteplayback"
-          className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-        >
-          <source src="/forest-video.mp4" type="video/mp4" />
-        </video>
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-full w-full object-cover pointer-events-none select-none"
+            preload="auto"
+            tabIndex={-1}
+          >
+            <source src="/forest-video.mp4" type="video/mp4" />
+          </video>
+        </div>
 
         {/* Vignette + center highlight (keeps text readable) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/60" />
