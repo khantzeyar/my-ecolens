@@ -578,8 +578,9 @@ export default function CampDetail({ params }: CampDetailProps) {
                 </div>
 
                 <div className="mt-6 text-center">
+                  {/* 改为 /recommender（需要有 page.tsx 才能渲染页面） */}
                   <Link
-                    href="/recommend"
+                    href="/recommender"
                     className="inline-block px-8 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors shadow-md hover:shadow-lg"
                   >
                     Go to Recommendations →
