@@ -154,7 +154,7 @@ export default function Home() {
                          bg-emerald-600 text-white shadow-[0_15px_30px_-12px_rgba(16,185,129,0.7)]
                          hover:bg-emerald-700 active:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all"
             >
-              Find Campsites
+              Discover Camping Sites
             </Link>
 
             <Link
@@ -167,12 +167,12 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/recommender"
+              href="/guide"
               className="inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold
                          bg-emerald-500/95 text-white shadow-[0_15px_30px_-12px_rgba(16,185,129,0.7)]
                          hover:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all"
             >
-              Get Recommendations
+              Camping Guide
             </Link>
           </div>
         </div>
@@ -205,9 +205,8 @@ export default function Home() {
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
               Explore Our Website
             </h2>
-            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Learn what you can do on Campeco — each page is designed to help
-              you camp responsibly and discover Malaysia&apos;s forests.
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto whitespace-nowrap">
+              Learn what you can do on Campeco - A complete guide to getting started and beyond.
             </p>
           </div>
 
@@ -344,10 +343,10 @@ export default function Home() {
       {/* ===== Activities ===== */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
+          <div className="text-center mb-12 -mt-10">
             <h2 className="text-3xl font-extrabold tracking-tight">Activities You Can Enjoy</h2>
             <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
-              Camping is more than staying outdoors – enjoy fun activities and discover nature.
+              Camping is more than staying outdoors - Enjoy fun activities and discover nature.
             </p>
           </div>
 
@@ -370,7 +369,7 @@ export default function Home() {
                     alt={a.name}
                     width={600}
                     height={400}
-                    className="h-80 sm:h-96 w-full object-cover"
+                    className="h-30 sm:h-50 w-full object-cover"
                   />
                   <div className="p-5">
                     <h3 className="text-lg font-bold mb-2">{a.name}</h3>
@@ -384,30 +383,16 @@ export default function Home() {
       </section>
 
       {/* ===== Chatbot CTA ===== */}
-      <section className="relative py-16">
-        {/* Dark gradient background (brand colors) */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-700 via-green-700 to-emerald-800" />
-        <div className="absolute inset-0 -z-10 opacity-20 bg-[radial-gradient(900px_240px_at_10%_0%,white,transparent),radial-gradient(900px_240px_at_90%_100%,white,transparent)]" />
-
-        <div className="max-w-5xl mx-auto px-6">
-          {/* Solid white card + dark text */}
-          <div className="rounded-3xl bg-white shadow-[0_24px_80px_-24px_rgba(16,185,129,0.55)] ring-1 ring-black/5">
-            <div className="px-8 py-10 text-center">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-2">Want to learn more?</h2>
-              <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
-                Click the button below to start chatting with our bot and get more information.
-              </p>
-              <button
-                onClick={handleOpenChatbot}
-                className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
-                           bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
-                           shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40 transition-all"
-              >
-                Start Chatting
-              </button>
-            </div>
-          </div>
+      <section className="relative py-16 -mt-18">
+        <div className="flex justify-center">
+          <button
+            className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
+                      bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
+                      shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40 transition-all"
+          >
+            Discover Camping Sites →
+          </button>
         </div>
       </section>
 
