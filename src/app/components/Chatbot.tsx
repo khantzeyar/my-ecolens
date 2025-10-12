@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-// @ts-expect-error: Remixicon CSS has no type declarations
-import "remixicon/fonts/remixicon.css";
 import { useChat, Message } from "../context/chatcontext";
 import Link from "next/link";
 
