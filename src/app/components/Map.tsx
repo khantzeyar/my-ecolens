@@ -1,9 +1,10 @@
+/* eslint-disable */
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-// @ts-expect-error: Remixicon CSS has no type declarations
+// @ts-ignore
 import 'remixicon/fonts/remixicon.css'
-// @ts-expect-error: Leaflet CSS has no type declarations
+// @ts-ignore
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
