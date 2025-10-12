@@ -387,7 +387,9 @@ export default function Home() {
                     alt={a.name}
                     width={600}
                     height={400}
-                    className="h-30 sm:h-50 w-full object-cover"
+                    className={` h-30 sm:h-50 w-full object-cover ${
+                      a.name === "Bird Watching" ? "[object-position:50%_20%]" : "object-center"
+                      }`}
                   />
                   <div className="p-5">
                     <h3 className="text-lg font-bold mb-2">{a.name}</h3>
@@ -400,17 +402,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== Chatbot CTA ===== */}
       <section className="relative py-16 -mt-18">
         <div className="flex justify-center">
-          <button
-            className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
-                      bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
-                      shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40 transition-all"
-          >
-            Discover Camping Sites →
-          </button>
+          <Link href="/camp">
+            <button
+              className="inline-flex items-center justify-center rounded-xl px-8 py-3 font-semibold
+                        bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
+                        shadow-[0_14px_36px_-14px_rgba(16,185,129,0.7)]
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40
+                        transition-all cursor-pointer"
+            >
+              Discover Camping Sites →
+            </button>
+          </Link>
         </div>
       </section>
 

@@ -479,7 +479,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
                       <span className="text-xl">📍</span>
-                      <span className="text-gray-800">Location</span>
+                      <span className="text-gray-800">Enquiry Location</span>
                     </h2>
                     <p className="font-medium text-gray-900">{camp.state}</p>
                     <p className="text-gray-600 text-sm mt-1 leading-relaxed">
@@ -581,10 +581,10 @@ export default function CampDetail({ params }: CampDetailProps) {
                 <div className="mt-6 text-center">
                   {/* 改为 /recommender（需要有 page.tsx 才能渲染页面） */}
                   <Link
-                    href="/recommender"
+                    href="/guide"
                     className="inline-block px-8 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors shadow-md hover:shadow-lg"
                   >
-                    Go to Recommendations →
+                    Camping Guide →
                   </Link>
                 </div>
               </div>
