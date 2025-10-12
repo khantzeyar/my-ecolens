@@ -26,8 +26,12 @@ const PAGE_MAPPINGS = [
 function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   if (input.includes("camp")) return "🏕️ : [Camping Sites](/camp)";
+  if (input.includes("recommend")) return "💡 : [Campsite Recommender](/recommender)";
+  if (input.includes("visit history")) return "👣 : [My Eco Footprint](/footprints)";
+  if (input.includes("eco")) return "🌍 : [Importance of Eco Camping](/why)";
   if (input.includes("tips")) return "🌱 : [Eco-friendly Tips](/guide)";
-  if (input.includes("forest insights")) return "🌱 : [Forest Insights](/insights)";
+  if (input.includes("identifier")) return "🔍 : [Plant Identifier](/plant)";
+  if (input.includes("forest insights")) return "📊 : [Forest Insights](/insights)";
   return `⚠️ Sorry, I am temporarily unavailable. Meanwhile, you can explore:
   - 🏕️ : [Camping Sites](/camp)
   - 🌍 : [Importance of Eco Camping](/why)
