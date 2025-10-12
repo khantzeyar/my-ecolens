@@ -20,8 +20,8 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollY, setScrollY] = useState(0);
 
-  // dropdown state
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // desktop dropdown
+  const [isMobileOpen, setIsMobileOpen] = useState(false); // mobile menu
   const hoverTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -73,21 +73,18 @@ const Navbar = () => {
   const getTextStyles = (isActive: boolean) => {
     if (isActive) {
       return {
-        className:
-          'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
+        className: 'bg-white/90 text-emerald-700 font-bold shadow-md backdrop-blur-sm',
         style: {},
       };
     }
     if (isDarkBackground) {
       return {
-        className:
-          'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
+        className: 'text-white hover:bg-white/30 hover:text-emerald-200 font-semibold',
         style: { textShadow: '0 1px 3px rgba(0,0,0,0.7)' },
       };
     } else {
       return {
-        className:
-          'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
+        className: 'text-gray-800 hover:bg-white/50 hover:text-emerald-700 font-semibold',
         style: { textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
       };
     }
@@ -104,7 +101,6 @@ const Navbar = () => {
     />
   );
 
-  // hover helpers for dropdown
   const onEnter = () => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current);
     setOpen(true);
@@ -139,22 +135,40 @@ const Navbar = () => {
         }}
       >
         {/* Logo */}
-        <Link href="/" className="cursor-pointer group">
+        <Link href="/" className="cursor-pointer">
           <div className="flex items-center">
             <Image
               src="/logo.svg"
-              alt="Logo"
-              width={50}
+              alt="Campeco Logo"
+              width={150}
               height={50}
-              className="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg"
-              style={{ height: '50px', width: 'auto' }}
+              priority
+              className="drop-shadow-lg"
+              style={{
+                width: '150px',
+                height: '50px',
+                flexShrink: 0,
+                objectFit: 'contain',
+              }}
             />
           </div>
         </Link>
 
-        {/* Menu */}
+        {/* Hamburger Menu */}
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="md:hidden p-2 rounded-md hover:bg-white/30 transition"
+        >
+          <i
+            className={`ri-${isMobileOpen ? 'close-line' : 'menu-line'} text-2xl ${
+              isDarkBackground ? 'text-white' : 'text-gray-800'
+            }`}
+          />
+        </button>
+
+        {/* Desktop menu */}
         <div
-          className="relative flex items-center backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg"
+          className="relative hidden md:flex items-center backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg"
           style={{
             backgroundColor: `rgba(255, 255, 255, ${
               Math.max(0.2, styles.bgOpacity + 0.1)
@@ -164,7 +178,6 @@ const Navbar = () => {
               : `1px solid rgba(0, 0, 0, ${Math.min(styles.borderOpacity, 0.1)})`,
           }}
         >
-          {/* Home */}
           <Link
             href="/"
             className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
@@ -175,8 +188,6 @@ const Navbar = () => {
             Home
           </Link>
           <Divider />
-
-          {/* Discover Camping Sites (dropdown) */}
           <div
             className="relative"
             onMouseEnter={onEnter}
@@ -192,21 +203,9 @@ const Navbar = () => {
               onClick={() => setOpen((v) => !v)}
             >
               Discover Camping Sites
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.17l3.71-2.94a.75.75 0 111.04 1.08l-4.24 3.36a.75.75 0 01-.94 0L5.21 8.31a.75.75 0 01.02-1.1z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <i className="ri-arrow-down-s-line text-xs" />
             </button>
 
-            {/* dropdown panel */}
             {open && (
               <div
                 className="absolute left-0 top-[110%] min-w-[220px] rounded-xl shadow-2xl ring-1 ring-black/10 overflow-hidden z-50"
@@ -220,22 +219,13 @@ const Navbar = () => {
                 onMouseLeave={onLeave}
               >
                 <div className="flex flex-col py-2">
-                  <Link
-                    href="/camp"
-                    className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700"
-                  >
+                  <Link href="/camp" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
                     All Camping Sites
                   </Link>
-                  <Link
-                    href="/recommender"
-                    className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700"
-                  >
+                  <Link href="/recommender" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
                     Campsite Recommender
                   </Link>
-                  <Link
-                    href="/footprints"
-                    className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700"
-                  >
+                  <Link href="/footprints" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
                     My Eco Footprint
                   </Link>
                 </div>
@@ -243,8 +233,6 @@ const Navbar = () => {
             )}
           </div>
           <Divider />
-
-          {/* Guide */}
           <Link
             href="/guide"
             className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
@@ -255,8 +243,6 @@ const Navbar = () => {
             Guide
           </Link>
           <Divider />
-
-          {/* Plant Identifier */}
           <Link
             href="/plant"
             className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
@@ -267,8 +253,6 @@ const Navbar = () => {
             Plant Identifier
           </Link>
           <Divider />
-
-          {/* Forest Insights */}
           <Link
             href="/insights"
             className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
@@ -280,6 +264,121 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
+
+      {/* Mobile dropdown menu */}
+      {isMobileOpen && (
+        <div
+          className="md:hidden mt-2 mx-4 rounded-xl shadow-lg ring-1 ring-black/10 backdrop-blur-lg overflow-hidden transition-all duration-300"
+          style={{
+            backgroundColor: isDarkBackground
+              ? 'rgba(20, 20, 20, 0.8)' // softer black with transparency
+              : 'rgba(255, 255, 255, 0.8)', // frosted white for light mode
+            border: isDarkBackground
+              ? '1px solid rgba(255,255,255,0.2)'
+              : '1px solid rgba(0,0,0,0.1)',
+          }}
+        >
+          <div className={`flex flex-col ${isDarkBackground ? 'text-white' : 'text-gray-800'}`}>
+            <Link
+              href="/"
+              className={`px-5 py-3 transition hover:bg-emerald-600/20 ${
+                isDarkBackground ? 'hover:text-emerald-300' : 'hover:text-emerald-700'
+              }`}
+              onClick={() => setIsMobileOpen(false)}
+            >
+              Home
+            </Link>
+
+            <button
+              onClick={() => setOpen(!open)}
+              className={`px-5 py-3 text-left flex justify-between items-center transition ${
+                isDarkBackground
+                  ? 'hover:bg-white/10 hover:text-emerald-300'
+                  : 'hover:bg-emerald-50 hover:text-emerald-700'
+              }`}
+            >
+              Discover Camping Sites
+              <i className={`ri-arrow-${open ? 'up' : 'down'}-s-line`} />
+            </button>
+
+            {open && (
+              <div
+                className={`flex flex-col transition-all ${
+                  isDarkBackground ? 'bg-white/10' : 'bg-white/70'
+                }`}
+              >
+                <Link
+                  href="/camp"
+                  className={`px-7 py-2 ${
+                    isDarkBackground
+                      ? 'hover:bg-white/20 hover:text-emerald-300'
+                      : 'hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  All Camping Sites
+                </Link>
+                <Link
+                  href="/recommender"
+                  className={`px-7 py-2 ${
+                    isDarkBackground
+                      ? 'hover:bg-white/20 hover:text-emerald-300'
+                      : 'hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  Campsite Recommender
+                </Link>
+                <Link
+                  href="/footprints"
+                  className={`px-7 py-2 ${
+                    isDarkBackground
+                      ? 'hover:bg-white/20 hover:text-emerald-300'
+                      : 'hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  My Eco Footprint
+                </Link>
+              </div>
+            )}
+
+            <Link
+              href="/guide"
+              className={`px-5 py-3 transition ${
+                isDarkBackground
+                  ? 'hover:bg-white/10 hover:text-emerald-300'
+                  : 'hover:bg-emerald-50 hover:text-emerald-700'
+              }`}
+              onClick={() => setIsMobileOpen(false)}
+            >
+              Guide
+            </Link>
+            <Link
+              href="/plant"
+              className={`px-5 py-3 transition ${
+                isDarkBackground
+                  ? 'hover:bg-white/10 hover:text-emerald-300'
+                  : 'hover:bg-emerald-50 hover:text-emerald-700'
+              }`}
+              onClick={() => setIsMobileOpen(false)}
+            >
+              Plant Identifier
+            </Link>
+            <Link
+              href="/insights"
+              className={`px-5 py-3 transition ${
+                isDarkBackground
+                  ? 'hover:bg-white/10 hover:text-emerald-300'
+                  : 'hover:bg-emerald-50 hover:text-emerald-700'
+              }`}
+              onClick={() => setIsMobileOpen(false)}
+            >
+              Forest Insights
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
