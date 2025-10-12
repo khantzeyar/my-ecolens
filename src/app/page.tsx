@@ -33,56 +33,54 @@ function OverviewCard({
   title: string;
   desc: string;
   cta?: string;
-  topBar?: string; // gradient for the top bar
-  bg?: string; // subtle card background gradient
-  iconTile?: string; // solid color for the icon square
+  topBar?: string;
+  bg?: string;
+  iconTile?: string;
   ariaLabel?: string;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-  children: React.ReactNode; // the icon svg
+  children: React.ReactNode;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
       aria-label={ariaLabel ?? `Go to ${title}`}
-      className="group relative rounded-[22px] bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+      className="group relative flex flex-col h-full rounded-[22px] bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
     >
       {/* Top rounded gradient bar */}
       <div className={`absolute inset-x-0 top-0 h-3 rounded-t-[22px] bg-gradient-to-r ${topBar}`} />
 
-      {/* Card body with very light green gradient */}
-      <div className={`pt-8 pb-6 px-6 rounded-[22px] bg-gradient-to-b ${bg} overflow-hidden`}>
+      {/* Card body */}
+      <div className={`flex flex-col flex-1 pt-8 pb-6 px-6 rounded-[22px] bg-gradient-to-b ${bg} overflow-hidden`}>
         {/* Icon tile */}
         <div className={`mx-auto mb-4 h-12 w-12 ${iconTile} rounded-xl text-white shadow-md grid place-items-center`}>
           <div className="w-6 h-6">{children}</div>
         </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-extrabold text-gray-900 text-center mb-2">{title}</h3>
+        {/* Title & description */}
+        <div className="flex-1 flex flex-col justify-between">
+          <div>
+            <h3 className="text-xl font-extrabold text-gray-900 text-center mb-2">{title}</h3>
+            <p className="text-gray-600 text-center leading-relaxed max-w-[28ch] mx-auto">{desc}</p>
+          </div>
 
-        {/* Description */}
-        <p className="text-gray-600 text-center leading-relaxed max-w-[28ch] mx-auto">
-          {desc}
-        </p>
-
-        {/* CTA row */}
-        <div className="mt-5 flex items-center justify-center">
-          <span className="text-emerald-600 font-semibold">
-            {cta}
-          </span>
-          <svg
-            className="ml-2 h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-x-0.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          {/* CTA row */}
+          <div className="mt-5 flex items-center justify-center">
+            <span className="text-emerald-600 font-semibold">{cta}</span>
+            <svg
+              className="ml-2 h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
         </div>
       </div>
 
-      {/* Subtle white footer strip to match the reference look */}
+      {/* Footer strip */}
       <div className="h-6 rounded-b-[22px] bg-white" />
     </Link>
   );
@@ -216,7 +214,7 @@ export default function Home() {
             <OverviewCard
               href="/camp"
               title="Discover Camping Sites"
-              desc="Find campsites across Malaysia with interactive maps and filters."
+              desc="Explore and enjoy sustainable camping locations across Malaysia's pristine forests."
               cta="Explore"
               topBar="from-teal-600 to-emerald-700"
               bg="from-emerald-50 to-white"
@@ -231,7 +229,7 @@ export default function Home() {
             <OverviewCard
               href="/insights"
               title="Forest Insights"
-              desc="Explore data on forest cover, loss trends, and sustainability insights."
+              desc="Explore data on forest cover loss and sustainability insights."
               cta="Learn"
               topBar="from-emerald-600 to-green-700"
               bg="from-emerald-50 to-white"
@@ -246,7 +244,7 @@ export default function Home() {
             <OverviewCard
               href="/guide"
               title="Camping Guide"
-              desc="Learn eco-friendly camping tips and do's & don'ts for responsible camping."
+              desc="Learn sustainable camping practices and guidelines for responsible outdoor recreation."
               cta="Read"
               topBar="from-teal-600 to-cyan-600"
               bg="from-emerald-50 to-white"
@@ -262,7 +260,7 @@ export default function Home() {
             <OverviewCard
               href="/plant"
               title="Plant Identifier"
-              desc="Identify plants you encounter while camping using our recognition tool."
+              desc="Identify plants encountered during your trips using our advanced image recognition tool."
               cta="Identify"
               topBar="from-lime-600 to-green-600"
               bg="from-emerald-50 to-white"
@@ -277,7 +275,7 @@ export default function Home() {
             <OverviewCard
               href="/why"
               title="Why Eco Camping Matters"
-              desc="Learn why responsible camping is important for protecting Malaysia's forests and biodiversity."
+              desc="Understand the importance of eco camping in preserving Malaysia's biodiversity."
               cta="Discover"
               topBar="from-green-700 to-emerald-700"
               bg="from-emerald-50 to-white"
@@ -292,7 +290,7 @@ export default function Home() {
             <OverviewCard
               href="/recommender"
               title="Campsite Recommender"
-              desc="Get suggestions based on your preferences and predicted weather."
+              desc="Receive personalised recommendations based on your preferences and forecasted weather conditions."
               cta="Open"
               topBar="from-emerald-600 to-green-600"
               bg="from-emerald-50 to-white"
@@ -307,7 +305,7 @@ export default function Home() {
             <OverviewCard
               href="/footprints"
               title="My Eco Footprints"
-              desc="Track favorites, identified plants, visit history, and your map."
+              desc="Track your favorite campsites and view your visit history."
               cta="Open"
               topBar="from-teal-600 to-emerald-600"
               bg="from-emerald-50 to-white"
@@ -323,7 +321,7 @@ export default function Home() {
               href="/#open-chatbot"
               onClick={openChatbotViaCard}
               title="Chatbot Assistant"
-              desc="Get quick answers about eco-friendly camping, find tips and site info, and chat anytime."
+              desc="Get instant answers and guidance for navigating the website."
               cta="Open"
               topBar="from-emerald-600 to-green-600"
               bg="from-emerald-50 to-white"
