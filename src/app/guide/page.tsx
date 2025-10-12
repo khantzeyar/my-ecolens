@@ -52,10 +52,10 @@ type Category =
 const categories: Category[] = [
   {
     id: "essentials",
-    title: "Checklists",
+    title: "Packing Checklist",
     icon: "ri-shopping-bag-3-line",
     color: "from-blue-500 to-blue-700",
-    description: "Not sure what to pack before camping? Open for a complete checklist.",
+    description: "",
     itemCount: "40+",
     checklist: [
       { group: "Sleeping Gear", items: ["Tent", "Sleeping Bag", "Sleeping Mat", "Pillow", "Blanket"] },
@@ -107,7 +107,7 @@ const categories: Category[] = [
     title: "Emergency Info",
     icon: "ri-phone-line",
     color: "from-rose-500 to-red-600",
-    description: "Use quick-dial and find nearby medical care.",
+    description: "",
     itemCount: "10",
     tips: [
       { title: "Emergency Contacts", description: "Police: 999, Fire & Rescue: 994, Ambulance: 999." },
@@ -127,11 +127,11 @@ const categories: Category[] = [
   },
   {
     id: "nature",
-    title: "Nature Awareness",
+    title: "Nature Safety Tips",
     icon: "ri-leaf-line",
     color: "from-emerald-500 to-green-600",
     description:
-      "Quick safety primers for wildlife, extreme weather, toxic plants & mushrooms, and snakes.",
+      "",
     itemCount: "4",
     tips: [
       {
@@ -772,7 +772,7 @@ export default function GuidePage() {
   /* ============== Homepage (refreshed layout) ============== */
   return (
     <main className="pt-24 md:pt-28 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto mt-5">
         {/* Hero */}
         <header className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] px-6 md:px-10 py-10 md:py-14 mb-10">
           <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/10 to-transparent" />
@@ -845,7 +845,7 @@ export default function GuidePage() {
             href="/why"
             className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-emerald-600 text-white text-lg md:text-xl font-semibold shadow hover:bg-emerald-700"
           >
-            Why Eco Camping Matters
+            Why Eco Camping Matters →
           </Link>
         </div>
       </div>

@@ -507,16 +507,22 @@ export default function CampDetail({ params }: CampDetailProps) {
                 </div>
               </div>
 
-              {/* Weather + Entry Fee */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 {/* Weather */}
-                <div className="p-6 bg-gradient-to-br from-blue-50 via-sky-50 to-white border border-blue-100 rounded-xl shadow-sm">
+                <div className="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <span className="text-2xl">🌤️</span>
+                    <span className="text-gray-800">Weather Forecast</span>
+                  </h2>
+
                   {weatherData.length > 0 ? (
-                    <WeatherCard weather={weatherData} />
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-gray-400">Weather data not available</p>
+                    <div className="space-y-4">
+                      <WeatherCard weather={weatherData} />
                     </div>
+                  ) : (
+                    <p className="text-gray-500 py-4 text-center bg-gray-50 rounded-lg">
+                      Weather data not available
+                    </p>
                   )}
                 </div>
 

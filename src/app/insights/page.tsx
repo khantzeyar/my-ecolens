@@ -276,7 +276,7 @@ export default function ForestPage() {
         </header>
 
         <section className="bg-white/90 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl w-full">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">How to Read this Page</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-green-700 mb-6 text-center">How to Read this Page</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm md:text-base text-gray-700">
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
               <div className="font-bold text-lg mb-3 text-green-700">Map & Timeline</div>

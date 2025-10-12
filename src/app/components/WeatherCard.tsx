@@ -54,9 +54,6 @@ const WeatherCard: React.FC<WeatherProps> = ({ weather = [] }) => {
 
   return (
     <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-md">
-      <h3 className="text-lg font-bold text-gray-800 mb-3">
-        5-Day Weather Forecast
-      </h3>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         {safeWeather.map((day) => (
           <div
