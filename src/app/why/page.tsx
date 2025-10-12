@@ -1,98 +1,99 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
+/** ---------- Static data (module scope, stable for hooks deps) ---------- */
+const IMPACT_DATA = {
+  forestLoss: {
+    title: "Forest Loss",
+    content: [
+      // 修正为 GFW 常用口径：相对 2000 年树冠覆盖的比例（2001–2024）
+      "Malaysia lost about 32% of its 2000 tree cover from 2001–2024 (Global Forest Watch).",
+      "Deforestation destroys natural habitats and disrupts ecosystems.",
+      "Illegal logging and land conversion accelerate forest degradation.",
+      "Loss of forest cover contributes to climate change and soil erosion."
+    ],
+    images: [
+      "/images/forest-loss-1.jpg",
+      "/images/forest-loss-2.jpg",
+      "/images/forest-loss-3.jpg",
+      "/images/forest-loss-4.jpg",
+      "/images/forest-loss-5.jpg"
+    ]
+  },
+  wildlife: {
+    title: "Wildlife at Risk",
+    content: [
+      "Iconic species like hornbills lose nesting trees due to habitat destruction.",
+      "Tigers are pushed closer to extinction as their habitats shrink.",
+      "Rare plants like Rafflesia are endangered by irresponsible camping.",
+      "Wildlife corridors are disrupted, affecting migration and breeding patterns."
+    ],
+    images: [
+      "/images/wildlife-1.jpg",
+      "/images/wildlife-2.jpg",
+      "/images/wildlife-3.jpg",
+      "/images/wildlife-4.jpg",
+      "/images/wildlife-5.jpg"
+    ]
+  },
+  pollution: {
+    title: "Environmental Pollution",
+    content: [
+      "Improper waste disposal pollutes rivers and attracts pests.",
+      "Plastic waste harms wildlife and contaminates water sources.",
+      "Chemical pollutants from camping activities damage soil quality.",
+      "Accumulated trash degrades the natural beauty of forest areas."
+    ],
+    images: [
+      "/images/pollution-1.jpg",
+      "/images/pollution-2.jpg",
+      "/images/pollution-3.jpg",
+      "/images/pollution-4.jpg",
+      "/images/pollution-5.jpg"
+    ]
+  },
+  fire: {
+    title: "Forest Fire Risk",
+    content: [
+      "Uncontrolled campfires can cause devastating forest fires.",
+      "Dry conditions and careless behavior increase fire hazards.",
+      "Forest fires destroy wildlife habitats and biodiversity.",
+      "Smoke pollution affects air quality and human health."
+    ],
+    images: [
+      "/images/fire-1.jpg",
+      "/images/fire-2.jpg",
+      "/images/fire-3.jpg",
+      "/images/fire-4.jpg",
+      "/images/fire-5.jpg"
+    ]
+  }
+} as const;
+
+type TabKey = keyof typeof IMPACT_DATA;
+
 export default function WhyPage() {
-  const [activeTab, setActiveTab] = useState("forestLoss");
+  const [activeTab, setActiveTab] = useState<TabKey>("forestLoss");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const impactData = {
-    forestLoss: {
-      title: "Forest Loss",
-      content: [
-        "Malaysia lost over 8.6% of tree cover between 2001–2023 (Global Forest Watch).",
-        "Deforestation destroys natural habitats and disrupts ecosystems.",
-        "Illegal logging and land conversion accelerate forest degradation.",
-        "Loss of forest cover contributes to climate change and soil erosion."
-      ],
-      images: [
-        "/images/forest-loss-1.jpg",
-        "/images/forest-loss-2.jpg",
-        "/images/forest-loss-3.jpg",
-        "/images/forest-loss-4.jpg",
-        "/images/forest-loss-5.jpg"
-      ]
-    },
-    wildlife: {
-      title: "Wildlife at Risk",
-      content: [
-        "Iconic species like hornbills lose nesting trees due to habitat destruction.",
-        "Tigers are pushed closer to extinction as their habitats shrink.",
-        "Rare plants like Rafflesia are endangered by irresponsible camping.",
-        "Wildlife corridors are disrupted, affecting migration and breeding patterns."
-      ],
-      images: [
-        "/images/wildlife-1.jpg",
-        "/images/wildlife-2.jpg",
-        "/images/wildlife-3.jpg",
-        "/images/wildlife-4.jpg",
-        "/images/wildlife-5.jpg"
-      ]
-    },
-    pollution: {
-      title: "Environmental Pollution",
-      content: [
-        "Improper waste disposal pollutes rivers and attracts pests.",
-        "Plastic waste harms wildlife and contaminates water sources.",
-        "Chemical pollutants from camping activities damage soil quality.",
-        "Accumulated trash degrades the natural beauty of forest areas."
-      ],
-      images: [
-        "/images/pollution-1.jpg",
-        "/images/pollution-2.jpg",
-        "/images/pollution-3.jpg",
-        "/images/pollution-4.jpg",
-        "/images/pollution-5.jpg"
-      ]
-    },
-    fire: {
-      title: "Forest Fire Risk",
-      content: [
-        "Uncontrolled campfires can cause devastating forest fires.",
-        "Dry conditions and careless behavior increase fire hazards.",
-        "Forest fires destroy wildlife habitats and biodiversity.",
-        "Smoke pollution affects air quality and human health."
-      ],
-      images: [
-        "/images/fire-1.jpg",
-        "/images/fire-2.jpg",
-        "/images/fire-3.jpg",
-        "/images/fire-4.jpg",
-        "/images/fire-5.jpg"
-      ]
-    }
-  };
+  const currentTabData = IMPACT_DATA[activeTab];
+  const imagesLen = currentTabData.images.length;
 
   // Auto-play images every 3 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex(
-        (prev) =>
-          (prev + 1) %
-          impactData[activeTab as keyof typeof impactData].images.length
-      );
+    const interval = window.setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % imagesLen);
     }, 3000);
-
-    return () => clearInterval(interval);
-  }, [activeTab]);
+    return () => window.clearInterval(interval);
+  }, [activeTab, imagesLen]); // 依赖稳定，无告警
 
   // Reset image index when tab changes
   useEffect(() => {
     setCurrentImageIndex(0);
   }, [activeTab]);
-
-  const currentTabData = impactData[activeTab as keyof typeof impactData];
 
   return (
     <main
@@ -115,12 +116,12 @@ export default function WhyPage() {
 
           {/* Tabs */}
           <div className="flex flex-wrap gap-3 mb-10">
-            {Object.entries(impactData).map(([key, data]) => (
+            {Object.entries(IMPACT_DATA).map(([key, data]) => (
               <button
                 key={key}
-                onClick={() => setActiveTab(key)}
+                onClick={() => setActiveTab(key as TabKey)}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                  activeTab === key
+                  activeTab === (key as TabKey)
                     ? "bg-green-600 text-white shadow-lg"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
@@ -199,6 +200,7 @@ export default function WhyPage() {
                         ? "bg-green-600 w-8"
                         : "bg-gray-300 hover:bg-gray-400"
                     }`}
+                    aria-label={`Go to image ${index + 1}`}
                   />
                 ))}
               </div>
@@ -271,18 +273,18 @@ export default function WhyPage() {
             forests are changing from 2001 to 2030.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            <a
+            <Link
               href="/insights"
               className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               See More Data →
-            </a>
-            <a
+            </Link>
+            <Link
               href="/guide"
               className="bg-emerald-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-emerald-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               How to Camp Responsibly →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
