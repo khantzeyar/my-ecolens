@@ -352,7 +352,7 @@ export default function CampDetail({ params }: CampDetailProps) {
           <div className="bg-gray-100 rounded-full p-1 flex w-fit mx-auto">
             <button
               onClick={() => setActiveTab("detail")}
-              className={`px-8 py-3 rounded-full font-medium transition-all ${
+              className={`px-8 py-3 rounded-full font-medium transition-all cursor-pointer ${
                 activeTab === "detail"
                   ? "bg-white text-green-700 shadow-md"
                   : "text-gray-600 hover:text-gray-800"
@@ -362,7 +362,7 @@ export default function CampDetail({ params }: CampDetailProps) {
             </button>
             <button
               onClick={() => setActiveTab("insight")}
-              className={`px-8 py-3 rounded-full font-medium transition-all ${
+              className={`px-8 py-3 rounded-full font-medium transition-all cursor-pointer ${
                 activeTab === "insight"
                   ? "bg-white text-green-700 shadow-md"
                   : "text-gray-600 hover:text-gray-800"
@@ -388,13 +388,13 @@ export default function CampDetail({ params }: CampDetailProps) {
                         <button
                           aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
                           onClick={() => toggleFavorite(routeId || String(camp.id))}
-                          className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200"
+                          className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200 cursor-pointer"
                           title={isFavorited ? "Remove from favorites" : "Add to favorites"}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            className="w-6 h-6"
+                            className="w-5 h-5"
                             fill={isFavorited ? "#f59e0b" : "none"}
                             stroke={isFavorited ? "#f59e0b" : "#9ca3af"}
                             strokeWidth="2"
@@ -453,7 +453,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   ) : (
                     <button
                       onClick={handleMarkVisited}
-                      className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 text-sm shadow-sm"
+                      className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 text-sm shadow-sm cursor-pointer"
                     >
                       Mark as Visited
                     </button>
@@ -479,7 +479,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                   <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
                       <span className="text-xl">📍</span>
-                      <span className="text-gray-800">Location</span>
+                      <span className="text-gray-800">Enquiry Location</span>
                     </h2>
                     <p className="font-medium text-gray-900">{camp.state}</p>
                     <p className="text-gray-600 text-sm mt-1 leading-relaxed">
@@ -507,16 +507,22 @@ export default function CampDetail({ params }: CampDetailProps) {
                 </div>
               </div>
 
-              {/* Weather + Entry Fee */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 {/* Weather */}
-                <div className="p-6 bg-gradient-to-br from-blue-50 via-sky-50 to-white border border-blue-100 rounded-xl shadow-sm">
+                <div className="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <span className="text-2xl">🌤️</span>
+                    <span className="text-gray-800">Weather Forecast</span>
+                  </h2>
+
                   {weatherData.length > 0 ? (
-                    <WeatherCard weather={weatherData} />
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-gray-400">Weather data not available</p>
+                    <div className="space-y-4">
+                      <WeatherCard weather={weatherData} />
                     </div>
+                  ) : (
+                    <p className="text-gray-500 py-4 text-center bg-gray-50 rounded-lg">
+                      Weather data not available
+                    </p>
                   )}
                 </div>
 
@@ -581,10 +587,10 @@ export default function CampDetail({ params }: CampDetailProps) {
                 <div className="mt-6 text-center">
                   {/* 改为 /recommender（需要有 page.tsx 才能渲染页面） */}
                   <Link
-                    href="/recommender"
+                    href="/guide"
                     className="inline-block px-8 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors shadow-md hover:shadow-lg"
                   >
-                    Go to Recommendations →
+                    Camping Guide →
                   </Link>
                 </div>
               </div>
@@ -603,7 +609,7 @@ export default function CampDetail({ params }: CampDetailProps) {
                 of its total forest area.
               </p>
 
-              <div className="max-w-lg mx-auto">
+              <div className="max-w-4xl mx-auto w-full">
                 <InsightsPanel
                   mode="mini"
                   data={{

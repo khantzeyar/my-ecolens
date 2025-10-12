@@ -48,8 +48,8 @@ const Footer = () => {
               Learning
             </h3>
             <ul className="space-y-3 text-gray-400 text-sm md:text-base">
-              <li><Link href="/guide" className="hover:text-white transition-colors">Camping Guide</Link></li>
               <li><Link href="/why" className="hover:text-white transition-colors">Why Eco Camping Matters</Link></li>
+              <li><Link href="/guide" className="hover:text-white transition-colors">Camping Guide</Link></li>
               <li><Link href="/insights" className="hover:text-white transition-colors">Forest Insights</Link></li>
             </ul>
           </div>
@@ -64,10 +64,10 @@ const Footer = () => {
               Hub
             </h3>
             <ul className="space-y-3 text-gray-400 text-sm md:text-base">
-              <li><Link href="/camp" className="hover:text-white transition-colors">Camping Sites</Link></li>
-              <li><Link href="/plant" className="hover:text-white transition-colors">Plant Identifier</Link></li>
+              <li><Link href="/camp" className="hover:text-white transition-colors">All Camping Sites</Link></li>
               <li><Link href="/recommender" className="hover:text-white transition-colors">Campsite Recommender</Link></li>
-              <li><Link href="/footprints" className="hover:text-white transition-colors">My Eco Footprints</Link></li>
+              <li><Link href="/plant" className="hover:text-white transition-colors">Plant Identifier</Link></li>
+              <li><Link href="/footprints" className="hover:text-white transition-colors">My Eco Footprint</Link></li>
             </ul>
           </div>
 

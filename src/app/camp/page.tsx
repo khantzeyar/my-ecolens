@@ -438,7 +438,7 @@ const CampPage: React.FC = () => {
                             setSelectedStates(selectedStates.filter((s) => s !== state));
                           }
                         }}
-                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
+                        className="w-4 h-4 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {state}
                     </label>
@@ -454,9 +454,9 @@ const CampPage: React.FC = () => {
                     type="checkbox"
                     checked={onlyFullyFree}
                     onChange={(e) => setOnlyFullyFree(e.target.checked)}
-                    className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
+                    className="w-4 h-4 mr-2 text-green-600 focus:ring-green-500"
                   />
-                  Free for everyone
+                  Free for Everyone
                 </label>
               </div>
 
@@ -470,7 +470,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedAttractions.includes(attr)}
                         onChange={() => toggleAttraction(attr)}
-                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
+                        className="w-4 h-4 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {attr}
                     </label>
@@ -488,7 +488,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedActivities.includes(act)}
                         onChange={() => toggleActivity(act)}
-                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
+                        className="w-4 h-4 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {act}
                     </label>
@@ -537,13 +537,13 @@ const CampPage: React.FC = () => {
                                 // toast
                                 pushToast(pre ? "Removed from Favorites" : "Added to Favorites");
                               }}
-                              className="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow hover:bg-white"
+                              className="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow hover:bg-white cursor-pointer"
                               title={fav ? "Remove from favorites" : "Add to favorites"}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                                 fill={fav ? "#f59e0b" : "none"}
                                 stroke={fav ? "#f59e0b" : "#6b7280"}
                                 strokeWidth="2"
@@ -569,7 +569,7 @@ const CampPage: React.FC = () => {
 
                             <div className="mt-auto">
                               <Link href={`/camp/${camp.id}`}>
-                                <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200 font-medium">
+                                <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200 font-medium cursor-pointer">
                                   View Details
                                 </button>
                               </Link>
@@ -588,7 +588,7 @@ const CampPage: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all cursor-pointer ${
                       currentPage === 1
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"
@@ -608,7 +608,7 @@ const CampPage: React.FC = () => {
                         <button
                           key={`p-${page}`}
                           onClick={() => setCurrentPage(page as number)}
-                          className={`min-w-[42px] h-[42px] flex items-center justify-center text-sm font-medium rounded-lg transition-all ${
+                          className={`min-w-[42px] h-[42px] flex items-center justify-center text-sm font-medium rounded-lg transition-all cursor-pointer ${
                             currentPage === page
                               ? "bg-green-600 text-white shadow-md scale-105"
                               : "text-gray-700 hover:bg-white hover:shadow-sm"
@@ -623,7 +623,7 @@ const CampPage: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all cursor-pointer ${
                       currentPage === totalPages
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"

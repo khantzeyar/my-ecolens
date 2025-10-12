@@ -52,10 +52,10 @@ type Category =
 const categories: Category[] = [
   {
     id: "essentials",
-    title: "Checklists",
+    title: "Packing Checklist",
     icon: "ri-shopping-bag-3-line",
     color: "from-blue-500 to-blue-700",
-    description: "Not sure what to pack before camping? Open for a complete checklist.",
+    description: "",
     itemCount: "40+",
     checklist: [
       { group: "Sleeping Gear", items: ["Tent", "Sleeping Bag", "Sleeping Mat", "Pillow", "Blanket"] },
@@ -107,7 +107,7 @@ const categories: Category[] = [
     title: "Emergency Info",
     icon: "ri-phone-line",
     color: "from-rose-500 to-red-600",
-    description: "Use quick-dial and find nearby medical care.",
+    description: "",
     itemCount: "10",
     tips: [
       { title: "Emergency Contacts", description: "Police: 999, Fire & Rescue: 994, Ambulance: 999." },
@@ -127,11 +127,11 @@ const categories: Category[] = [
   },
   {
     id: "nature",
-    title: "Nature Awareness",
+    title: "Nature Safety Tips",
     icon: "ri-leaf-line",
     color: "from-emerald-500 to-green-600",
     description:
-      "Quick safety primers for wildlife, extreme weather, toxic plants & mushrooms, and snakes.",
+      "",
     itemCount: "4",
     tips: [
       {
@@ -175,7 +175,7 @@ const GuideCard: React.FC<GuideCardProps> = ({
   return (
     <button
       onClick={onClick}
-      className="group relative w-full overflow-hidden rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_14px_40px_rgba(0,0,0,0.28)] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+      className="group relative w-full overflow-hidden rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_14px_40px_rgba(0,0,0,0.28)] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 cursor-pointer"
     >
       {/* gradient veil */}
       <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-25 group-hover:opacity-35 transition-opacity`} />
@@ -772,7 +772,7 @@ export default function GuidePage() {
   /* ============== Homepage (refreshed layout) ============== */
   return (
     <main className="pt-24 md:pt-28 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto mt-5">
         {/* Hero */}
         <header className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] px-6 md:px-10 py-10 md:py-14 mb-10">
           <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/10 to-transparent" />
@@ -822,17 +822,17 @@ export default function GuidePage() {
           {/* Illustrated steps */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center">
-              <Image src="/images/cleanup.jpg" alt="Pack Trash Correctly" width={160} height={160} className="w-40 h-40 object-cover rounded-xl mb-4 shadow" />
+              <Image src="/images/cleanup.jpg" alt="Pack Trash Correctly" width={160} height={160} className="w-full h-48 md:h-50 object-cover rounded-2xl mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Pack Trash Correctly</h3>
               <p className="text-gray-600 mt-2">Use trash bags and seal them tightly. Carry all waste back instead of burying it.</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Image src="/images/fire-safety.jpg" alt="Extinguish Fires Properly" width={160} height={160} className="w-40 h-40 object-cover rounded-xl mb-4 shadow" />
+              <Image src="/images/fire-safety.jpg" alt="Extinguish Fires Properly" width={160} height={160} className="w-full h-48 md:h-50 object-cover rounded-2xl mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Extinguish Fires Properly</h3>
               <p className="text-gray-600 mt-2">Pour water and stir ashes until cold. Never leave smoldering embers behind.</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Image src="/images/resources.jpg" alt="Eco-friendly Habits" width={160} height={160} className="w-40 h-40 object-cover rounded-xl mb-4 shadow" />
+              <Image src="/images/resources.jpg" alt="Eco-friendly Habits" width={160} height={160} className="w-full h-48 md:h-50 object-cover rounded-2xl mb-4 shadow" />
               <h3 className="font-bold text-gray-800">Eco-friendly Habits</h3>
               <p className="text-gray-600 mt-2">Use biodegradable soap, reusable bottles, and minimize plastic waste.</p>
             </div>
@@ -843,9 +843,9 @@ export default function GuidePage() {
         <div className="text-center">
           <Link
             href="/why"
-            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-emerald-600 text-white text-lg md:text-xl font-semibold shadow hover:bg-emerald-700"
+            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-4 rounded-2xl bg-emerald-600 text-white text-lg md:text-lg font-semibold shadow hover:bg-emerald-700"
           >
-            Why Eco Camping Matters
+            Why Eco Camping Matters →
           </Link>
         </div>
       </div>
