@@ -543,7 +543,7 @@ const CampPage: React.FC = () => {
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                                 fill={fav ? "#f59e0b" : "none"}
                                 stroke={fav ? "#f59e0b" : "#6b7280"}
                                 strokeWidth="2"
