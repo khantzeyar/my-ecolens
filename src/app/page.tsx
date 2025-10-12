@@ -123,16 +123,21 @@ export default function Home() {
         <div className="absolute inset-0 overflow-hidden">
           <video
             autoPlay
-            loop
             muted
+            loop
             playsInline
-            className="h-full w-full object-cover pointer-events-none select-none"
             preload="auto"
             tabIndex={-1}
+            className="h-full w-full object-cover pointer-events-none select-none"
+            style={{
+              WebkitUserSelect: 'none',
+              WebkitTouchCallout: 'none',
+            }}
           >
             <source src="/forest-video.mp4" type="video/mp4" />
           </video>
         </div>
+
 
         {/* Vignette + center highlight (keeps text readable) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/60" />
