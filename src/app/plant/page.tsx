@@ -60,6 +60,7 @@ export default function PlantIdentifier() {
 
     setLoading(true);
     setError(null);
+    setResult(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -70,9 +71,15 @@ export default function PlantIdentifier() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed to identify plant");
       const data = await res.json();
-      setResult(data);
+
+      if (data.error) {
+        setError(data.error);
+        setResult(null);
+      } else {
+        setResult(data);
+        setError(null);
+      }
     } catch (err) {
       setError("Something went wrong. Please try again.");
       console.error(err);
