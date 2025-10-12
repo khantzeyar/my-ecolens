@@ -185,25 +185,30 @@ export default function MyFootprintsPage() {
       style={{ backgroundImage: "url('/images/footprints.jpg')" }}
     >
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="relative flex items-center justify-center mb-10 mt-10">
-          <div className="absolute -z-0 top-1/2 -translate-y-1/2 w-[min(90%,720px)] h-16 rounded-full bg-black/35 backdrop-blur-sm blur-md"></div>
-          <h1
-            className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-center text-white"
-            style={{
-              textShadow:
-                "0 3px 16px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)",
-            }}
-          >
-            My Eco Footprints
-          </h1>
-          <Link
-            href="/camp"
-            className="absolute right-0 px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 shadow"
-          >
-            ← Back to Discover
-          </Link>
-        </div>
+      {/* Header */}
+      <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10">
+        {/* Background Blur*/}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90%,720px)] h-16 rounded-full bg-black/35 backdrop-blur-sm blur-md"></div>
+
+        {/* Title */}
+        <h1
+          className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-white"
+          style={{
+            textShadow:
+              "0 3px 16px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)",
+          }}
+        >
+          My Eco Footprints
+        </h1>
+
+        {/* Back button*/}
+        <Link
+          href="/camp"
+          className="mt-8 px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 shadow transition"
+        >
+          ← Back to Discover
+        </Link>
+      </div>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-3 mb-6 justify-center">

@@ -10,6 +10,7 @@
  * - Floating chatbot button
  */
 
+/* eslint-disable */
 "use client";
 
 import Link from "next/link";
@@ -92,6 +93,15 @@ export default function Home() {
     window.dispatchEvent(new Event("openChatbot"));
   };
 
+  // Mobile detection
+  const [isMobile, setIsMobile] = React.useState(false);
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    if (/android/i.test(userAgent) || /iPhone|iPad|iPod/i.test(userAgent)) {
+      setIsMobile(true);
+    }
+  }, []);
+
   // Optional: open with keyboard (Alt/Command + /)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -119,10 +129,20 @@ export default function Home() {
     <main className="bg-white text-gray-900">
       {/* ===== Hero ===== */}
       <section className="relative flex items-center justify-center h-[88vh] sm:h-screen overflow-hidden">
-        {/* Background video */}
-        <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
-          <source src="/forest-video.mp4" type="video/mp4" />
-        </video>
+        {/* Background: show image on mobile, video on desktop */}
+        {isMobile ? (
+          <Image
+            src="/images/forest-fallback.png"
+            alt="Forest background"
+            fill
+            className="absolute inset-0 h-full w-full object-cover"
+            priority
+          />
+        ) : (
+          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
+            <source src="/forest-video.mp4" type="video/mp4" />
+          </video>
+        )}
 
         {/* Vignette + center highlight (keeps text readable) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/60" />

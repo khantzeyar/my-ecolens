@@ -189,12 +189,12 @@ export default function WhyPage() {
               })}
 
               {/* Navigation Dots */}
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
                 {currentTabData.images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`w-4 h-4 rounded-full transition-all duration-300 ${
                       index === currentImageIndex
                         ? "bg-green-600 w-8"
                         : "bg-gray-300 hover:bg-gray-400"

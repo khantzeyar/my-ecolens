@@ -270,7 +270,7 @@ export default function ForestPage() {
               Forest Insights
             </span>
           </h1>
-          <p className="text-base md:text-lg text-white/90 drop-shadow-lg font-light leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-black/90 drop-shadow-lg font-light leading-relaxed max-w-2xl mx-auto">
             Explore Malaysia&apos;s Forest Cover Changes from 2001 to 2030
           </p>
         </header>
@@ -315,7 +315,7 @@ export default function ForestPage() {
 
       <div className="px-8 pt-6 pb-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50">
         <div className="max-w-6xl mx-auto w-full">
-          <div className="bg-white/95 backdrop-blur rounded-2xl p-1.5 shadow-xl border-2 border-gray-200 flex">
+          <div className="bg-white/95 backdrop-blur rounded-2xl p-1.5 shadow-xl border-2 border-gray-200 flex flex-wrap justify-center sticky top-0 z-30">
             {[
               { key: "map" as const, label: "Map & Timeline" },
               { key: "trends" as const, label: "Trends & Selectors" },
@@ -336,7 +336,10 @@ export default function ForestPage() {
         </div>
 
         {active === "map" ? (
-          <section id="map-tab" className="bg-white/95 p-6 md:p-8 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl mx-auto">
+          <section
+            id="map-tab"
+            className="bg-white/95 p-6 md:p-8 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl mx-auto relative z-10 mt-4 md:mt-6 overflow-hidden"
+          >
             <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
               <h2 className="text-2xl md:text-3xl font-bold text-green-700">
                 Forest Loss Map
@@ -416,7 +419,10 @@ export default function ForestPage() {
             </div>
           </section>
         ) : (
-          <section id="trends-tab" className="bg-white/95 p-6 md:p-8 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl mx-auto">
+          <section
+            id="map-tab"
+            className="bg-white/95 p-6 md:p-8 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl mx-auto relative z-10 mt-4 md:mt-6 overflow-hidden"
+          >
             <div className="mb-5">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
                 <h2 className="text-2xl md:text-3xl font-bold text-green-700">
