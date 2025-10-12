@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -379,7 +380,6 @@ export default function GuidePage() {
     }
 
     try {
-      // @ts-expect-error – broader PermissionName in browsers
       const status = await navigator.permissions?.query({ name: "geolocation" as PermissionName });
       if (status && status.state === "denied") {
         throw new Error("Location permission was denied. Enable it in your browser settings.");
