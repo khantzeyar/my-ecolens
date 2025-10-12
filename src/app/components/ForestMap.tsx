@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
+// @ts-expect-error: Leaflet CSS has no type declarations
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { Feature, Geometry, GeoJsonProperties, FeatureCollection } from 'geojson';
