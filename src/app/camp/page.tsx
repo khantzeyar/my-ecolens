@@ -404,7 +404,7 @@ const CampPage: React.FC = () => {
                 <h2 className="text-xl font-bold text-green-700">Filters</h2>
                 <button
                   onClick={clearAllFilters}
-                  className="text-sm text-green-600 hover:text-green-800 underline"
+                  className=" text-green-600 hover:text-green-800 underline"
                 >
                   Clear all
                 </button>
@@ -588,14 +588,14 @@ const CampPage: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
                       currentPage === 1
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"
                     }`}
+                    aria-label="Previous page"
                   >
-                    <span>←</span>
-                    <span>Previous</span>
+                    <i className="ri-arrow-left-s-line text-2xl"></i>
                   </button>
 
                   <div className="flex items-center gap-1 mx-2">
@@ -623,14 +623,14 @@ const CampPage: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg transition-all ${
                       currentPage === totalPages
                         ? "text-gray-300 cursor-not-allowed"
                         : "text-gray-700 hover:bg-white hover:shadow-sm"
                     }`}
+                    aria-label="Next page"
                   >
-                    <span>Next</span>
-                    <span>→</span>
+                    <i className="ri-arrow-right-s-line text-2xl"></i>
                   </button>
                 </div>
               )}
@@ -638,7 +638,6 @@ const CampPage: React.FC = () => {
           </div>
         </div>
       </section>
-
       {/* Toast */}
       <Toast state={toast} />
     </main>
