@@ -240,7 +240,7 @@ const Navbar = () => {
             }`}
             style={getTextStyles(pathname.startsWith('/guide')).style}
           >
-            Guide
+            Camping Guide
           </Link>
           <Divider />
           <Link
@@ -352,7 +352,7 @@ const Navbar = () => {
               }`}
               onClick={() => setIsMobileOpen(false)}
             >
-              Guide
+              Camping Guide
             </Link>
             <Link
               href="/plant"
