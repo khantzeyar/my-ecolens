@@ -263,7 +263,7 @@ export default function ForestPage() {
       className="min-h-screen bg-fixed bg-cover bg-center"
       style={{ backgroundImage: "url('/images/forest-banner.jpg')" }}
     >
-      <div className="min-h-screen flex flex-col justify-center items-center px-8 py-12 pt-24">
+      <div className="min-h-screen flex flex-col justify-center items-center px-8 py-12 pt-24 mt-10">
         <header className="text-center mb-10 max-w-4xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
             <span className="bg-gradient-to-r from-green-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
@@ -275,32 +275,32 @@ export default function ForestPage() {
           </p>
         </header>
 
-        <section className="bg-white/90 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-2xl border-2 border-white/50 max-w-6xl w-full">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">How to read this page</h3>
+        <section className="bg-white/90 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-2xl border-2 border-white/50 max-w-7xl w-full">
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">How to Read this Page</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm md:text-base text-gray-700">
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
-              <div className="font-bold text-lg mb-3 text-green-700">Map & timeline</div>
+              <div className="font-bold text-lg mb-3 text-green-700">Map & Timeline</div>
               <p className="leading-relaxed">
-                Drag the year slider or press Play to animate from 2001–2030. The
-                choropleth shows annual tree-cover loss (ha) by district/state.
+                Use the year slider or press “Play” to visualize changes from 2001 to 2030. 
+                The choropleth map illustrates annual tree-cover loss (in hectares) by district or state.
               </p>
             </div>
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
               <div className="font-bold text-lg mb-3 text-green-700">Forest Loss Trends</div>
               <p className="leading-relaxed">
-                Compare yearly loss between multiple states or districts. Pick the
-                series you want, then read the legend and hover for values.
+              Compare annual tree-cover loss across multiple states or districts.
+              Select the desired series, then refer to the legend and hover over areas for detailed values.
               </p>
             </div>
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
-              <div className="font-bold text-lg mb-3 text-green-700">Data & methodology</div>
+              <div className="font-bold text-lg mb-3 text-green-700">Data & Methodology</div>
               <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                 <li>
-                  <span className="font-semibold">2001–2024</span>: historical
+                  <span className="font-semibold">2001-2024</span>: Historical
                   annual tree-cover loss aggregated by district/state.
                 </li>
                 <li>
-                  <span className="font-semibold">2025–2030</span>: district-level
+                  <span className="font-semibold">2025-2030</span>: District-level
                   predictions aggregated to states.
                 </li>
                 <li>
@@ -314,7 +314,7 @@ export default function ForestPage() {
       </div>
 
       <div className="px-8 pt-6 pb-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50">
-        <div className="max-w-6xl mx-auto w-full">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="bg-white/95 backdrop-blur rounded-2xl p-1.5 shadow-xl border-2 border-gray-200 flex flex-wrap justify-center sticky top-0 z-30">
             {[
               { key: "map" as const, label: "Map & Timeline" },
@@ -323,7 +323,7 @@ export default function ForestPage() {
               <button
                 key={t.key}
                 onClick={() => setActive(t.key)}
-                className={`flex-1 px-8 py-3 rounded-xl text-sm md:text-base font-semibold transition-all duration-300 whitespace-nowrap ${
+                className={`flex-1 px-8 py-3 rounded-xl text-sm md:text-base font-semibold transition-all duration-300 whitespace-nowrap cursor-pointer ${
                   active === t.key
                     ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
@@ -358,7 +358,7 @@ export default function ForestPage() {
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-green-700 hover:to-emerald-700 transition font-medium"
+                    className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-green-700 hover:to-emerald-700 transition font-medium cursor-pointer"
                   >
                     {isPlaying ? "Pause" : "Play"}
                   </button>
