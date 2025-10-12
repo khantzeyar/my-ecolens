@@ -1,12 +1,15 @@
 /**
- * Navbar (Epic-1 + Epic-2 with Epic-3 UI)
- * - Epic-1 routes: Home, Camping Sites, Guide
- * - Epic-2: Forest Insights (/insights)
- * - UI: Epic-3 glassmorphism
+ * Navbar (with grouped menu)
+ * - Left logo, right menu (glassmorphism)
+ * - "Discover Camping Sites" as a dropdown:
+ *     • All Camping Sites  (/camp)
+ *     • Campsite Recommender  (/recommender)
+ *     • My Eco Footprint  (/footprints)
+ * - Other items: Guide (/guide), Plant Identifier (/plant), Forest Insights (/insights)
  */
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -28,7 +31,6 @@ const Navbar = () => {
 
       setLastScrollY(currentScrollY);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
@@ -38,13 +40,16 @@ const Navbar = () => {
     if (pathname.startsWith('/camp')) return 'light';
     if (pathname.startsWith('/guide')) return 'dark';
     if (pathname.startsWith('/insights')) return 'light';
+    if (pathname.startsWith('/recommender')) return 'light';
+    if (pathname.startsWith('/footprints')) return 'light';
+    if (pathname.startsWith('/plant')) return 'light';
     return 'light';
   };
 
   const pageTheme = getPageTheme();
   const isDarkBackground = pageTheme === 'dark';
 
-  const getNavbarStyles = () => {
+  const styles = (() => {
     const scrollProgress = Math.min(scrollY / 200, 1);
     return isDarkBackground
       ? {

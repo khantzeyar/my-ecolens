@@ -15,7 +15,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "MYEcoLens",
+  title: "Campeco",
   description: "Explore Campsites Confidently",
   icons: {
     icon: "/icons/ecolens-icon.svg",

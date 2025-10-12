@@ -13,19 +13,28 @@ const prisma = new PrismaClient();
 // Pages for chatbot to suggest
 const PAGE_MAPPINGS = [
   { keyword: "home", page: "/", description: "Landing Page." },
-  { keyword: "camping", page: "/camp", description: "Camping Sites" },
-  { keyword: "guide", page: "/guide", description: "Eco-friendly Tips." },
-  { keyword: "insights", page: "/insights", description: "Forest Insights" },
+  { keyword: ["eco camping", "irresponsible camping"], page: "/why", description: "Impact of irresponsible camping and importance of eco camping" },
+  { keyword: "campsites", page: "/camp", description: "All Camping Sites" },
+  { keyword: "recommender", page: "/recommender", description: "Campsite Recommender" },
+  { keyword: ["visit history", "favourited campsite"], page: "/footprints", description: "Favorited Campsites, Campsite Visit History" },
+  { keyword: ["responsible camping", "what to pack", "packing checklist"], page: "/guide", description: "Eco-friendly Tips, Packing Checklist, Responsible Camping Guide" },
+  { keyword: "plant identifier", page: "/plant", description: "Plant Identifier" },
+  { keyword: ["insights", "forest loss trends"], page: "/insights", description: "Forest Loss Trends and Insights" },
 ];
 
 // Helper: fallback responses if Gemini fails
 function getFallbackResponse(userInput: string): string {
   const input = userInput.toLowerCase();
   if (input.includes("camp")) return "🏕️ : [Camping Sites](/camp)";
+  if (input.includes("recommend")) return "💡 : [Campsite Recommender](/recommender)";
+  if (input.includes("visit history")) return "👣 : [My Eco Footprint](/footprints)";
+  if (input.includes("eco")) return "🌍 : [Importance of Eco Camping](/why)";
   if (input.includes("tips")) return "🌱 : [Eco-friendly Tips](/guide)";
-  if (input.includes("forest insights")) return "🌱 : [Forest Insights](/insights)";
+  if (input.includes("identifier")) return "🔍 : [Plant Identifier](/plant)";
+  if (input.includes("forest insights")) return "📊 : [Forest Insights](/insights)";
   return `⚠️ Sorry, I am temporarily unavailable. Meanwhile, you can explore:
   - 🏕️ : [Camping Sites](/camp)
+  - 🌍 : [Importance of Eco Camping](/why)
   - 🌱 : [Eco-friendly Tips](/guide)
   - 📊 : [Forest Insights](/insights)
   `;
@@ -150,7 +159,6 @@ function detectStates(message: string): string[] {
 function detectAttractions(message: string): string[] {
   const attractionKeywords = [
     "wildlife",
-    "bird watching",
     "beach",
     "river",
     "lake",
@@ -333,6 +341,8 @@ export async function POST(req: Request) {
     ${PAGE_MAPPINGS.map((p) => `${p.keyword} → ${p.page} (${p.description})`).join("\n")}
     - Only provide weather info if linked to a specific campsite.
     - Do not provide generic state-level forecasts.
+    - The website's recommender suggests campsites based on weather forecasts and user preferences. (Smarter than the chatbot).
+    - Please structure your responses clearly. Include line breaks between different topics.
 
       User question: ${message}
     `;

@@ -11,7 +11,6 @@ import { stateNameMap, districtNameMap } from '../utils/nameMap';
 import forestData from '../data/peninsular_tree_cover_loss.json';
 import rawStatePredictions from '../data/state_tree_loss_predictions.json';
 import rawDistrictPredictions from '../data/district_tree_loss_predictions.json';
-
 import type { RawForestRecord, TransformedForestData } from '../utils/transformForestData';
 
 const malaysiaGeoJson = malaysiaGeoJsonRaw as FeatureCollection<Geometry, GeoJsonProperties>;
@@ -145,7 +144,7 @@ interface ForestMapProps {
 }
 
 export default function ForestMap({ year }: ForestMapProps) {
-  // ✅ Soft gradient: green → yellow → orange → red
+  // ✅ Soft gradient
   const getColor = (value: number) => {
     return value > 10000
       ? '#e31a1c'
@@ -165,14 +164,11 @@ export default function ForestMap({ year }: ForestMapProps) {
   // style
   const style = useCallback(
     (feature?: Feature<Geometry, GeoJsonProperties>): L.PathOptions => {
-      if (!feature) {
-        return { fillColor: '#ccc', weight: 0.5, opacity: 1, color: 'white', fillOpacity: 0.5 };
-      }
+      if (!feature) return { fillColor: '#ccc', weight: 0.5, color: 'white', fillOpacity: 0.5 };
       const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1 || 'Unknown';
       const districtKey = getDistrictKey(rawName);
       const value = getLossValue(districtKey, year);
-
-      return { fillColor: getColor(value), weight: 1, opacity: 1, color: 'white', fillOpacity: 0.8 };
+      return { fillColor: getColor(value), weight: 1, color: 'white', fillOpacity: 0.8 };
     },
     [year]
   );
@@ -182,7 +178,6 @@ export default function ForestMap({ year }: ForestMapProps) {
     const rawName = feature.properties?.NAME_2 || feature.properties?.NAME_1 || 'Unknown';
     const districtKey = getDistrictKey(rawName);
     const value = getLossValue(districtKey, year);
-
     const record = (forestData as RawForestRecord[]).find(
       (d) => d.subnational1 === districtKey || d.subnational2 === districtKey
     );
@@ -194,7 +189,6 @@ export default function ForestMap({ year }: ForestMapProps) {
     }
 
     const infoText = `<b>${rawName}</b><br/>Year: ${year}<br/>Forest Loss: ${value.toLocaleString()} ha${extraInfo}`;
-
     if ('bindTooltip' in layer) {
       (layer as L.Layer & { bindTooltip: (s: string, o?: L.TooltipOptions) => void }).bindTooltip(infoText, {
         sticky: true,
@@ -203,14 +197,13 @@ export default function ForestMap({ year }: ForestMapProps) {
         opacity: 0.95,
       });
     }
-
-    if ('getElement' in layer) {
-      const el = (layer as L.Path).getElement() as HTMLElement | null;
-      if (el) el.style.cursor = 'pointer';
-    }
   };
 
-  const malaysiaBounds = L.geoJSON(malaysiaGeoJson).getBounds();
+  // ✅ Fixed Peninsular Malaysia bounds
+  const peninsularBounds = L.latLngBounds(
+    L.latLng(1.0, 99.5), // southwest corner
+    L.latLng(7.0, 105.0) // northeast corner
+  );
 
   return (
     <div className="relative">
@@ -227,14 +220,17 @@ export default function ForestMap({ year }: ForestMapProps) {
       </div>
 
       <MapContainer
-        bounds={malaysiaBounds}
-        maxBounds={malaysiaBounds}
+        center={[4.5, 102.0]}
+        zoom={7}
+        minZoom={6}
+        maxZoom={10}
+        maxBounds={peninsularBounds}
         maxBoundsViscosity={1.0}
         style={{ height: '70vh', width: '100%', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
         zoomControl={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> | &copy; <a href="https://carto.com/">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           subdomains={['a', 'b', 'c', 'd']}
         />
