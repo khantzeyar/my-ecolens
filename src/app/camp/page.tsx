@@ -584,7 +584,7 @@ const CampPage: React.FC = () => {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-10 mb-2 flex justify-center items-center gap-2">
+                <div className="mt-10 mb-2 flex justify-center items-center">
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
@@ -598,7 +598,7 @@ const CampPage: React.FC = () => {
                     <i className="ri-arrow-left-s-line text-2xl"></i>
                   </button>
 
-                  <div className="flex items-center gap-1 mx-2">
+                  <div className="flex items-center mx-2">
                     {getPageNumbers().map((page, idx) =>
                       page === "..." ? (
                         <span key={`e-${idx}`} className="px-3 py-2 text-gray-400 text-sm">
