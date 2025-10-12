@@ -438,7 +438,7 @@ const CampPage: React.FC = () => {
                             setSelectedStates(selectedStates.filter((s) => s !== state));
                           }
                         }}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {state}
                     </label>
@@ -454,7 +454,7 @@ const CampPage: React.FC = () => {
                     type="checkbox"
                     checked={onlyFullyFree}
                     onChange={(e) => setOnlyFullyFree(e.target.checked)}
-                    className="mr-2 text-green-600 focus:ring-green-500"
+                    className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                   />
                   Free for everyone
                 </label>
@@ -470,7 +470,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedAttractions.includes(attr)}
                         onChange={() => toggleAttraction(attr)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {attr}
                     </label>
@@ -488,7 +488,7 @@ const CampPage: React.FC = () => {
                         type="checkbox"
                         checked={selectedActivities.includes(act)}
                         onChange={() => toggleActivity(act)}
-                        className="mr-2 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 mr-2 text-green-600 focus:ring-green-500"
                       />
                       {act}
                     </label>

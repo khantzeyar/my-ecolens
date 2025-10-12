@@ -722,7 +722,7 @@ export default function GuidePage() {
                         return (
                           <li key={itemName} className="flex items-center justify-between group">
                             <label className="flex items-center">
-                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2" />
+                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2 w-5 h-5" />
                               {itemName}
                             </label>
                             {isCustom && (
