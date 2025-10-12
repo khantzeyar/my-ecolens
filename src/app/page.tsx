@@ -132,7 +132,7 @@ export default function Home() {
         {/* Background: show image on mobile, video on desktop */}
         {isMobile ? (
           <Image
-            src="/images/forest-fallback.jpg"
+            src="/images/forest-fallback.png"
             alt="Forest background"
             fill
             className="absolute inset-0 h-full w-full object-cover"
