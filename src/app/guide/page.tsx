@@ -260,45 +260,45 @@ export default function GuidePage() {
     () => [
       {
         key: "giant-hogweed",
-        common: "Giant Hogweed group (Heracleum spp.)",
+        common: "Giant Hogweed Group (Heracleum spp.)",
         img: "/images/Giant_Hogweed.jpg",
-        hazard: "Sap can cause phototoxic dermatitis with blisters/burning.",
-        response: "Rinse with water, avoid sunlight, and seek medical advice.",
+        hazard: "Sap causes severe skin reactions, including blistering and burning when exposed to sunlight.",
+        response: "Rinse affected area with water immediately, avoid sunlight, and seek medical attention.",
       },
       {
         key: "manchineel",
-        common: "Manchineel (Hippomane mancinella)",
+        common: "Manchineel (Hippomane Mancinella)",
         img: "/images/Manchineel.jpg",
-        hazard: "Highly toxic sap and fruit; rain dripping off leaves can burn skin.",
-        response: "Avoid contact entirely; if exposed, flush with plenty of water and get medical help.",
+        hazard: "Extremely toxic sap and fruit; rain dripping from leaves can burn skin.",
+        response: "Avoid all contact. If exposed, rinse thoroughly with water and obtain medical care immediately.",
       },
       {
         key: "dieffenbachia",
         common: "Dieffenbachia",
         img: "/images/Dieffenbachia.jpg",
-        hazard: "Calcium oxalate crystals irritate mouth/skin; ingestion causes swelling and pain.",
-        response: "Rinse mouth/skin and drink water; seek care if severe.",
+        hazard: "Contains calcium oxalate crystals that irritate skin and mouth; ingestion causes swelling and pain.",
+        response: "Rinse skin or mouth with water. Seek medical attention if symptoms are severe.",
       },
       {
         key: "rubber-vine",
-        common: "Rubber Vine (Cryptostegia grandiflora)",
+        common: "Rubber Vine (Cryptostegia Grandiflora)",
         img: "/images/Rubber_Vine.jpg",
-        hazard: "Contains cardiac glycosides; sap is irritating; ingestion is dangerous.",
-        response: "Avoid sap contact; rinse skin if exposed; seek medical care if ingested.",
+        hazard: "Sap contains cardiac glycosides; skin irritation is possible, ingestion is dangerous.",
+        response: "Avoid contact with sap. Rinse skin if exposed and seek medical care immediately if ingested.",
       },
       {
         key: "toxic-mushrooms",
         common: "Brightly Colored Tropical Mushrooms (various toxic spp.)",
         img: "/images/Brightly_Colored_Tropical_Mushrooms.jpg",
-        hazard: "Many species can be deadly even after cooking.",
-        response: "Never forage/eat wild mushrooms; go to a hospital if symptoms occur.",
+        hazard: "Many species are highly toxic and can be fatal even after cooking.",
+        response: "Never consume wild mushrooms. Seek immediate medical attention if ingestion occurs.",
       },
       {
         key: "oleander",
-        common: "Oleander (Nerium oleander)",
+        common: "Oleander (Nerium Oleander)",
         img: "/images/Oleander.jpg",
-        hazard: "All parts contain cardiac glycosides; ingestion can affect heart rhythm.",
-        response: "Avoid contact/ingestion; seek urgent care if exposure occurs.",
+        hazard: "All parts contain cardiac glycosides; ingestion can disrupt heart rhythm.",
+        response: "Avoid all contact and ingestion. Seek urgent medical care if exposure occurs.",
       },
     ],
     []
@@ -487,44 +487,44 @@ export default function GuidePage() {
     return (
       <main className="pt-24 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={handleBackToCards} className="bg-white/15 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/25">
+          <div className="flex items-center justify-between mb-5 mt-8">
+            <button onClick={handleBackToCards} className="bg-white/15 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/25 cursor-pointer">
               ← Back to Guide
             </button>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow">{(category as any).title}</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-10 drop-shadow text-center">{(category as any).title}</h2>
 
           {/* Emergency */}
           {isEmergency && (
             <>
-              <section className="mb-8 grid grid-cols-1 gap-6">
+              <section className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Emergency Calls (Left) */}
                 <div className="bg-white/85 backdrop-blur-xl rounded-2xl p-6 shadow border border-gray-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-4">One-tap Emergency Calls</h3>
                   <div className="flex gap-3 flex-wrap md:flex-nowrap">
-                    <a href="tel:999" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700">
+                    <a href="tel:999" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700">
                       <i className="ri-police-car-line" /> Police 999
                     </a>
-                    <a href="tel:994" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-orange-600 text-white hover:bg-orange-700">
+                    <a href="tel:994" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-600 text-white hover:bg-orange-700">
                       <i className="ri-fire-line" /> Fire & Rescue 994
                     </a>
-                    <a href="tel:999" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
+                    <a href="tel:999" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
                       <i className="ri-first-aid-kit-line" /> Ambulance 999
                     </a>
                   </div>
                 </div>
 
+                {/* Nearby Hospitals & Clinics (Right) */}
                 <div className="bg-white/85 backdrop-blur-xl rounded-2xl p-6 shadow border border-gray-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-3">Nearby Hospitals & Clinics</h3>
-
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <button onClick={() => openLocationPrompt("hospitals")} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">
+                  <div className="flex flex-wrap items-center gap-3 mb-1">
+                    <button onClick={() => openLocationPrompt("hospitals")} className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
                       <i className="ri-hospital-line" /> Search nearby hospitals
                     </button>
-                    <button onClick={() => openLocationPrompt("clinics")} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">
+                    <button onClick={() => openLocationPrompt("clinics")} className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer">
                       <i className="ri-first-aid-kit-line" /> Search nearby clinics
                     </button>
-
                     {pos && (
                       <span className="text-sm text-gray-700 inline-flex items-center gap-1">
                         <i className="ri-map-pin-2-line" />
@@ -533,9 +533,9 @@ export default function GuidePage() {
                     )}
                   </div>
 
+                  {/* Facilities list */}
                   {hError && <p className="text-red-600 mb-2">{hError}</p>}
                   {hLoading && <p className="text-gray-700">Locating / Searching…</p>}
-
                   {!hLoading && facilities.length > 0 && (
                     <ul className="space-y-4">
                       {facilities.slice(0, 5).map((h, idx) => {
@@ -583,40 +583,109 @@ export default function GuidePage() {
                 </div>
               </section>
 
-              {/* First-aid & Signaling */}
               <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Insect Bites & Stings</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Move away from source; remove stinger by scraping with a card (do not squeeze).<br />
-                    Wash with soap and water; apply a cold pack 10–15 minutes on/off.<br />
-                    Use oral antihistamine for itch/swelling; seek care for breathing trouble or facial swelling.
-                  </p>
+                {/* Insect Bites & Stings */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-red-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Insect Bites & Stings</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">1.</span>
+                        <p>Move away from the source of the bite or sting. Remove the stinger carefully using a flat object, such as a card, without squeezing it.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">2.</span>
+                        <p>Clean the affected area with soap and water. Apply a cold pack for 10-15 minutes, alternating on and off as needed to reduce swelling.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">3.</span>
+                        <p>Take an oral antihistamine to alleviate itching or swelling.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto mt-10">
+                    ⚠️ Seek immediate medical attention if there are signs of difficulty breathing, facial swelling, or other severe reactions.
+                  </div>
                 </div>
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Cuts & Wounds</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Apply direct pressure 5–10 minutes to stop bleeding.<br />
-                    Rinse with clean water; apply antiseptic; cover with sterile dressing.<br />
-                    Seek care if deep, gaping, contaminated, or bleeding will not stop; review tetanus status.
-                  </p>
+
+                {/* Cuts & Wounds */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-blue-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Cuts & Wounds</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-blue-500 font-bold shrink-0">1.</span>
+                        <p>Apply direct pressure for 5-10 minutes to control bleeding</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-blue-500 font-bold shrink-0">2.</span>
+                        <p>Rinse the wound thoroughly with clean water, apply antiseptic, and cover with a sterile dressing.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto">
+                    ⚠️ Seek medical attention if the wound is deep, heavily contaminated, or bleeding persists. 
+                  </div>
                 </div>
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Dehydration / Heat Exhaustion</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Move to shade; loosen clothing; cool with water on skin and fanning.<br />
-                    Sip oral rehydration solution/electrolytes; avoid alcohol and caffeine.<br />
-                    Confusion/collapse or hot dry skin → suspect heat stroke: cool aggressively and call emergency services.
-                  </p>
+
+                {/* Heat Exhaustion */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-orange-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Heat Exhaustion</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-orange-500 font-bold shrink-0">1.</span>
+                        <p>Move to a shaded or cool area, loosen clothing, and apply cool water to the skin while fanning to lower body temperature.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-orange-500 font-bold shrink-0">2.</span>
+                        <p>Drink oral rehydration solutions or electrolyte-containing fluids. Avoid alcohol and caffeinated beverages.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto">
+                    ⚠️ If the person shows confusion, collapses, or has hot, dry skin, this may indicate heat stroke. Contact emergency medical services immediately.
+                  </div>
                 </div>
+                
+                {/* Signaling for Rescue */}
                 <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Signaling for Rescue</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Audible: whistle or three short blasts; repeat at intervals.<br />
-                    Visual: mirror flashes toward aircraft/ground teams; high-visibility cloth or headlamp flashes.<br />
-                    Ground-to-air symbols: large “SOS” / arrows in open areas; use rocks/logs with strong contrast.<br />
-                    Stay visible: choose open ground, reduce movement, and send periodic signals to conserve battery.
-                  </p>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-emerald-500 text-white p-2.5 rounded-xl shadow-md">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-xl">Signaling for Rescue</h3>
+                  </div>
+                  <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                    <p><strong className="text-emerald-600">Audible:</strong> Use a whistle or three short blasts, repeating at intervals.</p>
+                    <p><strong className="text-emerald-600">Visual:</strong> Signal with mirror flashes toward aircraft or ground teams, or use a high-visibility cloth or headlamp.</p>
+                    <p><strong className="text-emerald-600">Ground:</strong> Create large "SOS" markings or arrows in open areas using rocks or logs with strong contrast.</p>
+                    <p><strong className="text-emerald-600">Stay Visible:</strong> Position yourself in open terrain, limit movement, and send signals periodically to conserve battery.</p>
+                    <p><strong className="text-emerald-600">Stay Calm:</strong> Control your breathing, conserve energy, and avoid panic.</p>
+                  </div>
                 </div>
               </section>
 
@@ -646,17 +715,79 @@ export default function GuidePage() {
           {isNature && (
             <>
               <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {((categories.find((c) => (c as any).id === "nature") as any).tips as Tip[]).map((tip) => (
-                  <div key={tip.title} className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                    <h3 className="font-bold text-gray-900">{tip.title}</h3>
-                    {tip.description && <p className="text-gray-700 mt-1">{tip.description}</p>}
-                    {tip.details && <p className="text-gray-600 mt-3 leading-relaxed whitespace-pre-line">{tip.details}</p>}
+                {/* Wildlife Safety */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-amber-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Wildlife Safety</h3>
                   </div>
-                ))}
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-amber-600">Food & Camp:</strong> Store all food in sealed containers or odor-proof bags, and cook well away from sleeping areas.</p>
+                    <p><strong className="text-amber-600">Travel:</strong> Avoid hiking alone at dawn or dusk in dense brush, and make your presence known around blind corners.</p>
+                    <p><strong className="text-amber-600">Distance:</strong> Keep 25-30 meters away from most animals, and at least 100 meters from larger wildlife.</p>
+                    <p><strong className="text-amber-600">Never:</strong> Feed, chase, or approach wild animals.</p>
+                  </div>
+                </div>
+
+                {/* Extreme Weather */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-indigo-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Extreme Weather</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-indigo-600">Rain/Flash Floods:</strong> Avoid camping in valleys or dry riverbeds. Move to higher ground early to stay safe.</p>
+                    <p><strong className="text-indigo-600">Lightning:</strong> Stay away from lone trees and metal objects. Keep antennae and poles stowed, and crouch with feet together if caught outside.</p>
+                    <p><strong className="text-indigo-600">Heat:</strong> Stay hydrated with electrolytes, wear light, breathable clothing, and plan low-intensity activities during the hottest part of the day.</p>
+                  </div>
+                </div>
+
+                {/* Toxic Plants */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-purple-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2C8 6 3 10 3 14a9 9 0 0018 0c0-4-5-8-9-12z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Toxic Plants</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-purple-600">Avoid:</strong> Touching or consuming unknown plants and mushrooms.</p>
+                    <p><strong className="text-purple-600">Warning Signs:</strong> Sap that irritates the skin or brightly colored mushrooms are indicators of toxicity.</p>
+                    <p><strong className="text-purple-600">If Exposed:</strong> Rinse the affected area with water, keep it out of sunlight, and seek medical attention if needed.</p>
+                  </div>
+                </div>
+
+                {/* Snake Awareness */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-rose-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Snake Awareness</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-rose-600">Action:</strong> Stay calm, move away slowly, and never attempt to handle a snake.</p>
+                    <p><strong className="text-rose-600">Prevention:</strong> Wear sturdy, ankle-covering boots when hiking or in snake-prone areas.</p>
+                    <p><strong className="text-rose-600">If Bitten:</strong> Remain still, keep the affected limb immobilised, and seek immediate medical attention.</p>
+                    <p><strong className="text-rose-600">Do Not:</strong> Cut the wound, suck out venom, or apply a tourniquet.</p>
+                  </div>
+                </div>
               </section>
 
-              <section className="mb-8">
-                <h3 className="text-xl font-semibold text-white mb-3 drop-shadow">Toxic Plants & Mushrooms Gallery (Malaysia)</h3>
+              <section className="mb-4 mt-20">
+                <h3 className="text-4xl font-semibold text-white mb-10 drop-shadow text-center">Common Toxic Plants</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {toxicGallery.map((p) => (
                     <div key={p.key} className="bg-white/85 rounded-2xl shadow border border-gray-200 overflow-hidden">
@@ -670,13 +801,13 @@ export default function GuidePage() {
                           }}
                         />
                       </div>
-                      <div className="p-4">
+                      <div className="p-4 mb-2">
                         <div className="font-semibold text-gray-900">{p.common}</div>
-                        <div className="mt-2 text-sm">
+                        <div className="mt-3 text-sm">
                           <span className="font-medium text-red-700">Hazard: </span>
                           <span className="text-gray-700">{p.hazard}</span>
                         </div>
-                        <div className="mt-1 text-sm">
+                        <div className="mt-2 text-sm">
                           <span className="font-medium text-emerald-700">What to do: </span>
                           <span className="text-gray-700">{p.response}</span>
                         </div>
@@ -711,6 +842,24 @@ export default function GuidePage() {
           {/* Checklist page */}
           {isChecklist && (
             <div>
+              {/* Add custom item */}
+              <div className="mt-8 bg-white/85 p-4 rounded-2xl shadow border border-gray-200 mb-8">
+                <h3 className="font-bold text-gray-900 mb-3">Add Your Own Items</h3>
+                <div className="flex flex-col md:flex-row gap-3 mb-4">
+                  <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter custom item" className="flex-1 px-3 py-2 border rounded" />
+                  <select value={targetGroup} onChange={(e) => setTargetGroup(e.target.value)} className="px-3 py-2 border rounded">
+                    {(customChecklist as any).map((group: ChecklistGroup) => (
+                      <option key={group.group} value={group.group}>
+                        {group.group}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={addCustomItem} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer">
+                    Add
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(customChecklist as any).map((group: ChecklistGroup) => (
                   <div key={group.group} className="bg-white/85 p-4 rounded-2xl shadow border border-gray-200 hover:shadow-lg transition">
@@ -722,7 +871,7 @@ export default function GuidePage() {
                         return (
                           <li key={itemName} className="flex items-center justify-between group">
                             <label className="flex items-center">
-                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2 w-5 h-5" />
+                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2 w-4 h-4" />
                               {itemName}
                             </label>
                             {isCustom && (
@@ -738,27 +887,9 @@ export default function GuidePage() {
                 ))}
               </div>
 
-              {/* Add custom item */}
-              <div className="mt-8 bg-white/85 p-4 rounded-2xl shadow border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-3">Add Your Own Items</h3>
-                <div className="flex flex-col md:flex-row gap-3 mb-4">
-                  <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter custom item" className="flex-1 px-3 py-2 border rounded" />
-                  <select value={targetGroup} onChange={(e) => setTargetGroup(e.target.value)} className="px-3 py-2 border rounded">
-                    {(customChecklist as any).map((group: ChecklistGroup) => (
-                      <option key={group.group} value={group.group}>
-                        {group.group}
-                      </option>
-                    ))}
-                  </select>
-                  <button onClick={addCustomItem} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Add
-                  </button>
-                </div>
-              </div>
-
               {/* PDF Download */}
-              <div className="mt-6 text-center">
-                <button onClick={downloadChecklistPdf} className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-purple-700">
+              <div className="mt-12 text-center -mb-8">
+                <button onClick={downloadChecklistPdf} className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-green-700 cursor-pointer">
                   Download Checklist (PDF)
                 </button>
               </div>
@@ -843,7 +974,7 @@ export default function GuidePage() {
         <div className="text-center">
           <Link
             href="/why"
-            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-4 rounded-2xl bg-emerald-600 text-white text-lg md:text-lg font-semibold shadow hover:bg-emerald-700"
+            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-4 rounded-2xl bg-emerald-600 text-white text-base md:text-l font-semibold shadow hover:bg-emerald-700 -mb-10"
           >
             Why Eco Camping Matters →
           </Link>

@@ -173,7 +173,7 @@ export default function ForestPage() {
   useEffect(() => {
     if (trendMode === "state" && selectedDistricts.length) setSelectedDistricts([]);
     if (trendMode === "district" && selectedStates.length) setSelectedStates([]);
-  }, [trendMode]);
+  }, [trendMode, selectedDistricts.length, selectedStates.length]);
 
   const stateOptions: OptionType[] = allStates.map((s) => ({ value: s, label: s }));
   const districtOptions: OptionType[] = allDistricts.map((d) => ({ value: d, label: d }));
@@ -279,28 +279,28 @@ export default function ForestPage() {
           <h3 className="text-2xl md:text-3xl font-bold text-green-700 mb-6 text-center">How to Read this Page</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm md:text-base text-gray-700">
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
-              <div className="font-bold text-lg mb-3 text-green-700">Map & Timeline</div>
+              <div className="font-bold text-lg mb-3 text-green-700">Map</div>
               <p className="leading-relaxed">
                 Use the year slider or press “Play” to visualize changes from 2001 to 2030. 
                 The choropleth map illustrates annual tree-cover loss (in hectares) by district or state.
               </p>
             </div>
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
-              <div className="font-bold text-lg mb-3 text-green-700">Forest Loss Trends</div>
+              <div className="font-bold text-lg mb-3 text-green-700">Trends</div>
               <p className="leading-relaxed">
-              Compare annual tree-cover loss across multiple states or districts.
-              Select the desired series, then refer to the legend and hover over areas for detailed values.
+                Compare annual tree-cover loss across multiple states or districts.
+                Select the desired series, then refer to the legend and hover over areas for detailed values.
               </p>
             </div>
             <div className="rounded-2xl border-2 border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white shadow-md hover:shadow-lg transition">
               <div className="font-bold text-lg mb-3 text-green-700">Data & Methodology</div>
               <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                 <li>
-                  <span className="font-semibold">2001-2024</span>: Historical
+                  <span className="font-semibold">2001–2024</span>: Historical
                   annual tree-cover loss aggregated by district/state.
                 </li>
                 <li>
-                  <span className="font-semibold">2025-2030</span>: District-level
+                  <span className="font-semibold">2025–2030</span>: District-level
                   predictions aggregated to states.
                 </li>
                 <li>
@@ -315,10 +315,11 @@ export default function ForestPage() {
 
       <div className="px-8 pt-6 pb-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50">
         <div className="max-w-7xl mx-auto w-full">
+          {/* ✅ Tabs: 改成 Map / Trends */}
           <div className="bg-white/95 backdrop-blur rounded-2xl p-1.5 shadow-xl border-2 border-gray-200 flex flex-wrap justify-center sticky top-0 z-30">
             {[
-              { key: "map" as const, label: "Map & Timeline" },
-              { key: "trends" as const, label: "Trends & Selectors" },
+              { key: "map" as const, label: "Map" },
+              { key: "trends" as const, label: "Trends" },
             ].map((t) => (
               <button
                 key={t.key}
@@ -351,6 +352,7 @@ export default function ForestPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-4 items-start">
               <section className="rounded-2xl overflow-hidden">
+                {/* ForestMap 组件内已锁定到西马（maxBounds / fitBounds） */}
                 <ForestMap year={year} />
               </section>
 

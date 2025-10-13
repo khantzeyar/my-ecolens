@@ -188,39 +188,32 @@ export default function MyFootprintsPage() {
       {/* Header */}
       <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10">
         {/* Background Blur*/}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90%,720px)] h-16 rounded-full bg-black/35 backdrop-blur-sm blur-md"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(35%,720px)] h-16 rounded-full bg-black/30 backdrop-blur-sm blur-md"></div>
 
         {/* Title */}
         <h1
-          className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-white"
+          className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-3"
           style={{
             textShadow:
               "0 3px 16px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)",
           }}
         >
-          My Eco Footprints
+          My Eco Footprint
         </h1>
 
-        {/* Back button*/}
-        <Link
-          href="/camp"
-          className="mt-8 px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 shadow transition"
-        >
-          ← Back to Discover
-        </Link>
       </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-6 justify-center">
+        <div className="flex flex-wrap gap-4 mb-8 justify-center">
           {[
             { id: "favorites", label: "Favorites" },
-            { id: "visits", label: "Visit History" },
-            { id: "map", label: "My Footprint Map" },
+            { id: "visits", label: "Visited Camping Sites" },
+            { id: "map", label: "Eco Footprint Map" },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as Tab)}
-              className={`px-5 py-2 rounded-full font-medium shadow-sm transition transform hover:-translate-y-0.5 ${
+              className={`px-6 py-2 rounded-full font-medium shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer ${
                 activeTab === tab.id
                   ? "bg-emerald-600 text-white ring-2 ring-white/40 shadow-lg"
                   : "bg-white/85 text-gray-800 hover:bg-white ring-1 ring-white/50"
@@ -235,9 +228,9 @@ export default function MyFootprintsPage() {
         {activeTab === "favorites" && (
           <>
             {favorites.length === 0 ? (
-              <div className="text-center py-24 bg-white/80 rounded-2xl shadow-md">
+              <div className="text-center py-28 bg-white/80 rounded-2xl shadow-md">
                 <p className="text-gray-600 text-lg mb-4">
-                  You haven’t favorited any camps yet.
+                  No camping sites have been added to favorites yet.
                 </p>
                 <Link
                   href="/camp"
@@ -304,10 +297,10 @@ export default function MyFootprintsPage() {
 
         {/* Visit History */}
         {activeTab === "visits" && (
-          <div className="bg-white/90 rounded-2xl p-8 shadow-md">
+          <div className="bg-white/80 rounded-2xl p-36 shadow-md">
             {visits.length === 0 ? (
               <p className="text-gray-600 text-center text-lg">
-                You haven’t logged any visits yet.
+                No campsite visits have been logged yet.
               </p>
             ) : (
               <ul className="space-y-4">
