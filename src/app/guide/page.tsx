@@ -260,45 +260,45 @@ export default function GuidePage() {
     () => [
       {
         key: "giant-hogweed",
-        common: "Giant Hogweed group (Heracleum spp.)",
+        common: "Giant Hogweed Group (Heracleum spp.)",
         img: "/images/Giant_Hogweed.jpg",
-        hazard: "Sap can cause phototoxic dermatitis with blisters/burning.",
-        response: "Rinse with water, avoid sunlight, and seek medical advice.",
+        hazard: "Sap causes severe skin reactions, including blistering and burning when exposed to sunlight.",
+        response: "Rinse affected area with water immediately, avoid sunlight, and seek medical attention.",
       },
       {
         key: "manchineel",
-        common: "Manchineel (Hippomane mancinella)",
+        common: "Manchineel (Hippomane Mancinella)",
         img: "/images/Manchineel.jpg",
-        hazard: "Highly toxic sap and fruit; rain dripping off leaves can burn skin.",
-        response: "Avoid contact entirely; if exposed, flush with plenty of water and get medical help.",
+        hazard: "Extremely toxic sap and fruit; rain dripping from leaves can burn skin.",
+        response: "Avoid all contact. If exposed, rinse thoroughly with water and obtain medical care immediately.",
       },
       {
         key: "dieffenbachia",
         common: "Dieffenbachia",
         img: "/images/Dieffenbachia.jpg",
-        hazard: "Calcium oxalate crystals irritate mouth/skin; ingestion causes swelling and pain.",
-        response: "Rinse mouth/skin and drink water; seek care if severe.",
+        hazard: "Contains calcium oxalate crystals that irritate skin and mouth; ingestion causes swelling and pain.",
+        response: "Rinse skin or mouth with water. Seek medical attention if symptoms are severe.",
       },
       {
         key: "rubber-vine",
-        common: "Rubber Vine (Cryptostegia grandiflora)",
+        common: "Rubber Vine (Cryptostegia Grandiflora)",
         img: "/images/Rubber_Vine.jpg",
-        hazard: "Contains cardiac glycosides; sap is irritating; ingestion is dangerous.",
-        response: "Avoid sap contact; rinse skin if exposed; seek medical care if ingested.",
+        hazard: "Sap contains cardiac glycosides; skin irritation is possible, ingestion is dangerous.",
+        response: "Avoid contact with sap. Rinse skin if exposed and seek medical care immediately if ingested.",
       },
       {
         key: "toxic-mushrooms",
         common: "Brightly Colored Tropical Mushrooms (various toxic spp.)",
         img: "/images/Brightly_Colored_Tropical_Mushrooms.jpg",
-        hazard: "Many species can be deadly even after cooking.",
-        response: "Never forage/eat wild mushrooms; go to a hospital if symptoms occur.",
+        hazard: "Many species are highly toxic and can be fatal even after cooking.",
+        response: "Never consume wild mushrooms. Seek immediate medical attention if ingestion occurs.",
       },
       {
         key: "oleander",
-        common: "Oleander (Nerium oleander)",
+        common: "Oleander (Nerium Oleander)",
         img: "/images/Oleander.jpg",
-        hazard: "All parts contain cardiac glycosides; ingestion can affect heart rhythm.",
-        response: "Avoid contact/ingestion; seek urgent care if exposure occurs.",
+        hazard: "All parts contain cardiac glycosides; ingestion can disrupt heart rhythm.",
+        response: "Avoid all contact and ingestion. Seek urgent medical care if exposure occurs.",
       },
     ],
     []
@@ -715,17 +715,79 @@ export default function GuidePage() {
           {isNature && (
             <>
               <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {((categories.find((c) => (c as any).id === "nature") as any).tips as Tip[]).map((tip) => (
-                  <div key={tip.title} className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                    <h3 className="font-bold text-gray-900">{tip.title}</h3>
-                    {tip.description && <p className="text-gray-700 mt-1">{tip.description}</p>}
-                    {tip.details && <p className="text-gray-600 mt-3 leading-relaxed whitespace-pre-line">{tip.details}</p>}
+                {/* Wildlife Safety */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-amber-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Wildlife Safety</h3>
                   </div>
-                ))}
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-amber-600">Food & Camp:</strong> Store all food in sealed containers or odor-proof bags, and cook well away from sleeping areas.</p>
+                    <p><strong className="text-amber-600">Travel:</strong> Avoid hiking alone at dawn or dusk in dense brush, and make your presence known around blind corners.</p>
+                    <p><strong className="text-amber-600">Distance:</strong> Keep 25-30 meters away from most animals, and at least 100 meters from larger wildlife.</p>
+                    <p><strong className="text-amber-600">Never:</strong> Feed, chase, or approach wild animals.</p>
+                  </div>
+                </div>
+
+                {/* Extreme Weather */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-indigo-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Extreme Weather</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-indigo-600">Rain/Flash Floods:</strong> Avoid camping in valleys or dry riverbeds. Move to higher ground early to stay safe.</p>
+                    <p><strong className="text-indigo-600">Lightning:</strong> Stay away from lone trees and metal objects. Keep antennae and poles stowed, and crouch with feet together if caught outside.</p>
+                    <p><strong className="text-indigo-600">Heat:</strong> Stay hydrated with electrolytes, wear light, breathable clothing, and plan low-intensity activities during the hottest part of the day.</p>
+                  </div>
+                </div>
+
+                {/* Toxic Plants */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-purple-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2C8 6 3 10 3 14a9 9 0 0018 0c0-4-5-8-9-12z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Toxic Plants</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-purple-600">Avoid:</strong> Touching or consuming unknown plants and mushrooms.</p>
+                    <p><strong className="text-purple-600">Warning Signs:</strong> Sap that irritates the skin or brightly colored mushrooms are indicators of toxicity.</p>
+                    <p><strong className="text-purple-600">If Exposed:</strong> Rinse the affected area with water, keep it out of sunlight, and seek medical attention if needed.</p>
+                  </div>
+                </div>
+
+                {/* Snake Awareness */}
+                <div className="group bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="bg-rose-500 text-white p-2.5 rounded-xl shadow-md shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">Snake Awareness</h3>
+                  </div>
+                  <div className="space-y-2.5 text-gray-700 text-sm leading-relaxed">
+                    <p><strong className="text-rose-600">Action:</strong> Stay calm, move away slowly, and never attempt to handle a snake.</p>
+                    <p><strong className="text-rose-600">Prevention:</strong> Wear sturdy, ankle-covering boots when hiking or in snake-prone areas.</p>
+                    <p><strong className="text-rose-600">If Bitten:</strong> Remain still, keep the affected limb immobilised, and seek immediate medical attention.</p>
+                    <p><strong className="text-rose-600">Do Not:</strong> Cut the wound, suck out venom, or apply a tourniquet.</p>
+                  </div>
+                </div>
               </section>
 
-              <section className="mb-8">
-                <h3 className="text-xl font-semibold text-white mb-3 drop-shadow">Toxic Plants & Mushrooms Gallery (Malaysia)</h3>
+              <section className="mb-4 mt-20">
+                <h3 className="text-4xl font-semibold text-white mb-10 drop-shadow text-center">Common Toxic Plants</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {toxicGallery.map((p) => (
                     <div key={p.key} className="bg-white/85 rounded-2xl shadow border border-gray-200 overflow-hidden">
@@ -739,13 +801,13 @@ export default function GuidePage() {
                           }}
                         />
                       </div>
-                      <div className="p-4">
+                      <div className="p-4 mb-2">
                         <div className="font-semibold text-gray-900">{p.common}</div>
-                        <div className="mt-2 text-sm">
+                        <div className="mt-3 text-sm">
                           <span className="font-medium text-red-700">Hazard: </span>
                           <span className="text-gray-700">{p.hazard}</span>
                         </div>
-                        <div className="mt-1 text-sm">
+                        <div className="mt-2 text-sm">
                           <span className="font-medium text-emerald-700">What to do: </span>
                           <span className="text-gray-700">{p.response}</span>
                         </div>
