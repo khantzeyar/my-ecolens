@@ -487,44 +487,44 @@ export default function GuidePage() {
     return (
       <main className="pt-24 px-4 md:px-6 pb-24 min-h-screen bg-fixed bg-cover" style={{ backgroundImage: "url('/images/bg-camping.jpg')" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={handleBackToCards} className="bg-white/15 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/25">
+          <div className="flex items-center justify-between mb-5 mt-8">
+            <button onClick={handleBackToCards} className="bg-white/15 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/25 cursor-pointer">
               ← Back to Guide
             </button>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow">{(category as any).title}</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-10 drop-shadow text-center">{(category as any).title}</h2>
 
           {/* Emergency */}
           {isEmergency && (
             <>
-              <section className="mb-8 grid grid-cols-1 gap-6">
+              <section className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Emergency Calls (Left) */}
                 <div className="bg-white/85 backdrop-blur-xl rounded-2xl p-6 shadow border border-gray-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-4">One-tap Emergency Calls</h3>
                   <div className="flex gap-3 flex-wrap md:flex-nowrap">
-                    <a href="tel:999" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700">
+                    <a href="tel:999" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700">
                       <i className="ri-police-car-line" /> Police 999
                     </a>
-                    <a href="tel:994" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-orange-600 text-white hover:bg-orange-700">
+                    <a href="tel:994" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-600 text-white hover:bg-orange-700">
                       <i className="ri-fire-line" /> Fire & Rescue 994
                     </a>
-                    <a href="tel:999" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
+                    <a href="tel:999" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
                       <i className="ri-first-aid-kit-line" /> Ambulance 999
                     </a>
                   </div>
                 </div>
 
+                {/* Nearby Hospitals & Clinics (Right) */}
                 <div className="bg-white/85 backdrop-blur-xl rounded-2xl p-6 shadow border border-gray-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-3">Nearby Hospitals & Clinics</h3>
-
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <button onClick={() => openLocationPrompt("hospitals")} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">
+                  <div className="flex flex-wrap items-center gap-3 mb-1">
+                    <button onClick={() => openLocationPrompt("hospitals")} className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
                       <i className="ri-hospital-line" /> Search nearby hospitals
                     </button>
-                    <button onClick={() => openLocationPrompt("clinics")} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">
+                    <button onClick={() => openLocationPrompt("clinics")} className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer">
                       <i className="ri-first-aid-kit-line" /> Search nearby clinics
                     </button>
-
                     {pos && (
                       <span className="text-sm text-gray-700 inline-flex items-center gap-1">
                         <i className="ri-map-pin-2-line" />
@@ -533,9 +533,9 @@ export default function GuidePage() {
                     )}
                   </div>
 
+                  {/* Facilities list */}
                   {hError && <p className="text-red-600 mb-2">{hError}</p>}
                   {hLoading && <p className="text-gray-700">Locating / Searching…</p>}
-
                   {!hLoading && facilities.length > 0 && (
                     <ul className="space-y-4">
                       {facilities.slice(0, 5).map((h, idx) => {
@@ -583,40 +583,109 @@ export default function GuidePage() {
                 </div>
               </section>
 
-              {/* First-aid & Signaling */}
               <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Insect Bites & Stings</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Move away from source; remove stinger by scraping with a card (do not squeeze).<br />
-                    Wash with soap and water; apply a cold pack 10–15 minutes on/off.<br />
-                    Use oral antihistamine for itch/swelling; seek care for breathing trouble or facial swelling.
-                  </p>
+                {/* Insect Bites & Stings */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-red-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Insect Bites & Stings</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">1.</span>
+                        <p>Move away from the source of the bite or sting. Remove the stinger carefully using a flat object, such as a card, without squeezing it.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">2.</span>
+                        <p>Clean the affected area with soap and water. Apply a cold pack for 10-15 minutes, alternating on and off as needed to reduce swelling.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-red-500 font-bold shrink-0">3.</span>
+                        <p>Take an oral antihistamine to alleviate itching or swelling.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto mt-10">
+                    ⚠️ Seek immediate medical attention if there are signs of difficulty breathing, facial swelling, or other severe reactions.
+                  </div>
                 </div>
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Cuts & Wounds</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Apply direct pressure 5–10 minutes to stop bleeding.<br />
-                    Rinse with clean water; apply antiseptic; cover with sterile dressing.<br />
-                    Seek care if deep, gaping, contaminated, or bleeding will not stop; review tetanus status.
-                  </p>
+
+                {/* Cuts & Wounds */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-blue-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Cuts & Wounds</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-blue-500 font-bold shrink-0">1.</span>
+                        <p>Apply direct pressure for 5-10 minutes to control bleeding</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-blue-500 font-bold shrink-0">2.</span>
+                        <p>Rinse the wound thoroughly with clean water, apply antiseptic, and cover with a sterile dressing.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto">
+                    ⚠️ Seek medical attention if the wound is deep, heavily contaminated, or bleeding persists. 
+                  </div>
                 </div>
-                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Dehydration / Heat Exhaustion</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Move to shade; loosen clothing; cool with water on skin and fanning.<br />
-                    Sip oral rehydration solution/electrolytes; avoid alcohol and caffeine.<br />
-                    Confusion/collapse or hot dry skin → suspect heat stroke: cool aggressively and call emergency services.
-                  </p>
+
+                {/* Heat Exhaustion */}
+                <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200 flex flex-col">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-orange-500 text-white p-2.5 rounded-xl shadow-md">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl">Heat Exhaustion</h3>
+                    </div>
+                    <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                      <div className="flex gap-2">
+                        <span className="text-orange-500 font-bold shrink-0">1.</span>
+                        <p>Move to a shaded or cool area, loosen clothing, and apply cool water to the skin while fanning to lower body temperature.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-orange-500 font-bold shrink-0">2.</span>
+                        <p>Drink oral rehydration solutions or electrolyte-containing fluids. Avoid alcohol and caffeinated beverages.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-300 text-yellow-900 text-sm leading-relaxed p-4 rounded-xl shadow-sm mt-6 h-37 overflow-y-auto">
+                    ⚠️ If the person shows confusion, collapses, or has hot, dry skin, this may indicate heat stroke. Contact emergency medical services immediately.
+                  </div>
                 </div>
+                
+                {/* Signaling for Rescue */}
                 <div className="bg-white/85 backdrop-blur-xl p-6 rounded-2xl shadow border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-2">Signaling for Rescue</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Audible: whistle or three short blasts; repeat at intervals.<br />
-                    Visual: mirror flashes toward aircraft/ground teams; high-visibility cloth or headlamp flashes.<br />
-                    Ground-to-air symbols: large “SOS” / arrows in open areas; use rocks/logs with strong contrast.<br />
-                    Stay visible: choose open ground, reduce movement, and send periodic signals to conserve battery.
-                  </p>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-emerald-500 text-white p-2.5 rounded-xl shadow-md">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-xl">Signaling for Rescue</h3>
+                  </div>
+                  <div className="space-y-3 text-gray-700 text-base leading-relaxed">
+                    <p><strong className="text-emerald-600">Audible:</strong> Use a whistle or three short blasts, repeating at intervals.</p>
+                    <p><strong className="text-emerald-600">Visual:</strong> Signal with mirror flashes toward aircraft or ground teams, or use a high-visibility cloth or headlamp.</p>
+                    <p><strong className="text-emerald-600">Ground:</strong> Create large "SOS" markings or arrows in open areas using rocks or logs with strong contrast.</p>
+                    <p><strong className="text-emerald-600">Stay Visible:</strong> Position yourself in open terrain, limit movement, and send signals periodically to conserve battery.</p>
+                    <p><strong className="text-emerald-600">Stay Calm:</strong> Control your breathing, conserve energy, and avoid panic.</p>
+                  </div>
                 </div>
               </section>
 
@@ -711,6 +780,24 @@ export default function GuidePage() {
           {/* Checklist page */}
           {isChecklist && (
             <div>
+              {/* Add custom item */}
+              <div className="mt-8 bg-white/85 p-4 rounded-2xl shadow border border-gray-200 mb-8">
+                <h3 className="font-bold text-gray-900 mb-3">Add Your Own Items</h3>
+                <div className="flex flex-col md:flex-row gap-3 mb-4">
+                  <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter custom item" className="flex-1 px-3 py-2 border rounded" />
+                  <select value={targetGroup} onChange={(e) => setTargetGroup(e.target.value)} className="px-3 py-2 border rounded">
+                    {(customChecklist as any).map((group: ChecklistGroup) => (
+                      <option key={group.group} value={group.group}>
+                        {group.group}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={addCustomItem} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer">
+                    Add
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(customChecklist as any).map((group: ChecklistGroup) => (
                   <div key={group.group} className="bg-white/85 p-4 rounded-2xl shadow border border-gray-200 hover:shadow-lg transition">
@@ -722,7 +809,7 @@ export default function GuidePage() {
                         return (
                           <li key={itemName} className="flex items-center justify-between group">
                             <label className="flex items-center">
-                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2 w-5 h-5" />
+                              <input type="checkbox" checked={checkedItems.includes(itemName)} onChange={() => toggleCheck(itemName)} className="mr-2 w-4 h-4" />
                               {itemName}
                             </label>
                             {isCustom && (
@@ -738,27 +825,9 @@ export default function GuidePage() {
                 ))}
               </div>
 
-              {/* Add custom item */}
-              <div className="mt-8 bg-white/85 p-4 rounded-2xl shadow border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-3">Add Your Own Items</h3>
-                <div className="flex flex-col md:flex-row gap-3 mb-4">
-                  <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter custom item" className="flex-1 px-3 py-2 border rounded" />
-                  <select value={targetGroup} onChange={(e) => setTargetGroup(e.target.value)} className="px-3 py-2 border rounded">
-                    {(customChecklist as any).map((group: ChecklistGroup) => (
-                      <option key={group.group} value={group.group}>
-                        {group.group}
-                      </option>
-                    ))}
-                  </select>
-                  <button onClick={addCustomItem} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Add
-                  </button>
-                </div>
-              </div>
-
               {/* PDF Download */}
-              <div className="mt-6 text-center">
-                <button onClick={downloadChecklistPdf} className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-purple-700">
+              <div className="mt-12 text-center -mb-8">
+                <button onClick={downloadChecklistPdf} className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-green-700 cursor-pointer">
                   Download Checklist (PDF)
                 </button>
               </div>
@@ -843,7 +912,7 @@ export default function GuidePage() {
         <div className="text-center">
           <Link
             href="/why"
-            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-4 rounded-2xl bg-emerald-600 text-white text-lg md:text-lg font-semibold shadow hover:bg-emerald-700"
+            className="inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-4 rounded-2xl bg-emerald-600 text-white text-base md:text-l font-semibold shadow hover:bg-emerald-700 -mb-10"
           >
             Why Eco Camping Matters →
           </Link>
