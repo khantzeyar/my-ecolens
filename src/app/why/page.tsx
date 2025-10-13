@@ -103,14 +103,14 @@ export default function WhyPage() {
       {/* Header */}
       <section className="text-center max-w-4xl mx-auto px-6 mb-16">
         <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-lg">
-          Why Responsible Camping Matters
+          Why Eco Camping Matters
         </h1>
       </section>
 
       {/* Tab Section - The Impact of Irresponsible Camping */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-10">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-12">
+          <h2 className="text-3xl font-bold text-green-700 mb-8">
             The Impact of Irresponsible Camping
           </h2>
 
@@ -120,7 +120,7 @@ export default function WhyPage() {
               <button
                 key={key}
                 onClick={() => setActiveTab(key as TabKey)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 cursor-pointer ${
                   activeTab === (key as TabKey)
                     ? "bg-green-600 text-white shadow-lg"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -195,7 +195,7 @@ export default function WhyPage() {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                    className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       index === currentImageIndex
                         ? "bg-green-600 w-8"
                         : "bg-gray-300 hover:bg-gray-400"
@@ -211,7 +211,7 @@ export default function WhyPage() {
 
       {/* Video and Introduction Section */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-10">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             {/* Left Side - Text */}
             <div>
@@ -266,24 +266,24 @@ export default function WhyPage() {
       <section className="text-center max-w-6xl mx-auto px-6 pb-20">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-10">
           <h2 className="text-3xl font-bold text-green-700 mb-4">
-            Want to See the Data?
+            Learn More
           </h2>
-          <p className="text-gray-800 mb-8 font-medium text-lg max-w-4xl mx-auto">
-            Explore interactive charts and maps to understand how Malaysia&apos;s
-            forests are changing from 2001 to 2030.
+          <p className="text-gray-800 mb-8 text-l max-w-5xl mx-auto">
+            Discover interactive visualisations that reveal how Malaysia&apos;s forests are changing, 
+            or explore our eco-camping guide for responsible practices.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <Link
               href="/insights"
               className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
-              See More Data →
+              Explore Forest Insights →
             </Link>
             <Link
               href="/guide"
               className="bg-emerald-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-emerald-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
-              How to Camp Responsibly →
+              Eco Camping Guide →
             </Link>
           </div>
         </div>
