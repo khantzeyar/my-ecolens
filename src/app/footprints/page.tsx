@@ -185,30 +185,29 @@ export default function MyFootprintsPage() {
       style={{ backgroundImage: "url('/images/footprints.jpg')" }}
     >
       <div className="max-w-7xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10">
-        {/* Background Blur*/}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(35%,720px)] h-16 rounded-full bg-black/30 backdrop-blur-sm blur-md"></div>
+        {/* Header */}
+        <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10">
+          {/* Background Blur*/}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(35%,720px)] h-16 rounded-full bg-black/30 backdrop-blur-sm blur-md"></div>
 
-        {/* Title */}
-        <h1
-          className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-3"
-          style={{
-            textShadow:
-              "0 3px 16px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)",
-          }}
-        >
-          My Eco Footprint
-        </h1>
-
-      </div>
+          {/* Title */}
+          <h1
+            className="relative z-[1] text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-3"
+            style={{
+              textShadow:
+                "0 3px 16px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)",
+            }}
+          >
+            My Camping Log
+          </h1>
+        </div>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-4 mb-8 justify-center">
           {[
             { id: "favorites", label: "Favorites" },
             { id: "visits", label: "Visited Camping Sites" },
-            { id: "map", label: "Eco Footprint Map" },
+            { id: "map", label: "Campground Map" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -229,8 +228,15 @@ export default function MyFootprintsPage() {
           <>
             {favorites.length === 0 ? (
               <div className="text-center py-28 bg-white/80 rounded-2xl shadow-md">
-                <p className="text-gray-600 text-lg mb-4">
-                  No camping sites have been added to favorites yet.
+                <p className="text-gray-600 text-lg mb-2">
+                  You don't have any favorites yet.
+                </p>
+                <p className="text-gray-500 text-sm mb-6">
+                  Tip: Add to favorites from any campground detail page or{" "}
+                  <Link href="/camp" className="text-inherit no-underline hover:underline">
+                    Discover Camping Sites
+                  </Link>{" "}
+                  page. (Look for ⭐)
                 </p>
                 <Link
                   href="/camp"
