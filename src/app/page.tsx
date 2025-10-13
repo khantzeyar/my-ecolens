@@ -126,7 +126,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-white text-gray-900">
+    <main className="bg-white text-gray-900 overflow-x-hidden">
       {/* ===== Hero ===== */}
       <section className="relative flex items-center justify-center h-[88vh] sm:h-screen overflow-hidden">
         {/* Background: show image on mobile, video on desktop */}
