@@ -4,8 +4,12 @@
  * - "Discover Camping Sites" as a dropdown:
  *     • All Camping Sites  (/camp)
  *     • Campsite Recommender  (/recommender)
- *     • My Eco Footprint  (/footprints)
- * - Other items: Guide (/guide), Plant Identifier (/plant), Forest Insights (/insights)
+ *     • My Camping Log  (/footprints)
+ * - Replace single "Camping Guide" button with:
+ *     • Knowledge Hub (dropdown)
+ *         - Why Eco Camping Matters (/why)
+ *         - Camping Guide (/guide)
+ * - Keep others: Plant Identifier (/plant), Forest Insights (/insights)
  */
 'use client';
 
@@ -20,9 +24,12 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollY, setScrollY] = useState(0);
 
-  const [open, setOpen] = useState(false); // desktop dropdown
+  const [open, setOpen] = useState(false); // desktop: Discover dropdown
+  const [openHub, setOpenHub] = useState(false); // desktop: Knowledge Hub dropdown
   const [isMobileOpen, setIsMobileOpen] = useState(false); // mobile menu
+  const [openHubMobile, setOpenHubMobile] = useState(false); // mobile: Knowledge Hub submenu
   const hoverTimer = useRef<NodeJS.Timeout | null>(null);
+  const hoverHubTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +54,7 @@ const Navbar = () => {
     if (pathname.startsWith('/recommender')) return 'light';
     if (pathname.startsWith('/footprints')) return 'light';
     if (pathname.startsWith('/plant')) return 'light';
+    if (pathname.startsWith('/why')) return 'light'; // 新增：Knowledge Hub 的 /why
     return 'light';
   };
 
@@ -109,10 +117,22 @@ const Navbar = () => {
     hoverTimer.current = setTimeout(() => setOpen(false), 120);
   };
 
+  const onEnterHub = () => {
+    if (hoverHubTimer.current) clearTimeout(hoverHubTimer.current);
+    setOpenHub(true);
+  };
+  const onLeaveHub = () => {
+    hoverHubTimer.current = setTimeout(() => setOpenHub(false), 120);
+  };
+
   const isDiscoverActive =
     pathname.startsWith('/camp') ||
     pathname.startsWith('/recommender') ||
     pathname.startsWith('/footprints');
+
+  // Knowledge Hub 激活（guide 或 why）
+  const isHubActive =
+    pathname.startsWith('/guide') || pathname.startsWith('/why');
 
   return (
     <nav
@@ -188,6 +208,8 @@ const Navbar = () => {
             Home
           </Link>
           <Divider />
+
+          {/* Discover dropdown (保持不变) */}
           <div
             className="relative"
             onMouseEnter={onEnter}
@@ -208,7 +230,7 @@ const Navbar = () => {
 
             {open && (
               <div
-                className="absolute left-0 top-[110%] min-w-[220px] rounded-xl shadow-2xl ring-1 ring-black/10 overflow-hidden z-50"
+                className="absolute left-0 top-[110%] min-w=[220px] rounded-xl shadow-2xl ring-1 ring-black/10 overflow-hidden z-50"
                 style={{
                   backgroundColor: `rgba(255,255,255,${
                     isDarkBackground ? 0.98 : 0.96
@@ -226,23 +248,61 @@ const Navbar = () => {
                     Campsite Recommender
                   </Link>
                   <Link href="/footprints" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
-                    My Eco Footprint
+                    My Camping Log
                   </Link>
                 </div>
               </div>
             )}
           </div>
+
           <Divider />
-          <Link
-            href="/guide"
-            className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
-              getTextStyles(pathname.startsWith('/guide')).className
-            }`}
-            style={getTextStyles(pathname.startsWith('/guide')).style}
+
+          {/* 新增：Knowledge Hub 下拉（替代原单个 Camping Guide 按钮） */}
+          <div
+            className="relative"
+            onMouseEnter={onEnterHub}
+            onMouseLeave={onLeaveHub}
           >
-            Camping Guide
-          </Link>
+            <button
+              aria-haspopup="menu"
+              aria-expanded={openHub}
+              className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm whitespace-nowrap flex items-center gap-1 ${
+                getTextStyles(isHubActive).className
+              }`}
+              style={getTextStyles(isHubActive).style}
+              onClick={() => setOpenHub((v) => !v)}
+            >
+              Knowledge Hub
+              <i className="ri-arrow-down-s-line text-xs" />
+            </button>
+
+            {openHub && (
+              <div
+                className="absolute left-0 top-[110%] min-w-[240px] rounded-xl shadow-2xl ring-1 ring-black/10 overflow-hidden z-50"
+                style={{
+                  backgroundColor: `rgba(255,255,255,${
+                    isDarkBackground ? 0.98 : 0.96
+                  })`,
+                  backdropFilter: 'blur(10px)',
+                }}
+                onMouseEnter={onEnterHub}
+                onMouseLeave={onLeaveHub}
+              >
+                <div className="flex flex-col py-2">
+                  <Link href="/why" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
+                    Why Eco Camping Matters
+                  </Link>
+                  <Link href="/guide" className="px-4 py-2 text-sm text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">
+                    Camping Guide
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
           <Divider />
+
+          {/* 其余按钮保持不变 */}
           <Link
             href="/plant"
             className={`px-4 py-2 rounded-md transition-all duration-300 font-medium text-sm cursor-pointer whitespace-nowrap ${
@@ -271,8 +331,8 @@ const Navbar = () => {
           className="md:hidden mt-2 mx-4 rounded-xl shadow-lg ring-1 ring-black/10 backdrop-blur-lg overflow-hidden transition-all duration-300"
           style={{
             backgroundColor: isDarkBackground
-              ? 'rgba(20, 20, 20, 0.8)' // softer black with transparency
-              : 'rgba(255, 255, 255, 0.8)', // frosted white for light mode
+              ? 'rgba(20, 20, 20, 0.8)'
+              : 'rgba(255, 255, 255, 0.8)',
             border: isDarkBackground
               ? '1px solid rgba(255,255,255,0.2)'
               : '1px solid rgba(0,0,0,0.1)',
@@ -289,6 +349,7 @@ const Navbar = () => {
               Home
             </Link>
 
+            {/* Discover (mobile，保持不变) */}
             <button
               onClick={() => setOpen(!open)}
               className={`px-5 py-3 text-left flex justify-between items-center transition ${
@@ -338,22 +399,56 @@ const Navbar = () => {
                   }`}
                   onClick={() => setIsMobileOpen(false)}
                 >
-                  My Eco Footprint
+                  My Camping Log
                 </Link>
               </div>
             )}
 
-            <Link
-              href="/guide"
-              className={`px-5 py-3 transition ${
+            {/* 新增：Knowledge Hub (mobile) */}
+            <button
+              onClick={() => setOpenHubMobile(!openHubMobile)}
+              className={`px-5 py-3 text-left flex justify-between items-center transition ${
                 isDarkBackground
                   ? 'hover:bg-white/10 hover:text-emerald-300'
                   : 'hover:bg-emerald-50 hover:text-emerald-700'
               }`}
-              onClick={() => setIsMobileOpen(false)}
             >
-              Camping Guide
-            </Link>
+              Knowledge Hub
+              <i className={`ri-arrow-${openHubMobile ? 'up' : 'down'}-s-line`} />
+            </button>
+
+            {openHubMobile && (
+              <div
+                className={`flex flex-col transition-all ${
+                  isDarkBackground ? 'bg-white/10' : 'bg-white/70'
+                }`}
+              >
+                <Link
+                  href="/why"
+                  className={`px-7 py-2 ${
+                    isDarkBackground
+                      ? 'hover:bg-white/20 hover:text-emerald-300'
+                      : 'hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  Why Eco Camping Matters
+                </Link>
+                <Link
+                  href="/guide"
+                  className={`px-7 py-2 ${
+                    isDarkBackground
+                      ? 'hover:bg-white/20 hover:text-emerald-300'
+                      : 'hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  Camping Guide
+                </Link>
+              </div>
+            )}
+
+            {/* 其余入口保持不变 */}
             <Link
               href="/plant"
               className={`px-5 py-3 transition ${
