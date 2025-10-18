@@ -67,7 +67,7 @@ const Footer = () => {
               <li><Link href="/camp" className="hover:text-white transition-colors">All Camping Sites</Link></li>
               <li><Link href="/recommender" className="hover:text-white transition-colors">Campsite Recommender</Link></li>
               <li><Link href="/plant" className="hover:text-white transition-colors">Plant Identifier</Link></li>
-              <li><Link href="/footprints" className="hover:text-white transition-colors">My Eco Footprint</Link></li>
+              <li><Link href="/footprints" className="hover:text-white transition-colors">My Camping Log</Link></li>
             </ul>
           </div>
 
